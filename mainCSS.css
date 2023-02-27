@@ -1,10 +1,18 @@
 
+html {
+    background-color: black;
+}
 
   h1 {
     font-family: 'Parisienne';
     font-size: 60px;
+    color: white;
   }
 
+
+p {
+    color: white;
+}
 
 ul {
     list-style-type: none;
