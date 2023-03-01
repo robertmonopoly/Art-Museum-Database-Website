@@ -52,3 +52,7 @@ ul {
     white-space: nowrap;
     padding: 35px;
   }
+
+  .images:hover {
+    transform: scale(1.10);
+  }
