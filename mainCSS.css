@@ -46,9 +46,9 @@ ul {
   }
 
   .images {
-    width: 400px;
-    height: 400px;
+    width: 425px;
+    height: 425px;
     border-radius: 25%;
     white-space: nowrap;
-    padding: 25px;
+    padding: 35px;
   }
