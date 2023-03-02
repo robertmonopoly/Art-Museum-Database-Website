@@ -57,11 +57,10 @@ ul {
   }
 
   .images:hover {
-    transform: scale(1.05);
-    background-size: 5%;
+    background-size: 2%;
     background: linear-gradient(#14ffe9, #ffeb3b, #ff00e0);
     animation: rotate 3.5s linear infinite;
-    animation
+    transform: scale(1.05);
   }
 
   @keyframes rotate {
