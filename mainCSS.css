@@ -38,6 +38,7 @@ ul {
   }
   
   li a:hover {
+    color: #000000;
     background-color: #C5B4E3;
   }
 
@@ -50,9 +51,24 @@ ul {
     height: 425px;
     border-radius: 25%;
     white-space: nowrap;
-    padding: 35px;
+    padding: 45px;
+    position: relative;
+    left: 20px;
   }
 
   .images:hover {
-    transform: scale(1.10);
+    transform: scale(1.05);
+    background-size: 5%;
+    background: linear-gradient(#14ffe9, #ffeb3b, #ff00e0);
+    animation: rotate 3.5s linear infinite;
+    animation
+  }
+
+  @keyframes rotate {
+    0%{
+      filter: hue-rotate(0deg);
+    }
+    100%{
+      filter: hue-rotate(360deg);
+    }
   }
