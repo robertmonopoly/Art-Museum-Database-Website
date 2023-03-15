@@ -10,10 +10,11 @@ html {
   }
 
 
-p {
+.homepageDescription {
     color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
+    margin-bottom: 15px;
 }
 
 ul {
@@ -74,6 +75,7 @@ ul {
 
   .image-container {
     display: inline-block;
+    margin-top: 35px;
     margin-right: 20px;
     vertical-align: top;
     text-align: center;
@@ -86,6 +88,7 @@ ul {
   .caption {
     position: relative;
     top: 20px;
+    margin-bottom: 40px;
     color: white;
     font-size: 30px;
     font-family: Arial, Helvetica, sans-serif;
