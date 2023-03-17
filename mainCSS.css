@@ -1,95 +1,150 @@
 
 html {
-    background-color: black;
+  background-color: black;
 }
 
-  h1 {
-    font-family: 'Parisienne';
-    font-size: 60px;
-    color: white;
-  }
+h1 {
+  font-family: 'Parisienne';
+  font-size: 50px;
+  color: white;
+}
 
 
 .homepageDescription {
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 24px;
-    margin-bottom: 15px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  margin-bottom: 10px;
 }
 
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #400080;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #400080;
+}
+
+li {
+  float: left;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 10px 12px;
+  text-decoration: none;
+}
+
+li a:hover {
+  color: #000000;
+  background-color: #C5B4E3;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+
+.images {
+  width: 250px;
+  height: 250px;
+  border-radius: 5%;
+  white-space: nowrap;
+  padding: 20px;
+  position: relative;
+  left: 15px;
+}
+
+.images:hover {
+  background-size: 0.5%;
+  background: linear-gradient(#c5f2ed, #e9e4b8, #edc7e9);
+  animation: rotate 3.5s linear infinite;
+  transform: scale(1.05);
+}
+
+@keyframes rotate {
+  0%{
+    filter: hue-rotate(0deg);
   }
-  
-  li {
-    float: left;
-    font-family: Arial, Helvetica, sans-serif;
+  100%{
+    filter: hue-rotate(360deg);
   }
+}
+
+.image-container {
+  display: inline-block;
+  margin-top: 20px;
+  margin-right: 15px;
+  vertical-align: top;
+  text-align: center;
+}
+
+.caption-container {
+  margin-top: 5px;
+}
+
+.caption {
+  position: relative;
+  top: 10px;
+  margin-bottom: 20px;
+  color: white;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Add a black background color to the top navigation bar */
+.topnav {
+  overflow: hidden;
+  background-color:#400080;
+  vertical-align: middle;
+  padding-left: 760px;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #400080;
+  color: black;
+}
+
+/* Style the "active" element to highlight the current page */
+
+
+/* Style the search box inside the navigation bar */
+.topnav input[type=text] {
+  float: right;
+  padding: 6px;
+  border: none;
+  margin-top: 4px;
+  margin-right: 16px;
+  font-size: 17px;
+  margin-bottom: 4px;
   
-  li a {
+}
+
+/* When the screen is less than 600px wide, stack the links and the search field vertically instead of horizontally */
+@media screen and (max-width: 600px) {
+  .topnav a, .topnav input[type=text] {
+    float: none;
     display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+ 
+ 
   }
-  
-  li a:hover {
-    color: #000000;
-    background-color: #C5B4E3;
-  }
-
-  .active {
-    background-color: #04AA6D;
-  }
-
-  .images {
-    width: 425px;
-    height: 425px;
-    border-radius: 25%;
-    white-space: nowrap;
-    padding: 45px;
-    position: relative;
-    left: 20px;
-  }
-
-  .images:hover {
-    background-size: 2%;
-    background: linear-gradient(#14ffe9, #ffeb3b, #ff00e0);
-    animation: rotate 3.5s linear infinite;
-    transform: scale(1.05);
-  }
-
-  @keyframes rotate {
-    0%{
-      filter: hue-rotate(0deg);
-    }
-    100%{
-      filter: hue-rotate(360deg);
-    }
-  }
-
-  .image-container {
-    display: inline-block;
-    margin-top: 35px;
-    margin-right: 20px;
-    vertical-align: top;
-    text-align: center;
-  }
-  
-  .caption-container {
-    margin-top: 10px;
-  }
-  
-  .caption {
-    position: relative;
-    top: 20px;
-    margin-bottom: 40px;
-    color: white;
-    font-size: 30px;
-    font-family: Arial, Helvetica, sans-serif;
-  }
+ 
+}
