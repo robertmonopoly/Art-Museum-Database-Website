@@ -9,6 +9,13 @@ h1 {
   color: white;
 }
 
+h2 {
+  font-family:'Times New Roman', Times, serif;
+  font-size: 25px;
+  color: white;
+  
+}
+
 
 .homepageDescription {
   color: white;
