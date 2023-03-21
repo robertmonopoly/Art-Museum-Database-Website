@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Exhibition Tickets</title>
+</head>
+<body>
+    <h1>Exhibition Tickets</h1>
+    
+    
+    <ul class = "navbarone">
+        <li><a href="/html/homepage.html">Home</a></li>
+        <li class = "active"><a href="/html/exhibitions.html">Exhibitions</a></li>
+        <li class="topnav"><input type="text" placeholder="Search..."></li>
+      </ul>
+      <p></p>
+
+    <h3 style="padding-left:20px">Find tickets to our Exhibitions here.</h3>
+    <hr width="100%" color= "grey" size="0.5px" padding="0"/>
+  
+  
+    
+    <p style="padding-left:20px">Exhibition Name</p>
+    <form style="padding-left:20px; padding-top:  5px;">
+    <select name="menu1" id="menu1">
+      <option value="http://www.espn.com">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
+      <option value="http://www.cnn.com">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
+      <option value="http://www.abcnews.com">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
+      <option value="http://www.cbsnews.com">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
+      </select>
+    </form>
+      <script type="text/javascript">
+       var urlmenu = document.getElementById( 'menu1' );
+       urlmenu.onchange = function() {
+            window.open( this.options[ this.selectedIndex ].value );
+       };
+      </script>
+    
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    </body>
+    </html>
