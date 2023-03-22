@@ -11,11 +11,11 @@ h1 {
 }
 
 h2 {
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:'Segoe UI', Geneva, Verdana, sans-serif;
   font-size: 10px;
   color:black;
   padding-left: 20px;
-  margin-bottom: 0%;
+  margin: 0%;
   padding-bottom: 0%;
 }
 
@@ -42,14 +42,14 @@ h4{
 .homepageDescription {
   color: black;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   margin-bottom: 10px;
 }
 
 ul {
   list-style-type: none;
-  margin: 2px;
-  padding-left: 20px;
+  margin: 0px;
+  padding-left: 0px;
   overflow: hidden;
   background-color: #98bfe4;
   width: 100%;
@@ -114,7 +114,9 @@ li a:hover {
   margin-right: 15px;
   vertical-align: top;
   text-align: center;
-  padding-left: 8%;
+  padding-left: 6%;
+ width:23%;
+  
 }
 
 .caption-container {
@@ -126,7 +128,7 @@ li a:hover {
   top: 10px;
   margin-bottom: 15px;
   color: black;
-  font-size: 15px;
+  font-size: 16px;
   font-family: Arial, Helvetica, sans-serif;
 }
 
