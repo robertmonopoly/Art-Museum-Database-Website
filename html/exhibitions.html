@@ -17,7 +17,7 @@
   width: 50%;
   padding-top: 10px;
   padding-bottom: 0px;
-  padding-left: 10px;
+  padding-left: 0px;
   padding-right: 10px;
   margin-bottom:0px;
 }
@@ -63,12 +63,23 @@
   /* Split the screen in half */
 .split {
   height: 100%;
-  width: 70%;
+  width: 50%;
   position: fixed;
   z-index: 1;
   top: 0;
   overflow-x: hidden;
   padding-top: 20px;
+}
+
+.blink {
+         animation: blinker 2s linear infinite;
+         color: rgb(38, 0, 255);
+         
+}
+@keyframes blinker {
+    50% {
+        opacity: 0;
+        }
 }
 </style>
 </head>
@@ -81,13 +92,21 @@
     <li><a href="/html/homepage.html">Home</a></li>
     <li class = "active"><a href="/html/exhibitions.html">Exhibitions</a></li>
     <li class="topnav"><input type="text" placeholder="Search..."></li>
+    <li><a href="/html/add_new_exhibition.html">Add New Exhibition</a></li>
+  </ul>
   </ul>
   <p></p>
 
-
+<div class="row" style="padding-top:0px;">
+<div class = "column" style="padding-top:0px;">
 <h2 style="color:blue; font-size: 20px; padding-left:30px;" >Now On View</h2>
-<hr width="100%" color= "grey" size="0.5px" padding="0"/>
+</div>
+<div class = "column" style="padding-top:0px;">
+  <h2 class = "blink" style="color:blue; font-size: 20px; " >Upcoming Special Exhibitions</h2>
+  </div>
+</div>
 
+<hr width="100%" color= "grey" size="0.5px" padding="0"/>
 <div class ="column">
 <div class = "row" style="padding-left: 20px;">
   <p> 
@@ -142,8 +161,36 @@
 </div>
 </div>
 
-<div class = "column" style="padding-left: 35%;">
-<p> second col</p>
+<div class = "column">
+  
+<div class ="row">
+  <div class = "row" style="padding-left: 20px;">
+    <p> 
+      <img src="/img/e1.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+      <h3 style="margin-bottom:3px">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</h3>
+      <p style="margin-top: 0; margin-bottom:5px">May 21 to September 17, 2023 </p>
+      <button class = "button button1"><a href="/html/exhib_tickets.html">Buy Tickets</a></button> 
+    </p>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+
+  <div class = "row" style="padding-left: 20px;">
+    <p> 
+      <img src="/img/e2.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+      <h3 style="margin-bottom:3px">Woven Wonders: Indian Textiles from the Parpia Collection</h3>
+      <p style="margin-top: 0; margin-bottom:5px">June 10 to September 4, 2023</p>
+      <button class = "button button1"><a href="/html/exhib_tickets.html">Buy Tickets</a></button> 
+    </p>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+</div>
+
 
 </div>
 
@@ -152,21 +199,7 @@
 
 
  
-
- 
-
-
-
-
-
- 
-
-
-
-
-
-    <li><a href="/html/add_new_exhibition.html">Add New Exhibition</a></li>
-  </ul>
+   
 
 </body>
 </html>
