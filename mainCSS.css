@@ -199,3 +199,26 @@ aside {
   margin: 0 1.5%;
   width: 30%;
 }
+
+.blink {
+  animation: blinker 2s linear infinite;
+  color: rgb(38, 0, 255);
+  
+}
+@keyframes blinker {
+50% {
+ opacity: 0;
+ }
+}
+
+.boxed {
+  border: 2px solid blue ;
+  padding: 10px;
+  margin-left: 20px;
+  width:fit-content;
+}
+
+
+
+
+
