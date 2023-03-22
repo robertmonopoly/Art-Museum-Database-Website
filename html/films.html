@@ -5,6 +5,69 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Films</title>
+
+<style>
+  div.film {
+    border: 1px solid #ccc;
+    margin-left: 5%;
+    margin-right: 5%;
+    max-width: 90%;
+    margin-bottom:  10px;
+    width:70%;
+    display: inline-table;
+
+  }
+  
+  div.film:hover {
+    border: 1px solid #777;
+  }
+  
+  div.film img {
+    width: 100%;
+    height: auto;
+  }
+  
+  div.desc {
+    padding: 15px;
+    text-align: center;
+    width:100%;
+  
+   
+  }
+  
+  * {
+    box-sizing: border-box;
+    
+   
+  }
+  
+  .responsive {
+    padding: 0 16px;
+    float: left;
+    width: 20%;
+
+  }
+  
+  @media only screen and (max-width: 700px) {
+    .responsive {
+      width: 49.99999%;
+      margin: 6px 0;
+    }
+  }
+  
+  @media only screen and (max-width: 500px) {
+    .responsive {
+      width: 70%;
+    }
+  }
+  
+  .clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  </style>
+
 </head>
 <body>
 
@@ -15,6 +78,35 @@
     <li class = "active"><a href="/html/films.html">Films</a></li>
     <li><a href="/html/add_new_film.html">Add New Film</a></li>
   </ul>
+
+
+  <div class="responsive">
+    <div class="film">
+        <img src="/img/carlos_and_elsa.png" alt="Carlos Alamaraz" width="600" height="400">
+      </a>
+      <div class="desc">Carlos Almaraz<br>Playing With Fire<br>June 7, 2023<br></div>
+    </div>
+  </div>
+
+  <div class="responsive">
+    <div class="film">
+        <img src="/img/tadao_ando.jpg" alt="Tadao Ando" width="600" height="400">
+      </a>
+      <div class="desc">Tadao Ando<br>From Emptiness to Infinity<br>July 9, 2023<br></div>
+    </div>
+  </div>
+
+
+
+  <div class="responsive">
+    <div class="film">
+        <img src="/img/artwork6.png" alt="Marina Abramovic" width="600" height="400">
+      </a>
+      <div class="desc">Marina Abramovic<br>The Artist is Present<br>May 30, 2023<br></div>    
+  </div>
+  </div>
+
+
 
 </body>
 </html>

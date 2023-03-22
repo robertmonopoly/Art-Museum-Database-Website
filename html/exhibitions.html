@@ -72,15 +72,17 @@
 }
 
 .blink {
-         animation: blinker 2s linear infinite;
-         color: rgb(38, 0, 255);
-         
+  animation: blinker 2s 1;
+  color: rgb(38, 0, 255);
 }
+
 @keyframes blinker {
-    50% {
-        opacity: 0;
-        }
+  0% { opacity: 0.0; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1.0; }
 }
+
+
 </style>
 </head>
 
