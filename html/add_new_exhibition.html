@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Add New Exhibition</title>
+</head>
+<body>
+
+<h1>Add New Exhibition</h1>
+
+
+<ul class = "navbarone">
+  <li><a href="/html/homepage.html">Home</a></li>
+  <li><a href="/html/artworks.html">Artworks</a></li>
+  <li class = "active"><a href="/html/exhibitions.html">Exhibitions</a></li>
+</ul>
+
+<form action="submit.php" method="post">
+    <label for="exhibition_at">Exhibition Date and Time:</label>
+    <input type="datetime-local" id="exhibition_at" name="exhibition_at"><br>
+  
+    <label for="exhibition_ticket_price">Ticket Price:</label>
+    <input type="number" id="exhibition_ticket_price" name="exhibition_ticket_price"><br>
+  
+    <label for="exhibition_gallery">Gallery:</label>
+    <input type="text" id="exhibition_gallery" name="exhibition_gallery"><br>
+  
+    <label for="exhibition_title">Exhibition Title:</label>
+    <input type="text" id="exhibition_title" name="exhibition_title"><br>
+  
+    <label for="curator">Curator:</label>
+    <input type="text" id="curator" name="curator"><br>
+  
+    <label for="exhibition_artists">Artists:</label>
+    <input type="text" id="exhibition_artists" name="exhibition_artists"><br>
+  
+    <input type="submit" value="Submit">
+  </form>
+
+
+</div>
+</body>
+</html>
