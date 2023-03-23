@@ -1,6 +1,5 @@
 import uuid
-import bcrypt
-
+import hash_password as hw
 # This file is just a library of SQL functions; no connection is actually being done here.
 # The "cur" input variable comes from:
 # con = psycopg2.connect("host="",
@@ -29,7 +28,7 @@ def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_do
 def insert_user_login(cur, user_role, user_name, pw, login_at ):
     # email is used as username
     user_uuid = cur.execute("""SELECT * FROM user_account WHERE email=?""", user_name)
-    hashed = hash_pw(pw)
+    hashed = hw.hash_pw(pw)
     cur.execute("""INSERT INTO user_login VALUES (%s, %s, %s, %s, %s)""", (user_uuid,user_role, user_name, hashed, login_at))
     
     # note: this part is completely separate from this function; we will use it when connecting to db!
