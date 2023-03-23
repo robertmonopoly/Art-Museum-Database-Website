@@ -1,8 +1,6 @@
 import uuid
 import bcrypt
 
-
-
 # This file is just a library of SQL functions; no connection is actually being done here.
 # The "cur" input variable comes from:
 # con = psycopg2.connect("host="",
@@ -32,7 +30,6 @@ def hash_pw(password):
     # print(result)
     return result
 
-
 # @app.route('/registration', methods=['POST']) -> use this when connecting db and routing html
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
@@ -45,8 +42,6 @@ def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_do
 
    # insert user into database
     cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname,user_lname, user_addr, p_number, user_sex, user_dob,membership))
-  
-
 
 def insert_user_login(cur, user_role, user_name, pw, login_at ):
     # email is used as username
@@ -63,7 +58,6 @@ def insert_user_login(cur, user_role, user_name, pw, login_at ):
     # except:
     #     cur.rollback()
     #     return 'User registration failed.'
-
 
 # WARNING: the area below is all pseudo or unfinished code                     
 
@@ -87,8 +81,6 @@ def insert_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
     else:
         cur.commit()
         return "Gift item inserted successfully."
-    
-
 
 def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     try:
@@ -120,8 +112,6 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     finally:
         # Close the database connection
         cur.close()
-
-
 
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
