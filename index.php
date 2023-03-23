@@ -1,16 +1,12 @@
 <?php
-    $host = "localhost";
-    $port = "5432";
-    $dbname = "postgres";
-    $user = "postgres";
-    $password = "0907";
+    // Initialize connection variables.
+	$host = "team8.postgres.database.azure.com";
+	$database = "postgres";
+	$user = "team8";
+	$password = "server1234!";
 
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;user=$user;password=$password";
-
-    try {
-        $pdo = new PDO($dsn);
-        echo "good connection";
-    } catch (PDOException $e) {
-        echo "connection failed: " . $e->getMessage();
-    }
+	// Initialize connection object.
+	$connection = pg_connect("host=$host dbname=$database user=$user password=$password") 
+		or die("Failed to create connection to database: ". pg_last_error(). "<br/>");
+	print "Successfully created connection to database.<br/>";
 ?>
