@@ -113,6 +113,18 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
         # Close the database connection
         cur.close()
 
+def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+    cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator))
+
+def insert_exhib_sales(cur, exhib_transac_id, user_id, exhib_id, exhib_transac_at):
+    cur.execute("""INSERT INTO exhibition_ticket_sales VALUES(%s, %s, %s, %s)""", (exhib_transac_id, user_id, exhib_id, exhib_transac_at))
+
+# ALERT: might change film_rate to an ENUM of value 1-5 stars!!!!!!!!!!!!!!
+def insert_films(cur,film_id, film_title, film_price, film_dur, film_dir, film_rate):
+    cur.execute("""INSERT INTO films VALUES (%s, %s, %s, %s, %s, %s)""", (film_id, film_title, film_price, film_dur, film_dir, film_rate))
+
+def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
+    cur.execute("""INSERT INTO film_ticket_sales VALUES (%s, %s, %s, %s, %s)""", (film_transac_id, user_id, film_id, film_transac_at))
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
     rs = conn.execute("SELECT * FROM events");
