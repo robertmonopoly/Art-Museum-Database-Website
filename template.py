@@ -13,23 +13,6 @@ import bcrypt
 # need to create user class
 
 
-
-
-# probably separate this function into a helper.py file
-def hash_pw(password):
-    # encoding user password
-    bytes = password.encode('utf-8')
-    # generating the salt
-    salt = bcrypt.gensalt()
-    # Hashing the password
-    hash = bcrypt.hashpw(bytes, salt)
-    print(hash)
-    userBytes = password.encode('utf-8')
-    # checking password (boolean)
-    result = bcrypt.checkpw(userBytes, hash)
-    # print(result)
-    return result
-
 # @app.route('/registration', methods=['POST']) -> use this when connecting db and routing html
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
