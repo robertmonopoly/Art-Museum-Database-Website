@@ -122,13 +122,13 @@ def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
 
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
-    rs = conn.execute("SELECT * FROM events");
-    if rs:
-        #map(convert_row_to_event, rs)
-        return
-    else:
-        # no results found
-        return None
+    rs = conn.execute("SELECT * FROM events")
+    events = []
+    for row in event_table:
+        event = convert_row_to_event(row)
+        events.append(event)
+    return events
+
 def get_user_by_id(cur, user_uuid):
     rs = cur.execute("SELECT * FROM users WHERE id=?", (user_uuid))
     if rs:
