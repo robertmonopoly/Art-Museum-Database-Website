@@ -1,3 +1,5 @@
+import bcrypt
+
 def hash_pw(password):
     # encoding user password
     bytes = password.encode('utf-8')

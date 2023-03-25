@@ -1,6 +1,5 @@
 import uuid
-import bcrypt
-
+import hash_password as hw
 # This file is just a library of SQL functions; no connection is actually being done here.
 # The "cur" input variable comes from:
 # con = psycopg2.connect("host="",
@@ -17,19 +16,13 @@ import bcrypt
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
     user_uuid = str(uuid.uuid4())
-    # do the request in dif. file
-        # user_fname = request.form['user_fname']
-        # user_lname = request.form['user_lname']
-        # user_email = request.form['user_email']
-        # user_password = request.form['user_password']
-
    # insert user into database
     cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname,user_lname, user_addr, p_number, user_sex, user_dob,membership))
 
 def insert_user_login(cur, user_role, user_name, pw, login_at ):
     # email is used as username
     user_uuid = cur.execute("""SELECT * FROM user_account WHERE email=?""", user_name)
-    hashed = hash_pw(pw)
+    hashed = hw.hash_pw(pw)
     cur.execute("""INSERT INTO user_login VALUES (%s, %s, %s, %s, %s)""", (user_uuid,user_role, user_name, hashed, login_at))
     
     # note: this part is completely separate from this function; we will use it when connecting to db!
@@ -96,6 +89,16 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
         # Close the database connection
         cur.close()
 
+# tested it locally, not sure if it works officially as a function!
+def gift_report(cur):
+    try:
+        cur.execute("""
+        SELECT i.gift_sku, i.gift_name, i.gift_price, s.gift_transaction_id,s.gift_transaction_at, s.user_id 
+        FROM gift_shop_item as i 
+        INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
+    except Exception as e:
+        print("An error occurred while inserting the exhibition:", e)
+
 def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
     try:
         cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator))
@@ -123,13 +126,13 @@ def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
 
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
-    rs = conn.execute("SELECT * FROM events");
-    if rs:
-        #map(convert_row_to_event, rs)
-        return
-    else:
-        # no results found
-        return None
+    rs = conn.execute("SELECT * FROM events")
+    events = []
+    for row in event_table:
+        event = convert_row_to_event(row)
+        events.append(event)
+    return events
+
 def get_user_by_id(cur, user_uuid):
     rs = cur.execute("SELECT * FROM users WHERE id=?", (user_uuid))
     if rs:

@@ -52,13 +52,12 @@ CREATE TYPE US_State AS ENUM (
         'WY');
 CREATE TYPE User_Address AS (
     line_1 TEXT,
-    line_2 TEXT,
     city TEXT,
     us_state US_State,
     zip TEXT);
 CREATE TYPE User_Role AS ENUM ('USER','ADMIN');
 CREATE TYPE Sex AS ENUM ('FEMALE', 'MALE', 'OTHER');
-CREATE TYPE MembershipType AS ENUM ('BASIC', 'SILVER','GOLD');
+CREATE TYPE MembershipType AS ENUM ('NONE','BASIC', 'SILVER','GOLD');
 
 CREATE TABLE artworks (
     object_number INT PRIMARY KEY,
