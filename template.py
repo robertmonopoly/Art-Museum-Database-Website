@@ -16,12 +16,6 @@ import hash_password as hw
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
     user_uuid = str(uuid.uuid4())
-    # do the request in dif. file
-        # user_fname = request.form['user_fname']
-        # user_lname = request.form['user_lname']
-        # user_email = request.form['user_email']
-        # user_password = request.form['user_password']
-
    # insert user into database
     cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname,user_lname, user_addr, p_number, user_sex, user_dob,membership))
 
