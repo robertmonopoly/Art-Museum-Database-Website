@@ -1,7 +1,7 @@
 import jwt
 import bcrypt
 import flask
-from flask import Flask, request, render_template, make_response, redirect, url_for
+from flask import Flask, request, render_template, make_response, redirect, url_for, session
 app = Flask(__name__)
 import psycopg2
 import template as temp
@@ -32,7 +32,11 @@ def login():
         # if request.form['password'] == 'admin':
         username = request.form['user_email'] 
         password = hp(request.form['password'])
-        if (cur.execute("""SELECT * FROM user_login WHERE user_name=? AND hashed_password=?""", [username,password])):
+        account = cur.execute("""SELECT * FROM user_login WHERE user_name=? AND hashed_password=?""", [username,password])
+        if account:
+            # session['loggedin'] = True
+            # session['id'] = account['id']
+            # session['username'] = account['username']
             msg = "Logged in successfully!"
             # render the home page maybe?
             return render_template("home.html")
@@ -41,6 +45,25 @@ def login():
     return render_template('login.html', msg = msg)
 
 
-# @app.route('/home', methods = ['POST', 'GET'])
-# def home():
-#     if 
+@app.route('/logout', methods=['POST','GET'])
+def logout():
+    return
+    
+
+@app.route('/signup', methods=['POST','GET'])
+def signup():
+    msg = ""
+    if request.method == 'POST':
+        f_name = request.form['user_fname']
+        l_name = request.form['user_lname']
+        email = request.form['user_email']
+        password = request.form['user_password']
+        phone_number = request.form['phone_number']
+        sex = request.form['sex']
+        dob = request.form['dob']
+        # address area
+        line_1 = request.form['line_1']
+        city = request.form['city']
+        state = request.form['state']
+        temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE' )
+
