@@ -89,6 +89,16 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
         # Close the database connection
         cur.close()
 
+# tested it locally, not sure if it works officially as a function!
+def gift_report(cur):
+    try:
+        cur.execute("""
+        SELECT i.gift_sku, i.gift_name, i.gift_price, s.gift_transaction_id,s.gift_transaction_at, s.user_id 
+        FROM gift_shop_item as i 
+        INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
+    except Exception as e:
+        print("An error occurred while inserting the exhibition:", e)
+
 def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
     try:
         cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator))
