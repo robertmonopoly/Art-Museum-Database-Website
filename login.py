@@ -16,14 +16,16 @@ import hash_password as hp
 # 2. server validates using bcrypt, if its valid then generates a JWT and sends it back 
 # 3. JWT is set as a cookie
 # 4. all future requests can grab the JWT from the browser cookies, and verify it, and then grab the info from the payload
-
-conn = psycopg2.connect(dbname="test")
-cur = conn.cursor()
-print("Connected to Postgres")
+try:
+    conn = psycopg2.connect(dbname="test")
+    cur = conn.cursor()
+    print("Connected to Postgres")
+except Exception as e:
+    print("An error occurred while connecting: ", e)
 
 @app.route("/")
 def index():
-    return render_template("login.html")
+    return render_template("home.html") # use to test each html
 
 @app.route('/login', methods =['POST','GET'])
 def login():
@@ -43,7 +45,6 @@ def login():
         else:
             msg = "Incorrect username / password!"
     return render_template('login.html', msg = msg)
-
 
 @app.route('/logout', methods=['POST','GET'])
 def logout():
@@ -65,5 +66,16 @@ def signup():
         line_1 = request.form['line_1']
         city = request.form['city']
         state = request.form['state']
-        temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE' )
+        temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
+@app.route('/report_gifts', methods=['GET'])
+def report_gifts():
+    # msg = ""
+    cur.execute("""
+        SELECT i.gift_sku, i.gift_name, i.gift_price, s.gift_transaction_id,s.gift_transaction_at, s.user_id 
+        FROM gift_shop_item as i 
+        INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
+    data = cur.fetchall()
+    app.logger.info(data)
+    return render_template('report_gifts.html', data=data)
+        
