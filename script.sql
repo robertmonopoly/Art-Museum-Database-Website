@@ -26,17 +26,5 @@ INSERT INTO gift_shop_sales VALUES ('3457ab7b-9ecb-48e2-a8d0-2b921fe12747', 'tot
 INSERT INTO gift_shop_sales VALUES ('c7974efc-cb45-11ed-afa1-0242ac120002', 'mugs-art1', '2023-03-27 13:00:58', '6be41a29-8fd3-407e-9b37-784a30492237');
 
 INSERT INTO gift_shop_sales VALUES ('dc4f2f5e-cb45-11ed-afa1-0242ac120002', 'pai-ang-bla', '2023-03-27 14:08:52', 'c8304586-5661-4db7-8e75-4dd44b4f7648');
--- CREATE TABLE gift_shop_item (
---     gift_SKU TEXT PRIMARY KEY,
---     gift_name TEXT NOT NULL,
---     gift_type TEXT NOT NULL,
---     gift_price MONEY NOT NULL
--- );
 
--- CREATE TABLE gift_shop_sales (
---     gift_transaction_id UUID PRIMARY KEY,
---     gift_SKU TEXT NOT NULL,
---     gift_transaction_at TIMESTAMP NOT NULL,
---     user_id UUID NOT NULL REFERENCES user_account(user_id)
--- );
 COMMIT;
