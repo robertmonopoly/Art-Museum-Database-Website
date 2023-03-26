@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Ticket Details</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 10px;
+  margin-bottom:0px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+
+
+div.elem-group {
+  margin: 15px 0;
+}
+
+div.elem-group.inlined {
+  width: 49%;
+  display: inline-block;
+  float: left;
+  margin-left: 0.5%;
+}
+
+label {
+  display: block;
+  font-family: 'Nanum Gothic';
+  padding-bottom: 5px;
+  font-size: 1.25em;
+}
+
+input, select, textarea {
+  border-radius: 0.5px;
+  border: 2px solid #777;
+  box-sizing: border-box;
+  font-size: 17px;
+  font-family: sans-serif;
+  width: 100%;
+  padding: 5px;
+}
+
+div.elem-group.inlined input {
+  width: 95%;
+  display: inline-block;
+}
+
+textarea {
+  height: 200px;
+}
+
+hr {
+  border: 1px dotted #ccc;
+}
+
+button {
+  height: 50px;
+  background: #5898ed;
+  border: none;
+  color: white;
+  font-size: 1.25em;
+  font-family: 'Nanum Gothic';
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  border: 2px solid black;
+}
+
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+
+}
+
+.right {
+  right: 0;
+ 
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.centered img {
+  width: 150px;
+  border-radius: 50%;
+}
+</style>
+</style>
+</head>
+<body>
+    <h1>Ticket Details</h1>
+    
+    
+    <ul class = "navbarone">
+        <li><a href="/html/homepage.html">Home</a></li>
+        <li><a href="/html/exhibitions.html">Exhibitions</a></li>
+        <li class="topnav"><input type="text" placeholder="Search..."></li>
+      </ul>
+      <p></p>
+
+    <h2 class = "blink" style="color:blue; font-size: 25px;">Find tickets to our Exhibitions here.</h2>
+    <hr width="100%" color= "grey" size="0.5px" padding="0"/>
+  
+    <h3 style="padding-left:20px"> General Admission</h3>
+    <p style="padding-left:20px; margin-bottom: 10px;">Visitors in the galleries / law building / arts of india galleries. General admission provides access to the MFAH art collections. Purchase online or drop by any admissions desk.</p>
+
+  <div class = "boxed">
+    <p style=" margin-top: 0%;">MFAH Member (Join now!)<b> Free</b><br>
+      Adult General Admission (19+) 	<b>   $19</b><br>
+      Senior General Admission (65+ with ID) 	<b>   $16</b><br>
+      College Student General Admission (19+ with ID)	<b>   $12</b><br>
+      Youth General Admission (13 to 18)	<b>   $12</b><br>
+      Child General Admission (12 & younger)	<b>   Free</b><br>
+      Military General Admission (with ID)	<b>   Free</b><br>
+      </p>   
+      </div>
+    
+ 
+     
+    <h3 style="padding-left:20px">Museum Hours</h3>
+    <p style="padding-left:20px">See the latest visiting guidelines here. Advance timed tickets recommended. We welcome all visitors at any time.
+    </p>
+  
+    <p style="padding-left:20px; padding-bottom: 20px;">
+    <b><u>Hours of Operation</u></b><br>
+    Sunday | 12:30 p.m. to 6 p.m.<br>
+    Monday | Closed  (Open selected holidays)<br>
+    Tuesday | Closed<br>
+    Wednesday | 11 a.m. to 5 p.m.<br>
+    Thursday | 11 a.m. to 9 p.m.<br>
+    Friday | 11 a.m. to 6 p.m.<br>
+    Saturday | 11 a.m. to 6 p.m.<br>
+    </p>
+
+ <h2 style="color:blue; font-size: 25px;">Get Tickets Here</h2>
+ <hr width="100%" color= "grey" size="0.5px" padding="0"/>
+
+
+ <div class="row">
+  <div class="column">
+  <form action="/pythonweb.py" method="post" style="width:80%; margin-left:20px;">
+    <div class="elem-group">
+      <label for="name">First Name</label>
+      <input type="text" id="lname" name="visitor_fname" pattern=[A-Z\sa-z]{3,20} required>
+    </div>
+    <div class="elem-group">
+      <label for="name">Last Name</label>
+      <input type="text" id="lname" name="visitor_lname" pattern=[A-Z\sa-z]{3,20} required>
+    </div>
+    <div class="elem-group">
+      <label for="email">E-mail Address</label>
+      <input type="email" id="email" name="visitor_email" placeholder="john.doe@email.com" required>
+    </div>
+    <div class="elem-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="visitor_phone" placeholder="498-348-3872" pattern=(\d{3})-?\s?(\d{3})-?\s?(\d{4}) required>
+    </div>
+    <hr>
+    <div class="elem-group inlined">
+      <label for="adult">Adults</label>
+      <input type="number" id="adult" name="total_adults"  min="1" required>
+    </div>
+    <div class="elem-group inlined">
+      <label for="child">Children</label>
+      <input type="number" id="child" name="total_children"  min="0" required>
+    </div>
+    <div class="elem-group">
+      <label for="checkin-date">Select Date</label>
+      <input type="date" id="checkin-date" name="checkin" required>
+    </div>
+  
+     
+    
+    <div class="elem-group">
+      <label for="selection">Select Membership type</label>
+      <select id="selection" name="Mem_preference" required>
+        <option value="">Choose Membership Type</option>
+        <option value="general">General Member</option>
+        <option value="silver">Silver Member</option>
+        <option value="bronze">Bronze Member</option>
+        <option value="gold">Gold Member</option>
+        <option value="platinum">Platinum Member</option>
+      
+    </select>
+    
+    </div>
+
+  
+  <div class="elem-group">
+    <label for="selection">Select Exhibition Name</label>
+    <select id="selection" name="Exh_preference" required>
+        <option value="">Choose an Exhibition from the List</option>
+        <option value="Pipilotti">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
+        <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
+        <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
+        <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
+        <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
+        <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
+    </select>
+  </div>
+
+<div>
+  <button type="submit" style="background-color: #5898ed;">Book Tickets</button>
+</form>
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<div class = "row">
+<div class ="column" style="width:50%; padding-top: 50px;">
+  
+
+  <iframe src = "/html/shopping_cart.html"> hello</iframe>
+
+</div>
+</div>
+
+
+
+
+    </body>
+    </html>
