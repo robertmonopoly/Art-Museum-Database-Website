@@ -117,20 +117,20 @@ CREATE TABLE employees (
 );
 
 CREATE TABLE exhibitions (
-    exhibition_id UUID PRIMARY KEY,
-    exhibition_at TIMESTAMP NOT NULL,
-    exhibition_ticket_price MONEY NOT NULL,
-    exhibition_gallery TEXT NOT NULL,
-    exhibition_title TEXT NOT NULL,
+    exhib_id UUID PRIMARY KEY,
+    exhib_at TIMESTAMP NOT NULL,
+    exhib_ticket_price MONEY NOT NULL,
+    exhib_gallery TEXT NOT NULL,
+    exhib_title TEXT NOT NULL,
     curator TEXT NOT NULL,
-    exhibition_artists TEXT NOT NULL
+    exhib_artists TEXT NOT NULL
 );
 
-CREATE TABLE exhibition_ticket_sales (
-    exhibition_transaction_id UUID PRIMARY KEY, 
+CREATE TABLE exhib_ticket_sales (
+    exhib_transac_id UUID PRIMARY KEY, 
     user_id UUID NOT NULL REFERENCES user_account(user_id), 
-    exhibition_id UUID NOT NULL REFERENCES exhibitions(exhibition_id),
-    exhibition_transaction_at TIMESTAMP NOT NULL
+    exhib_id UUID NOT NULL REFERENCES exhibitions(exhib_id),
+    exhib_transac_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE films (
@@ -144,10 +144,10 @@ CREATE TABLE films (
 );
 
 CREATE TABLE film_ticket_sales (
-    film_transaction_id UUID PRIMARY KEY,
+    film_transac_id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES user_account(user_id),
     film_id UUID NOT NULL REFERENCES films(film_id),
-    film_transaction_at TIMESTAMP NOT NULL
+    film_transac_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE calendar (

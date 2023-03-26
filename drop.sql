@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS film_ticket_sales;
 
 DROP TABLE IF EXISTS films;
 
-DROP TABLE IF EXISTS exhibition_ticket_sales;
+DROP TABLE IF EXISTS exhib_ticket_sales;
 
 DROP TABLE IF EXISTS exhibitions;
 

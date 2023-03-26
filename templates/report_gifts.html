@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Gift Item Report</title>
+        <title>Gift Item Sales Report</title>
     </head>
     <body>
         <div class="item-name">
             <form action=/report_gifts method = 'GET'>
                 <p><h3>Please enter the gift's item name.</h3></p>
                 <p><input type = "text" name = "gift-name" placeholder="Gift Name" id = "gift-name" required/></p>
+                <label for="start">Start:</label>
+                <input type="date" id="start" name="start-date">
+                <label for="end">End:</label>
+                <input type="date" id="end" name="end-date">
                <p><input type = "submit" value = "Grab Report" /></p>
             </form>
         </div>
     </body>
         <table>
-            <thead> <h3>This table shows how many of an item were sold in a day</h3>
+            <thead> 
+            <h3>This table shows how many of an item were sold in an interval</h3>
             <tr>
                 <th>SKU</th>
                 <th>Gift Name</th>
                 <th>Price</th>
-                <th>Date</th>
+                <th>Date of Transaction</th>
             </tr>
             </thead>
             <tbody>

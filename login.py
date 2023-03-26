@@ -1,5 +1,6 @@
 import jwt
 import bcrypt
+from datetime import date
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
 app = Flask(__name__)
 import psycopg2
@@ -70,14 +71,17 @@ def signup():
 
 @app.get('/report_gifts')
 def report_gifts():
+    # need to give range of data
     gift_name = request.args.get('gift-name')
-    if gift_name:
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    if gift_name and start_date and end_date:
         cur.execute("""
             SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
             FROM gift_shop_item as i
             INNER JOIN gift_shop_sales as s 
             ON s.gift_sku = i.gift_sku 
-            WHERE i.gift_name = %s""", [gift_name]
+            WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) > %s AND DATE(s.gift_transaction_at) < %s """, [gift_name, start_date, end_date]
             )
         data = cur.fetchall()
         app.logger.info(data)
@@ -85,3 +89,21 @@ def report_gifts():
     else:
          return render_template('report_gifts.html')
             
+@app.get('/report_tickets')
+def report_tickets():
+    # implement date as today's date later, but rn it's fake date
+    t_date = date.today()
+    if t_date:
+        cur.execute("""
+        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
+        FROM exhibitions as e
+            INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
+        UNION
+        SELECT film_title, film_ticket_price, DATE(film_transac_at)
+        FROM films as f
+            INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
+        """)
+       
+        data = cur.fetchall()
+        app.logger.info(data)
+        return render_template('report_tickets.html') # fill it in
