@@ -1,6 +1,5 @@
 import jwt
 import bcrypt
-import flask
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
 app = Flask(__name__)
 import psycopg2
@@ -41,11 +40,12 @@ def login():
             # session['username'] = account['username']
             msg = "Logged in successfully!"
             # render the home page maybe?
-            return render_template("home.html")
+            return render_template("home.html",msg=msg)
         else:
             msg = "Incorrect username / password!"
     return render_template('login.html', msg = msg)
 
+# may or may not implement this lol. not super important
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     return
@@ -68,14 +68,20 @@ def signup():
         state = request.form['state']
         temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
-@app.route('/report_gifts', methods=['GET'])
+@app.get('/report_gifts')
 def report_gifts():
-    # msg = ""
-    cur.execute("""
-        SELECT i.gift_sku, i.gift_name, i.gift_price, s.gift_transaction_id,s.gift_transaction_at, s.user_id 
-        FROM gift_shop_item as i 
-        INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
-    data = cur.fetchall()
-    app.logger.info(data)
-    return render_template('report_gifts.html', data=data)
-        
+    gift_name = request.args.get('gift-name')
+    if gift_name:
+        cur.execute("""
+            SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
+            FROM gift_shop_item as i
+            INNER JOIN gift_shop_sales as s 
+            ON s.gift_sku = i.gift_sku 
+            WHERE i.gift_name = %s""", [gift_name]
+            )
+        data = cur.fetchall()
+        app.logger.info(data)
+        return render_template('report_gifts.html', data=data)
+    else:
+         return render_template('report_gifts.html')
+            

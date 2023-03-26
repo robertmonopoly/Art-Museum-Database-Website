@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>test</title>
+        <title>Gift Item Report</title>
     </head>
     <body>
-        {% for item in data %}
-        <tr>
-            <td>{{item[0]}}</td>
-            <td>{{item[1]}}</td>
-        </tr> 
-        {% endfor %}
+        <div class="item-name">
+            <form action=/report_gifts method = 'GET'>
+                <p><h3>Please enter the gift's item name.</h3></p>
+                <p><input type = "text" name = "gift-name" placeholder="Gift Name" id = "gift-name" required/></p>
+               <p><input type = "submit" value = "Grab Report" /></p>
+            </form>
+        </div>
     </body>
+        <table>
+            <thead> <h3>This table shows how many of an item were sold in a day</h3>
+            <tr>
+                <th>SKU</th>
+                <th>Gift Name</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for item in data %} 
+                    <tr>
+                        <td>{{item[0]}}</td>
+                        <td>{{item[1]}}</td>
+                        <td>{{item[2]}}</td>
+                        <td>{{item[3]}}</td>
+                        <br>
+                    </tr>
+                {% endfor %} 
+            </tbody>
+       
 </html>
