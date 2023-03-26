@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Museum Database Homepage</title>
@@ -29,7 +29,7 @@
   
     <div class="image-container">
     <a href="/html/artworks.html">
-      <img class="images" src="/img/art3.jpeg">
+      <img class="images" src="{{ url_for('static', filename='/img/art3.jpeg') }}"> 
     </a>
     <div class="caption-container">
       <div class="caption">Artworks</div>
@@ -39,7 +39,7 @@
 
   <div class="image-container">
     <a href="/html/exhibitions.html">
-      <img class="images" src="/img/exhibit.png">
+      <img class="images" src="{{ url_for('static', filename='/img/exhibit.png') }}">
     </a>
     <div class="caption-container">
       <div class="caption">Exhibitions</div>
@@ -48,7 +48,7 @@
   
   <div class="image-container">
     <a href="/html/members.html">
-      <img class="images" src="/img/mems.jpeg">
+      <img class="images" src="{{ url_for('static', filename='/img/mems.jpeg') }}">
     </a>
     <div class="caption-container">
       <div class="caption">Members</div>
@@ -57,7 +57,7 @@
  
   <div class="image-container">
     <a href="/html/films.html">
-      <img class="images" src="/img/films.webp">
+      <img class="images" src="{{ url_for('static', filename='/img/films.webp') }}">
     </a>
     <div class="caption-container">
       <div class="caption">Films</div>
@@ -66,7 +66,7 @@
 
   <div class="image-container">
     <a href="/html/gift_shop.html">
-      <img class="images" src="/img/mfah_shop.png">
+      <img class="images" src="{{ url_for('static', filename='/img/mfah_shop.png') }}">
     </a>
     <div class="caption-container">
       <div class="caption">Gift Shop</div>
@@ -75,7 +75,7 @@
 
   <div class="image-container">
     <a href="/html/employees.html">
-      <img class="images" src="/img/emps.jpeg">
+      <img class="images" src="{{ url_for('static', filename='/img/emps.jpeg') }}">
     </a>
     <div class="caption-container">
       <div class="caption">Employees</div>
