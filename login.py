@@ -50,7 +50,6 @@ def login():
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     return
-    
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -87,23 +86,28 @@ def report_gifts():
         app.logger.info(data)
         return render_template('report_gifts.html', data=data)
     else:
-         return render_template('report_gifts.html')
+        return render_template('report_gifts.html')
             
 @app.get('/report_tickets')
 def report_tickets():
-    # implement date as today's date later, but rn it's fake date
-    t_date = date.today()
-    if t_date:
+    msg = ""
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    if start_date and end_date:
         cur.execute("""
         SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
         FROM exhibitions as e
             INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
+        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
         UNION
         SELECT film_title, film_ticket_price, DATE(film_transac_at)
         FROM films as f
             INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
-        """)
-       
+        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
+        """, [start_date, end_date, start_date,end_date])
         data = cur.fetchall()
         app.logger.info(data)
-        return render_template('report_tickets.html') # fill it in
+        return render_template('report_tickets.html', data=data) # fill it in
+    else:
+        msg = "Invalid query. Please try again!"
+        return render_template('report_tickets.html', msg=msg)
