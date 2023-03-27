@@ -2,10 +2,11 @@ import jwt
 import bcrypt
 from datetime import date
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
-app = Flask(__name__)
 import psycopg2
 import template as temp
 import hash_password as hp
+app = Flask(__name__)
+app.secret_key = 'my_secret'
 # MAIN IDEA
 # 1. the user can send their email and password to the server
 # 2. the server can validate the email and password, and see if it matches
@@ -16,6 +17,18 @@ import hash_password as hp
 # 2. server validates using bcrypt, if its valid then generates a JWT and sends it back 
 # 3. JWT is set as a cookie
 # 4. all future requests can grab the JWT from the browser cookies, and verify it, and then grab the info from the payload
+
+# USER CLASS
+class User():
+    def __init__(self, name, email, password, access='USER'):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.access = access
+    
+    def is_admin(self):
+        return self.access == 'ADMIN'
+
 try:
     conn = psycopg2.connect(dbname="test")
     cur = conn.cursor()
@@ -25,31 +38,75 @@ except Exception as e:
 
 @app.route("/")
 def index():
-    return render_template("home.html") # use to test each html
+    return render_template("login.html") 
+
+@app.route('/home', methods = ['POST', 'GET'])
+def home():
+    if request.method == 'GET':
+        user = request.cookies.get('user-role')
+        return render_template("home.html", user=user)
 
 @app.route('/login', methods =['POST','GET'])
 def login():
-    msg = ""
     if request.method == 'POST':
-        # if request.form['password'] == 'admin':
-        username = request.form['user_email'] 
-        password = hp(request.form['password'])
-        account = cur.execute("""SELECT * FROM user_login WHERE user_name=? AND hashed_password=?""", [username,password])
-        if account:
-            # session['loggedin'] = True
-            # session['id'] = account['id']
-            # session['username'] = account['username']
-            msg = "Logged in successfully!"
-            # render the home page maybe?
-            return render_template("home.html",msg=msg)
-        else:
-            msg = "Incorrect username / password!"
-    return render_template('login.html', msg = msg)
+        email = request.form['user_email'] 
+        in_password = request.form['password']
+        try:
+            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name= %s""", (email,))
+            db_password = cur.fetchone()
+        except psycopg2.Error as e:
+            print("error",e)
+    
+        valid_password = hp.isValidPw(in_password,db_password)
+        print (valid_password)
+
+        if valid_password:
+            cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""", (email,))
+            name = cur.fetchone()
+            cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
+            account = cur.fetchone()
+            cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
+            db_role = cur.fetchone()
+            print("role is ", db_role)
+
+            if account:
+                user = User(name, email, in_password, db_role[0])
+                session['user-role'] = user.access
+                return render_template('home.html', user=user)
+    return render_template('login.html') # called when the request.method is not 'POST'
 
 # may or may not implement this lol. not super important
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     return
+@app.get('/artworks')
+def artworks():
+        user = session["user-role"]
+        return render_template('artworks.html', user=user)
+
+@app.get('/exhibitions')
+def exhibitions():
+    return render_template('exhibitions.html')
+
+@app.get('/films')
+def films():
+    return render_template('films.html')
+
+@app.get('/members')
+def members():
+    return render_template('members.html')
+
+@app.get('/gift_shop')
+def gift_shop():
+    return render_template('gift_shop.html')
+
+@app.get('/employees')
+def employees():
+    return render_template('employees.html')
+
+@app.get('/add_new_artwork')
+def add_new_artwork():
+     return render_template('add_new_artwork.html')
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -111,3 +168,5 @@ def report_tickets():
     else:
         msg = "Invalid query. Please try again!"
         return render_template('report_tickets.html', msg=msg)
+
+
