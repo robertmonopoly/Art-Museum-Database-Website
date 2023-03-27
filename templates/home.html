@@ -9,7 +9,9 @@
 
 <body>
 <h1 vertical-align="center" style="padding-left: 20px;">Museum Database</h1>
-
+<!-- {% if user %}
+<li><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
+{% endif %} -->
 <ul class = "navbarone">
     <li class = "active"><a href="{{ url_for('home') }}">Home</a></li>
     <li><a href="{{ url_for('artworks') }}">Artworks</a></li>
