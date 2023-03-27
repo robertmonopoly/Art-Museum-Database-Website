@@ -1,6 +1,7 @@
+# This file is just a library of SQL functions; no connection is actually being done here.
 import uuid
 import hash_password as hw
-# This file is just a library of SQL functions; no connection is actually being done here.
+
 # The "cur" input variable comes from:
 # con = psycopg2.connect("host="",
 #     database="",
@@ -9,7 +10,16 @@ import hash_password as hw
 # cur = con.cursor()
 # print("Connected to Postgres")
 
-# need to create user class
+# USER CLASS
+class User():
+    def __init__(self, name, email, password, access='USER'):
+        self.name = name
+        self.email = email
+        self.password = password
+        self.access = access
+    
+    def is_admin(self):
+        return self.access == 'ADMIN'
 
 
 # @app.route('/registration', methods=['POST']) -> use this when connecting db and routing html
@@ -47,7 +57,7 @@ def insert_art(cur, obj_num,title, artist, culture, made_on, obj_type, art_dpt, 
     else:
         print("Values inserted successfully!")
 
-
+# good example of insertion
 def insert_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
     try:
         sql_query = "INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s);"
@@ -60,7 +70,7 @@ def insert_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
 
 def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     try:
-        # Extract values from the request body -> do this in dif. file
+        # Extract values from the request body -> do this in login.py file
         # gift_sku = request.json['gift_sku']
         # transac_at = request.json['transaction_at']
         # user_id = request.json['user_id']
@@ -79,8 +89,7 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
             print("Values inserted successfully!")
         cur.commit()
 
-        # Return a success message
-        return jsonify({'message': 'Gift sale inserted successfully.'}), 201
+        
     except Exception as e:
         # If any error occurs, rollback the transaction and return an error message
         cur.rollback()
@@ -93,7 +102,7 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
 def gift_report(cur):
     try:
         cur.execute("""
-        SELECT i.gift_sku, i.gift_name, i.gift_price, s.gift_transaction_id,s.gift_transaction_at, s.user_id 
+        SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at), s.user_id 
         FROM gift_shop_item as i 
         INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
     except Exception as e:

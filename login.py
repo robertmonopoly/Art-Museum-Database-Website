@@ -1,22 +1,9 @@
-import jwt
-import bcrypt
-from datetime import date
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
 import psycopg2
 import template as temp
 import hash_password as hp
 app = Flask(__name__)
 app.secret_key = 'my_secret'
-# MAIN IDEA
-# 1. the user can send their email and password to the server
-# 2. the server can validate the email and password, and see if it matches
-# 3. the server can inform the user of if their username/password was correct
-
-# OVERALL PROCESS:
-# 1. user sends email/pw to server
-# 2. server validates using bcrypt, if its valid then generates a JWT and sends it back 
-# 3. JWT is set as a cookie
-# 4. all future requests can grab the JWT from the browser cookies, and verify it, and then grab the info from the payload
 
 # USER CLASS
 class User():
@@ -25,10 +12,7 @@ class User():
         self.email = email
         self.password = password
         self.access = access
-    
-    def is_admin(self):
-        return self.access == 'ADMIN'
-
+# Connection
 try:
     conn = psycopg2.connect(dbname="test")
     cur = conn.cursor()
@@ -106,24 +90,29 @@ def employees():
 
 @app.get('/add_new_artwork')
 def add_new_artwork():
-     return render_template('add_new_artwork.html')
+    return render_template('add_new_artwork.html')
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     msg = ""
     if request.method == 'POST':
-        f_name = request.form['user_fname']
-        l_name = request.form['user_lname']
+       
         email = request.form['user_email']
         password = request.form['user_password']
-        phone_number = request.form['phone_number']
-        sex = request.form['sex']
-        dob = request.form['dob']
-        # address area
-        line_1 = request.form['line_1']
-        city = request.form['city']
-        state = request.form['state']
-        temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+        
+# need to create page
+@app.route('/user_info')
+def user_info():
+    f_name = request.form['user_fname']
+    l_name = request.form['user_lname']
+    # address area
+    line_1 = request.form['line_1']
+    city = request.form['city']
+    state = request.form['state']
+    phone_number = request.form['phone_number']
+    sex = request.form['sex']
+    dob = request.form['dob']
+    temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
 @app.get('/report_gifts')
 def report_gifts():
