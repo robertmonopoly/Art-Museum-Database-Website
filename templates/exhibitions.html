@@ -91,10 +91,10 @@
 
 
 <ul class = "navbarone">
-    <li><a href="/html/homepage.html">Home</a></li>
-    <li class = "active"><a href="/html/exhibitions.html">Exhibitions</a></li>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li class = "active"><a href="{{ url_for('exhibitions') }}">Exhibitions</a></li>
     <li class="topnav"><input type="text" placeholder="Search..."></li>
-    <li><a href="/html/add_new_exhibition.html">Add New Exhibition</a></li>
+    <li><a href="{{ url_for('add_new_exhibition') }}">Add New Exhibition</a></li>
   </ul>
   </ul>
   <p></p>
@@ -112,10 +112,10 @@
 <div class ="column">
 <div class = "row" style="padding-left: 20px;">
   <p> 
-    <img src="/img/img1.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+    <img src="{{ url_for('static', filename='/img/img1.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">Pipilotti Rist: Pixel Forest and Worry Will Vanish</h3>
     <p style="margin-top: 0;margin-bottom:5px">Through September 4, 2023 </p>
-    <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button></p>
+    <button class = "button button1"><a href="{{ url_for('ticket_details.html')}}">Buy Tickets</a></button></p>
   </p>
   <br>
   <br>
@@ -125,10 +125,10 @@
 
 <div class = "row" style="padding-left: 20px;">
   <p> 
-    <img src="/img/img2.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+    <img src="{{ url_for('static', filename='/img/img2.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</h3>
     <p style="margin-top: 0; margin-bottom:5px">Through May 14, 2023 </p>
-    <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button> 
+    <button class = "button button1"><a href="{{ url_for('/html/ticket_details.html')}}">Buy Tickets</a></button> 
   </p>
   <br>
   <br>
@@ -138,10 +138,10 @@
 
 <div class = "row" style="padding-left: 20px;">
   <p> 
-    <img src="/img/img3.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+    <img src="{{ url_for('static', filename='/img/img3.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</h3>
     <p style="margin-top: 0; margin-bottom:5px">Through April 16, 2023</p>
-    <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button>
+    <button class = "button button1"><a href="{{ url_for('/html/ticket_details.html')}}">Buy Tickets</a></button>
   </p>
   <br>
   <br>
@@ -151,10 +151,10 @@
 
 <div class = "row" style="padding-left: 20px;">
   <p> 
-    <img src="/img/img4.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+    <img src="{{ url_for('static', filename='/img/img4.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">Golden Worlds: The Portable Universe of Indigenous Colombia</h3>
     <p style="margin-top: 0; margin-bottom:5px">Through April 16, 2023 </p>
-    <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button> 
+    <button class = "button button1"><a href="{{ url_for('/html/ticket_details.html')}}">Buy Tickets</a></button> 
   </p>
   <br>
   <br>
@@ -168,10 +168,10 @@
 <div class ="row">
   <div class = "row" style="padding-left: 20px;">
     <p> 
-      <img src="/img/e1.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+      <img src="{{ url_for('static', filename='/img/e1.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
       <h3 style="margin-bottom:3px">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</h3>
       <p style="margin-top: 0; margin-bottom:5px">May 21 to September 17, 2023 </p>
-      <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button> 
+      <button class = "button button1"><a href="{{ url_for('/html/ticket_details.html')}}">Buy Tickets</a></button> 
     </p>
     <br>
     <br>
@@ -181,10 +181,10 @@
 
   <div class = "row" style="padding-left: 20px;">
     <p> 
-      <img src="/img/e2.png" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+      <img src="{{ url_for('static', filename='/img/e2.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
       <h3 style="margin-bottom:3px">Woven Wonders: Indian Textiles from the Parpia Collection</h3>
       <p style="margin-top: 0; margin-bottom:5px">June 10 to September 4, 2023</p>
-      <button class = "button button1"><a href="/html/ticket_details.html">Buy Tickets</a></button> 
+      <button class = "button button1"><a href="{{ url_for('/html/ticket_details.html')}}">Buy Tickets</a></button> 
     </p>
     <br>
     <br>

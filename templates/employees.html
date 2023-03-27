@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Members</title>
@@ -11,9 +11,9 @@
 <h1>Employees</h1>
 
 <ul class = "navbarone">
-    <li><a href="/html/homepage.html">Home</a></li>
-    <li class = "active"><a href="/html/employees.html">Employees</a></li>
-    <li><a href="/html/add_new_employee.html">Add New Employee</a></li>
+    <li><a href="{{ url_for('home') }}">Home</a></li>
+    <li class = "active"><a href="{{ url_for('employees') }}">Employees</a></li>
+    <li><a href="{{ url_for('add_new_employee') }}">Add New Employee</a></li>
   </ul>
 
 </body>
