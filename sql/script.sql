@@ -14,7 +14,7 @@ INSERT INTO user_login VALUES ('6be41a29-8fd3-407e-9b37-784a30492237', 'USER', '
 INSERT INTO user_account VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'yves','chu', '(861 country side,spoon island,FL,324225)', 'her@gmail.com', '112-426-3265', 'FEMALE', '12-11-2002', 'BASIC');
 INSERT INTO user_login VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'USER', 'her@gmail.com','$2b$12$WhzUm6vuWEG/0tDXneCHuuZljGnH.wQcCidwqz0yM9WGbp8cN5sru','2023-05-04 07:22:02');
 
--- these are for the report generation of how many of a certain item was sold in a day
+-- these are for the report generation of how many of a certain item was sold in an interval
 INSERT INTO gift_shop_item VALUES ('toteb-art2', 'totebag','accessories','13.99');
 INSERT INTO gift_shop_item VALUES ('toteb-art3', 'totebag','accessories','11.99');
 INSERT INTO gift_shop_item VALUES ('toteb-art4', 'totebag','accessories','12.99');
@@ -40,6 +40,7 @@ INSERT INTO gift_shop_sales VALUES ('dc4f2f5e-cb45-11ed-afa1-0242ac120002', 'pai
 INSERT INTO gift_shop_sales VALUES ('ceca2fa6-cc16-11ed-afa1-0242ac120002', 'pai-cir-bla', '2023-04-15 14:08:52', 'c8304586-5661-4db7-8e75-4dd44b4f7648');
 INSERT INTO gift_shop_sales VALUES ('f4db3386-27a0-4dfb-814b-e2e4e12ee98b', 'pai-cir-wht', '2023-04-11 14:08:52', 'e3a9dc6e-cad1-11ed-afa1-0242ac120002');
 
+-- these are for the report generation of how many of a certain item was sold in a day
 INSERT INTO exhibitions VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', '5.99','gallery name','Flower Exhib', 'some curator', 'an artist');
 INSERT INTO exhib_ticket_sales VALUES ('f91e597a-cb90-11ed-afa1-0242ac120002', 'c8304586-5661-4db7-8e75-4dd44b4f7648', 'b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2023-03-02 20:35:06');
 
@@ -52,35 +53,4 @@ INSERT INTO film_ticket_sales VALUES ('f91e5ad8-cb90-11ed-afa1-0242ac120002', '6
 INSERT INTO films VALUES ('23382a5a-cb97-11ed-afa1-0242ac120002', '2013-08-19 06:36:03', 'Matrix Film', '3.99', '121','some director', '4');
 INSERT INTO film_ticket_sales VALUES ('233831f8-cb97-11ed-afa1-0242ac120002', '6be41a29-8fd3-407e-9b37-784a30492237', '23382a5a-cb97-11ed-afa1-0242ac120002', '2023-04-10 20:35:06');
 
--- CREATE TABLE films (
---     film_id UUID PRIMARY KEY,
---     viewing_at TIMESTAMP NOT NULL,
---     film_title TEXT NOT NULL,
---     film_ticket_price MONEY NOT NULL,
---     duration_min INTEGER NOT NULL,
---     film_director TEXT NOT NULL,
---     film_rating TEXT NOT NULL
--- );
--- CREATE TABLE film_ticket_sales (
---     film_transaction_id UUID PRIMARY KEY,
---     user_id UUID NOT NULL REFERENCES user_account(user_id),
---     film_id UUID NOT NULL REFERENCES films(film_id),
---     film_transaction_at TIMESTAMP NOT NULL
--- );
--- CREATE TABLE exhibitions (
---     exhibition_id UUID PRIMARY KEY,
---     exhibition_at TIMESTAMP NOT NULL,
---     exhibition_ticket_price MONEY NOT NULL,
---     exhibition_gallery TEXT NOT NULL,
---     exhibition_title TEXT NOT NULL,
---     curator TEXT NOT NULL,
---     exhibition_artists TEXT NOT NULL
--- );
-
--- CREATE TABLE exhibition_ticket_sales (
---     exhibition_transaction_id UUID PRIMARY KEY, 
---     user_id UUID NOT NULL REFERENCES user_account(user_id), 
---     exhibition_id UUID NOT NULL REFERENCES exhibitions(exhibition_id),
---     exhibition_transaction_at TIMESTAMP NOT NULL
--- );
 COMMIT;
