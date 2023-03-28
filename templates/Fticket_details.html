@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Film Tickets Details</title>
+</head>
+<body>
+<style>
+  input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
+}
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 10px;
+  margin-bottom:0px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
+</style>
+<h1>Ticket Details</h1>
+
+<ul class = "navbarone">
+    <li><a href="{{url_for('home')}}">Home</a></li>
+    <li class = "active"><a href="{{url_for('films')}}">Films</a></li>
+  </ul>
+
+<br>
+
+<div class = "column">
+  <div class = "row">
+  <img src= "{{url_for('static', filename = '/img/films_webapge_background.png')}}" style="width: 450px; height: 300px; padding-left: 20px;">
+  </div>
+<br>
+  
+  <p style="text-align: left; font-size: 17px;padding-left:20px; padding-top:0px; margin-top:0px"><b>Location & Directions
+    The MFAH has two theaters:</b> <br>
+   <u>Brown Auditorium</u> Theater 
+    in the Law Building (1001 Bissonnet Street)<br>
+    <u>The Lynn Wyatt</u> Theater in the Kinder Building (5500 Main Street).</p>
+    
+    <p  style="text-align: left; padding-left:20px; padding-bottom: 2px; font-size: 17px"><b>Subtitles</b><br>
+    All films originating in foreign languages are shown with English subtitles,<br> unless otherwise noted.</p>
+    
+    <p  style="text-align: left; padding-left:20px; padding-bottom: 2px; font-size: 17px"><b>Showtimes</b><br>
+    Check <a href = "{{url_for(films)}}"> Films</a> to see the film schedule and to purchase tickets online.</p>
+    <br>
+   
+    
+      <p style=" margin-top: 0%; padding-bottom: 0px; padding-left:20px; font-size: 17px"><u><b>Memebrship Discounts</u></b>
+        </p>  
+        <p style="padding-left:20px; margin-top: 2px; font-size: 17px"> General Member 	<b>   Regular Price</b><br>
+          Silver Memeber	<b>   10% off</b><br>
+          Gold Memebr	<b>   20% off</b><br>
+          Platinum Member	<b>   30% off</b><br></p> 
+    
+
+</div>
+   
+
+  <h2 style="color:blue; font-size: 25px; padding:20px;">Get Tickets Here</h2>
+  <form action="/pythonweb.py" method="post" style="width:80%; margin-left:20px; font-size: 17px;">
+  <div class="elem-group inlined">
+    <div class="elem-group">
+      <label for="selection">Select Film Name</label>
+      <select id="selection" name="Mem_preference" style ="padding:4px"required >
+        <option value="">Choose Film</option>
+        <option value="general">Tadao Ando - From Emptiness to Infinity</option>
+        <option value="silver">Marina Abramovic - The Artist is Present</option>
+        <option value="bronze">The Art of Silence</option>
+        <option value="gold">Hilma af Klint - Beyond the Visible</option>
+        <option value="platinum">Ha Le Diem - Children of the Mist</option>  
+    </select><br><br>
+    <label for="adult" >Number of Tickets</label>
+    <input type="number" id="adult" name="total_adults" placeholder="1  " min="1"   style="text-align: right;" required>
+  </div><br>
+  </form>
+
+
+</body>
+</html>
