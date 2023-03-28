@@ -29,7 +29,7 @@ INSERT INTO gift_shop_item VALUES ('pai-ang-bla', 'paintbrush','supplies','9.99'
 
 INSERT INTO gift_shop_sales VALUES ('3457ab7b-9ecb-48e2-a8d0-2b921fe12747', 'toteb-art2', '2023-03-27 10:36:01','e3a9dd72-cad1-11ed-afa1-0242ac120002');
 INSERT INTO gift_shop_sales VALUES ('b6cbac88-cb79-11ed-afa1-0242ac120002', 'toteb-art1', '2023-04-10 11:36:01','e3a9dd72-cad1-11ed-afa1-0242ac120002');
-INSERT INTO gift_shop_sales VALUES ('ceca31ea-cc16-11ed-afa1-0242ac120002', 'toteb-art10', '2023-04-11 11:36:01','e3a9dd72-cad1-11ed-afa1-0242ac120002');
+INSERT INTO gift_shop_sales VALUES ('ceca31ea-cc16-11ed-afa1-0242ac120002', 'toteb-art4', '2023-04-11 11:36:01','e3a9dd72-cad1-11ed-afa1-0242ac120002');
 INSERT INTO gift_shop_sales VALUES ('1437c24c-cc17-11ed-afa1-0242ac120002', 'toteb-art3', '2023-04-13 11:36:01','e3a9dd72-cad1-11ed-afa1-0242ac120002');
 
 INSERT INTO gift_shop_sales VALUES ('c7974efc-cb45-11ed-afa1-0242ac120002', 'mugs-art1', '2023-04-10 13:00:58', '6be41a29-8fd3-407e-9b37-784a30492237');

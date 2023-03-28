@@ -125,7 +125,6 @@ def Fticket_details():
 def signup():
     msg = ""
     if request.method == 'POST':
-       
         email = request.form['user_email']
         password = request.form['user_password']
 
@@ -155,7 +154,7 @@ def report_gifts():
             FROM gift_shop_item as i
             INNER JOIN gift_shop_sales as s 
             ON s.gift_sku = i.gift_sku 
-            WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) > %s AND DATE(s.gift_transaction_at) < %s """, [gift_name, start_date, end_date]
+            WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [gift_name, start_date, end_date]
             )
         data = cur.fetchall()
         app.logger.info(data)
