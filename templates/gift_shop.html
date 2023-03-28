@@ -92,10 +92,10 @@
 </div>
 
 <ul class = "navbarone">
-    <li><a href="{{url for ('home')}}">Home</a></li>
-    <li class = "active"><a href="{{url for ('gift_shop')}}">Gift Shop</a></li>
-    <li><a href="{{url for ('add_new_gift_shop')}}">Add New Gift Shop Item</a></li>
-  </ul>
+    <li><a href="{{url_for('home')}}">Home</a></li>
+    <li class = "active"><a href="{{url_for('gift_shop')}}">Gift Shop</a></li>
+    <li><a href="{{url_for('add_new_gift_shop_item')}}">Add New Gift Shop Item</a></li>
+</ul>
 
 <p class = "homepageDescription" style="text-align: center;"> The MFA Shop offers a unique selection of artful gifts, 
   prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
@@ -105,7 +105,7 @@
 <p style="text-align: center; padding-left: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
     <div class="responsive" >
       <div class="gift">
-          <img src="{{url for ('static', filename = '/img/geisha_mug.jpg')}}" alt="Geisha Mug" width="600" height="400">
+          <img src="{{url_for('static', filename = '/img/geisha_mug.jpg')}}" alt="Geisha Mug" width="600" height="400">
         </a>
         <div class="desc">Geisha Mug<br>
           $14.99<br>
@@ -114,7 +114,7 @@
     </div>
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/starrynight_mug.png')}}" alt="Starry Night Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/starrynight_mug.png')}}" alt="Starry Night Mug" width="600" height="400">
         </a>
         <div class="desc">Starry Night Mug<br>
           $14.99<br>
@@ -124,7 +124,7 @@
   
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/picasso_mug.jpg')}}" alt="Picasso Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/picasso_mug.jpg')}}" alt="Picasso Mug" width="600" height="400">
         </a>
         <div class="desc">Picasso Mug<br>
           $14.99<br>
@@ -134,7 +134,7 @@
   
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/wave_mug.jpg')}}" alt="Wave Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/wave_mug.jpg')}}" alt="Wave Mug" width="600" height="400">
         </a>
         <div class="desc">Wave Mug<br>
           $14.99<br>
@@ -144,7 +144,7 @@
 
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/gift6.png')}}" alt="Wave Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/gift6.png')}}" alt="Wave Mug" width="600" height="400">
         </a>
         <div class="desc">Bluetooth Speaker<br>
           $30<br>
@@ -155,7 +155,7 @@
 
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/gift3.png')}}" alt="Wave Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/gift3.png')}}" alt="Wave Mug" width="600" height="400">
         </a>
         <div class="desc">Love, Icebox<br>
           $24.95<br>
@@ -165,7 +165,7 @@
 
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/gift2.png')}}" alt="Wave Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/gift2.png')}}" alt="Wave Mug" width="600" height="400">
         </a>
         <div class="desc">Square Minimal<br>
           $850.00<br>
@@ -176,7 +176,7 @@
 
     <div class="responsive">
       <div class="gift">
-          <img src="{{url for ('static', filename ='/img/gift1.png')}}" alt="Wave Mug" width="600" height="400">
+          <img src="{{url_for('static', filename ='/img/gift1.png')}}" alt="Wave Mug" width="600" height="400">
         </a>
         <div class="desc">Henri Matisse<br>
           From $29<br>
@@ -186,7 +186,7 @@
  
   <div class="responsive">
     <div class="gift">
-        <img src="{{url for ('static', filename ='/img/gift4.png')}}" alt="Wave Mug" width="600" height="400">
+        <img src="{{url_for('static', filename ='/img/gift4.png')}}" alt="Wave Mug" width="600" height="400">
       </a>
       <div class="desc">Book of Poems<br>
         $28.99<br>
@@ -196,7 +196,7 @@
 
 <div class="responsive">
   <div class="gift">
-      <img src="{{url for ('static', filename ='/img/gift5.png')}}" alt="Wave Mug" width="600" height="400">
+      <img src="{{url_for('static', filename ='/img/gift5.png')}}" alt="Wave Mug" width="600" height="400">
     </a>
     <div class="desc">Dinner Candles<br>
       From $34<br>

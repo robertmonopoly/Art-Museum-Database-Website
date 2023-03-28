@@ -2,13 +2,6 @@
 import uuid
 import hash_password as hw
 
-# The "cur" input variable comes from:
-# con = psycopg2.connect("host="",
-#     database="",
-#     user="",
-#     password="")
-# cur = con.cursor()
-# print("Connected to Postgres")
 
 # USER CLASS
 class User():

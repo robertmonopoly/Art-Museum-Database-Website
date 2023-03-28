@@ -102,7 +102,6 @@ CREATE TABLE gift_shop_item_inventory (
     gift_transaction_id UUID REFERENCES gift_shop_sales(gift_transaction_id)
 );
 
-
 CREATE TABLE employees (
     employee_id UUID PRIMARY KEY,
     employee_membership MembershipType NOT NULL,

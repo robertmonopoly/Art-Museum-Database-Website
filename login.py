@@ -63,6 +63,7 @@ def login():
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     return
+
 @app.get('/artworks')
 def artworks():
         user = session["user-role"]
@@ -71,6 +72,26 @@ def artworks():
 @app.get('/exhibitions')
 def exhibitions():
     return render_template('exhibitions.html')
+
+@app.get('/add_new_exhibtion')
+def add_new_exhibition():
+    return render_template('add_new_exhibition.html')
+
+@app.get('/add_new_film')
+def add_new_film():
+    return render_template('add_new_film.html')
+
+@app.get('/add_new_employee')
+def add_new_employee():
+    return render_template('add_new_employee.html')
+
+@app.get('/add_new_artwork')
+def add_new_artwork():
+    return render_template('add_new_artwork.html')
+
+@app.get('/add_new_gift_shop_item')
+def add_new_gift_shop_item():
+    return render_template('add_new_gift_shop_item.html')
 
 @app.get('/films')
 def films():
@@ -88,9 +109,9 @@ def gift_shop():
 def employees():
     return render_template('employees.html')
 
-@app.get('/add_new_artwork')
-def add_new_artwork():
-    return render_template('add_new_artwork.html')
+@app.get('/Eticket_details')
+def Eticket_details():
+    return render_template('Eticket_details')
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -99,7 +120,7 @@ def signup():
        
         email = request.form['user_email']
         password = request.form['user_password']
-        
+
 # need to create page
 @app.route('/user_info')
 def user_info():
