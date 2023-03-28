@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Film Tickets Details</title>
@@ -39,15 +39,15 @@
 <h1>Ticket Details</h1>
 
 <ul class = "navbarone">
-    <li><a href="/html/homepage.html">Home</a></li>
-    <li class = "active"><a href="/html/films.html">Films</a></li>
+    <li><a href="{{url_for('home')}}">Home</a></li>
+    <li class = "active"><a href="{{url_for ('films')}}">Films</a></li>
   </ul>
 
 <br>
 
 <div class = "column">
   <div class = "row">
-  <img src="/img/films_webapge_background.png" style="width: 450px; height: 300px; padding-left: 20px;">
+  <img src= "{{url_for('static', filename = '/img/films_webapge_background.png')}}" style="width: 450px; height: 300px; padding-left: 20px;">
   </div>
 <br>
   
@@ -61,7 +61,7 @@
     All films originating in foreign languages are shown with English subtitles,<br> unless otherwise noted.</p>
     
     <p  style="text-align: left; padding-left:20px; padding-bottom: 2px; font-size: 17px"><b>Showtimes</b><br>
-    Check <a href = "/html/films.html"> Films</a> to see the film schedule and to purchase tickets online.</p>
+    Check <a href = "{{url_for(films)}}"> Films</a> to see the film schedule and to purchase tickets online.</p>
     <br>
    
     
