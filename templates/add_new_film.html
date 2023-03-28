@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Add New Film</title>
+</head>
+<body>
+
+<h1>Add New Film</h1>
+
+
+<ul class = "navbarone">
+  <li><a href="/html/homepage.html">Home</a></li>
+  <li><a href="/html/films.html">Films</a></li>
+  <li class = "active"><a href="/html/add_new_film.html">Add New Film</a></li>
+</ul>
+
+<form action="insert_film.php" method="POST" style="padding:20px;">
+    <label for="film_id">Film ID:</label>
+    <input type="text" name="film_id" id="film_id"><br><br>
+    <label for="viewing_at">Viewing At:</label>
+    <input type="datetime-local" name="viewing_at" id="viewing_at"><br><br>
+    <label for="film_title">Film Title:</label>
+    <input type="text" name="film_title" id="film_title"><br><br>
+    <label for="film_ticket_price">Ticket Price:</label>
+    <input type="text" name="film_ticket_price" id="film_ticket_price"><br><br>
+    <label for="duration_min">Duration (min):</label>
+    <input type="number" name="duration_min" id="duration_min"><br><br>
+    <label for="film_director">Director:</label>
+    <input type="text" name="film_director" id="film_director"><br><br>
+    <label for="film_rating">Rating:</label>
+    <input type="text" name="film_rating" id="film_rating"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+
+
+</div>
+</body>
+</html>

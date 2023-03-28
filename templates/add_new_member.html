@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/mainCSS.css">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Add New Member</title>
+</head>
+<body>
+
+<h1>Add Member</h1>
+
+
+<ul class = "navbarone">
+  <li><a href="/html/homepage.html">Home</a></li>
+  <li><a href="/html/members.html">Members</a></li>
+  <li class = "active"><a href="/html/add_new_gift_shop_itm.html">Add New Member</a></li>
+</ul>
+
+<form action="create_member_account.php" method="post" style="padding:20px;">
+    <label for="first_name">First Name:</label>
+    <input type="text" name="first_name" required><br><br>
+    <label for="last_name">Last Name:</label>
+    <input type="text" name="last_name" required><br><br>
+    <label for="address_line1">Address Line 1:</label>
+    <input type="text" name="address_line1" required><br><br>
+    <label for="address_line2">Address Line 2:</label>
+    <input type="text" name="address_line2"><br><br>
+    <label for="city">City:</label>
+    <input type="text" name="city" required><br><br>
+    <label for="state">State:</label>
+    <input type="text" name="state" required><br><br>
+    <label for="zip">Zip Code:</label>
+    <input type="text" name="zip" required><br><br>
+    <label for="email">Email:</label>
+    <input type="email" name="email" required><br><br>
+    <label for="phone_number">Phone Number:</label>
+    <input type="text" name="phone_number" required><br><br>
+    <label for="sex">Sex:</label>
+    <input type="text" name="gender" required><br><br>
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" required><br><br>
+    <label for="membership">Membership Type:</label>
+    <select id="membership" name="membership" required>
+        <option value="">Select Membership Type</option>
+        <option value="Standard">Standard</option>
+        <option value="Premium">Premium</option>
+        <option value="VIP">VIP</option>
+    </select><br><br>
+    <input type="submit" value="Submit">
+</form>    
+
+
+
+</div>
+</body>
+</html>
