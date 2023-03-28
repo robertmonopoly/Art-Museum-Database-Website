@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
 import psycopg2
-import template as temp
+import query as q
 import hash_password as hp
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -22,7 +22,7 @@ def home():
     if request.method == 'GET':
         user = request.cookies.get('user-role')
         return render_template("home.html", user=user)
-    
+#TODO: setup registration page
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     msg = ""
@@ -54,7 +54,7 @@ def login():
             print("role is ", db_role)
 
             if account:
-                user = temp.User(name, email, in_password, db_role[0])
+                user = q.User(name, email, in_password, db_role[0])
                 session['user-role'] = user.access
                 return render_template('home.html', user=user)
     return render_template('login.html') # called when the request.method is not 'POST'
@@ -89,6 +89,7 @@ def add_new_employee():
 def add_new_member():
     return render_template('add_new_member.html')
 
+#TODO: need to add new artwork
 @app.get('/add_new_artwork')
 def add_new_artwork():
     return render_template('add_new_artwork.html')
@@ -122,7 +123,7 @@ def Fticket_details():
     return render_template('Fticket_details')
 
 
-# need to create page
+# TODO: need to create page
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
@@ -134,8 +135,9 @@ def user_info():
     phone_number = request.form['phone_number']
     sex = request.form['sex']
     dob = request.form['dob']
-    temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+    q.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
+# the reports
 @app.get('/report_gifts')
 def report_gifts():
     mgs = ""
@@ -143,7 +145,7 @@ def report_gifts():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if gift_name and start_date and end_date:
-        data = temp.insert_gift_rep(cur, gift_name,start_date,end_date)
+        data = q.insert_gift_rep(cur, gift_name,start_date,end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_gifts.html', msg=msg)
@@ -158,7 +160,7 @@ def report_tickets():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if start_date and end_date:
-        data = temp.insert_ticket_rep(cur, start_date, end_date)
+        data = q.insert_ticket_rep(cur, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_tickets.html', msg=msg)
@@ -167,4 +169,5 @@ def report_tickets():
     else:
         return render_template('report_tickets.html')
 
+# TODO: need to make third report
 
