@@ -2,8 +2,7 @@
 import uuid
 import hash_password as hw
 
-
-# USER CLASS
+# User Class
 class User():
     def __init__(self, name, email, password, access='USER'):
         self.name = name
@@ -39,6 +38,31 @@ def insert_user_login(cur, user_role, user_name, pw, login_at ):
     #     return 'User registration failed.'
 
 # WARNING: the area below is all pseudo or unfinished code                     
+def insert_gift_rep(cur, g_name, s_date, e_date):
+    cur.execute("""
+    SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
+    FROM gift_shop_item as i
+    INNER JOIN gift_shop_sales as s 
+    ON s.gift_sku = i.gift_sku 
+    WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
+    )
+    data = cur.fetchall()
+    return data
+
+def insert_ticket_rep(cur, s_date,e_date):
+    cur.execute("""
+        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
+        FROM exhibitions as e
+            INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
+        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
+        UNION
+        SELECT film_title, film_ticket_price, DATE(film_transac_at)
+        FROM films as f
+            INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
+        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
+        """, [s_date, e_date, s_date,e_date])
+    data = cur.fetchall()
+    return data
 
 def insert_art(cur, obj_num,title, artist, culture, made_on, obj_type, art_dpt, dim):
     sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
