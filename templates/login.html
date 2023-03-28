@@ -5,7 +5,7 @@
         <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Parisienne">
         <meta charset="utf-8">
-        <title>Registration Page</title>
+        <title>Login Page</title>
         <style>
             .info
             {
@@ -22,15 +22,13 @@
 
     <div class="info" style="vertical-align: middle; margin-top:15%">
     <div class = "boxed" style="margin-left: 19%; border:2px solid black;">
-    <h1 style="font-size: 40px;padding-left: 0%; color: crimson;"> Welcome to The Museum of Fine Arts, Houston - Database </h1>
-    <div class="register">
-        <form action="/register" method="POST">
-            <p><h3 style="color:black; padding-left: 0%;" >Please enter your first name, last name, email, and password.</h3></p>
-            <input type="text" name="user_fname" placeholder="First Name" id="fname" required />
-            <input type="text" name="user_lname" placeholder="Last Name" id="pname" required />
+    <h1 style="font-size: 40px;padding-left: 0%; color: crimson;"> Welcome to The Archive Arts Museum - Database </h1>
+    <div class="login">
+        <form action="/login" method='POST'>
+            <p><h3 style="color:black; padding-left: 0%;" >Please enter your email and password.</h3></p>
             <input type="email" name="user_email" placeholder="Email" id="email" required />
             <input type="password" name="user_password" placeholder="Password" id="password" required />
-            <p><input type="submit" value="Register" style="padding:5px"/></p>
+            <p><input type="submit" value="Login" style="padding:5px"/></p>
         </form>
     </div>
     </div>

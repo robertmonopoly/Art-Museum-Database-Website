@@ -34,7 +34,7 @@ def home():
 def login():
     if request.method == 'POST':
         email = request.form['user_email'] 
-        in_password = request.form['password']
+        in_password = request.form['user_password']
         try:
             cur.execute("""SELECT hashed_password FROM user_login WHERE user_name= %s""", (email,))
             db_password = cur.fetchone()
@@ -73,7 +73,7 @@ def artworks():
 def exhibitions():
     return render_template('exhibitions.html')
 
-@app.get('/add_new_exhibtion')
+@app.get('/add_new_exhibition')
 def add_new_exhibition():
     return render_template('add_new_exhibition.html')
 
@@ -84,6 +84,10 @@ def add_new_film():
 @app.get('/add_new_employee')
 def add_new_employee():
     return render_template('add_new_employee.html')
+
+@app.get('/add_new_member')
+def add_new_member():
+    return render_template('add_new_member.html')
 
 @app.get('/add_new_artwork')
 def add_new_artwork():
@@ -112,6 +116,10 @@ def employees():
 @app.get('/Eticket_details')
 def Eticket_details():
     return render_template('Eticket_details')
+
+@app.get('/Fticket_details')
+def Fticket_details():
+    return render_template('Fticket_details')
 
 @app.route('/signup', methods=['POST','GET'])
 def signup():
