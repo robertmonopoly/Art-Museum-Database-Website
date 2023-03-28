@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
 <link rel="stylesheet" href="/mainCSS.css">
+=======
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+>>>>>>> 3f0f676b71e633b86def10f16c2712a4396eb276
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Add New Film</title>
@@ -12,9 +16,15 @@
 
 
 <ul class = "navbarone">
+<<<<<<< HEAD
   <li><a href="/html/homepage.html">Home</a></li>
   <li><a href="/html/films.html">Films</a></li>
   <li class = "active"><a href="/html/add_new_film.html">Add New Film</a></li>
+=======
+  <li><a href="{{ url_for('home') }}">Home</a></li>
+  <li><a href="{{ url_for('films') }}">Films</a></li>
+  <li class = "active"><a href="{{ url_for('add_new_film') }}">Add New Film</a></li>
+>>>>>>> 3f0f676b71e633b86def10f16c2712a4396eb276
 </ul>
 
 <form action="insert_film.php" method="POST" style="padding:20px;">
