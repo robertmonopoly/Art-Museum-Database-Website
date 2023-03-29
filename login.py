@@ -1,18 +1,11 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session
 import psycopg2
-import template as temp
+import query as q
 import hash_password as hp
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
-# USER CLASS
-class User():
-    def __init__(self, name, email, password, access='USER'):
-        self.name = name
-        self.email = email
-        self.password = password
-        self.access = access
-# Connection
+# Local Connection
 try:
     conn = psycopg2.connect(dbname="test")
     cur = conn.cursor()
@@ -27,8 +20,16 @@ def index():
 @app.route('/home', methods = ['POST', 'GET'])
 def home():
     if request.method == 'GET':
-        user = request.cookies.get('user-role')
+        user = session["user-role"]
         return render_template("home.html", user=user)
+    
+#TODO: setup registration page
+@app.route('/signup', methods=['POST','GET'])
+def signup():
+    msg = ""
+    if request.method == 'POST':
+        email = request.form['user_email']
+        password = request.form['user_password']
 
 @app.route('/login', methods =['POST','GET'])
 def login():
@@ -54,7 +55,7 @@ def login():
             print("role is ", db_role)
 
             if account:
-                user = User(name, email, in_password, db_role[0])
+                user = q.User(name, email, in_password, db_role[0])
                 session['user-role'] = user.access
                 return render_template('home.html', user=user)
     return render_template('login.html') # called when the request.method is not 'POST'
@@ -69,9 +70,24 @@ def artworks():
         user = session["user-role"]
         return render_template('artworks.html', user=user)
 
+#TODO: need to add new artwork
+@app.route('/add_new_artwork', methods=['POST','GET'])
+def add_new_artwork():
+    if request.method == 'POST':
+        artist = request.form['artist']
+        title = request.form['artwork_title']
+        made_on = request.form['made_on']
+        obj_type = request.form['object_number']
+        art_img = request.form['art_img']
+        data = q.insert_art(cur,artist,title,made_on, obj_type, art_img)
+        return render_template('add_new_artwork.html')
+    else:
+        return render_template('add_new_artwork.html')
+    
 @app.get('/exhibitions')
 def exhibitions():
-    return render_template('exhibitions.html')
+    user = request.cookies.get('user-role')
+    return render_template('exhibitions.html', user=user)
 
 @app.get('/add_new_exhibition')
 def add_new_exhibition():
@@ -89,9 +105,8 @@ def add_new_employee():
 def add_new_member():
     return render_template('add_new_member.html')
 
-@app.get('/add_new_artwork')
-def add_new_artwork():
-    return render_template('add_new_artwork.html')
+
+
 
 @app.get('/add_new_gift_shop_item')
 def add_new_gift_shop_item():
@@ -99,19 +114,23 @@ def add_new_gift_shop_item():
 
 @app.get('/films')
 def films():
-    return render_template('films.html')
+    user = request.cookies.get('user-role')
+    return render_template('films.html',user=user)
 
 @app.get('/members')
 def members():
-    return render_template('members.html')
+    user = request.cookies.get('user-role')
+    return render_template('members.html',user=user)
 
 @app.get('/gift_shop')
 def gift_shop():
-    return render_template('gift_shop.html')
+    user = request.cookies.get('user-role')
+    return render_template('gift_shop.html', user=user)
 
 @app.get('/employees')
 def employees():
-    return render_template('employees.html')
+    user = request.cookies.get('user-role')
+    return render_template('employees.html', user=user)
 
 @app.get('/Eticket_details')
 def Eticket_details():
@@ -121,14 +140,8 @@ def Eticket_details():
 def Fticket_details():
     return render_template('Fticket_details')
 
-@app.route('/signup', methods=['POST','GET'])
-def signup():
-    msg = ""
-    if request.method == 'POST':
-        email = request.form['user_email']
-        password = request.form['user_password']
 
-# need to create page
+# TODO: need to create page
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
@@ -140,23 +153,20 @@ def user_info():
     phone_number = request.form['phone_number']
     sex = request.form['sex']
     dob = request.form['dob']
-    temp.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+    q.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
+# the reports
 @app.get('/report_gifts')
 def report_gifts():
-    # need to give range of data
+    mgs = ""
     gift_name = request.args.get('gift-name')
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if gift_name and start_date and end_date:
-        cur.execute("""
-            SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
-            FROM gift_shop_item as i
-            INNER JOIN gift_shop_sales as s 
-            ON s.gift_sku = i.gift_sku 
-            WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [gift_name, start_date, end_date]
-            )
-        data = cur.fetchall()
+        data = q.insert_gift_rep(cur, gift_name, start_date, end_date)
+        if data == []:
+            msg = "There was no report for the selected interval. Please try another set of dates!"
+            return render_template('report_gifts.html', msg=msg)
         app.logger.info(data)
         return render_template('report_gifts.html', data=data)
     else:
@@ -168,22 +178,14 @@ def report_tickets():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if start_date and end_date:
-        cur.execute("""
-        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
-        FROM exhibitions as e
-            INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
-        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
-        UNION
-        SELECT film_title, film_ticket_price, DATE(film_transac_at)
-        FROM films as f
-            INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
-        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
-        """, [start_date, end_date, start_date,end_date])
-        data = cur.fetchall()
+        data = q.insert_ticket_rep(cur, start_date, end_date)
+        if data == []:
+            msg = "There was no report for the selected interval. Please try another set of dates!"
+            return render_template('report_tickets.html', msg=msg)
         app.logger.info(data)
         return render_template('report_tickets.html', data=data) # fill it in
     else:
-        msg = "Invalid query. Please try again!"
-        return render_template('report_tickets.html', msg=msg)
+        return render_template('report_tickets.html')
 
+# TODO: need to make third report
 

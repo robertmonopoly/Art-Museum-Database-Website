@@ -60,14 +60,12 @@ CREATE TYPE Sex AS ENUM ('FEMALE', 'MALE', 'OTHER');
 CREATE TYPE MembershipType AS ENUM ('NONE','BASIC', 'SILVER','GOLD');
 
 CREATE TABLE artworks (
-    object_number INT PRIMARY KEY,
-    artwork_title VARCHAR (256) UNIQUE NOT NULL,
     artist TEXT NOT NULL,
-    culture TEXT NOT NULL,
+    artwork_title VARCHAR (256) UNIQUE NOT NULL,
     made_on DATE NOT NULL,
     object_type TEXT NOT NULL,
-    art_department TEXT NOT NULL,
-    dimensions TEXT NOT NULL
+    object_number INT PRIMARY KEY
+    
 );
 
 CREATE TABLE user_account (

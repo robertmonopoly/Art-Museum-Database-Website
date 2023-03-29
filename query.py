@@ -2,8 +2,7 @@
 import uuid
 import hash_password as hw
 
-
-# USER CLASS
+# User Class
 class User():
     def __init__(self, name, email, password, access='USER'):
         self.name = name
@@ -37,29 +36,64 @@ def insert_user_login(cur, user_role, user_name, pw, login_at ):
     # except:
     #     cur.rollback()
     #     return 'User registration failed.'
+                   
+# report functions
+def insert_gift_rep(cur, g_name, s_date, e_date):
+    cur.execute("""
+    SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
+    FROM gift_shop_item as i
+    INNER JOIN gift_shop_sales as s 
+    ON s.gift_sku = i.gift_sku 
+    WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
+    )
+    data = cur.fetchall()
+    return data
 
-# WARNING: the area below is all pseudo or unfinished code                     
+def insert_ticket_rep(cur, s_date,e_date):
+    cur.execute("""
+        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
+        FROM exhibitions as e
+            INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
+        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
+        UNION
+        SELECT film_title, film_ticket_price, DATE(film_transac_at)
+        FROM films as f
+            INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
+        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
+        """, [s_date, e_date, s_date,e_date])
+    data = cur.fetchall()
+    return data
 
-def insert_art(cur, obj_num,title, artist, culture, made_on, obj_type, art_dpt, dim):
-    sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-    values = (obj_num, title, artist, culture, made_on, obj_type, art_dpt, dim)
+def insert_member_don(cur):
+    return
+
+# end report functions
+
+# insert functions
+def insert_art(cur, artist, title, made_on, obj_type, obj_num, art_byte):
+    sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s)"""
+    values = (artist,title, made_on, obj_type, obj_num, art_byte)
     try:
         cur.execute(sql_query, values)
+        data = cur.fetchall()
+        cur.commit()
+        print("Art values inserted successfully!")
+        return data
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
-    else:
-        print("Values inserted successfully!")
-
-# good example of insertion
+   
 def insert_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
+    sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
+    values = (gift_sku, gift_name, gift_type, gift_price)
     try:
-        sql_query = "INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s);"
-        cur.execute(sql_query, (gift_sku, gift_name, gift_type, gift_price))
-    except Exception as e:
-        return f"Error inserting gift item: {e}"
-    else:
+        cur.execute(sql_query,values)
+        data = cur.fetchall()
         cur.commit()
-        return "Gift item inserted successfully."
+        print("Gift item inserted successfully.") 
+        return data
+    except Exception as e:
+        print (f"Error inserting gift item: {e}")
+   
 
 def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     try:
@@ -91,15 +125,7 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
         # Close the database connection
         cur.close()
 
-# tested it locally, not sure if it works officially as a function!
-def gift_report(cur):
-    try:
-        cur.execute("""
-        SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at), s.user_id 
-        FROM gift_shop_item as i 
-        INNER JOIN gift_shop_sales as s ON i.gift_sku = s.gift_sku""")
-    except Exception as e:
-        print("An error occurred while inserting the exhibition:", e)
+
 
 def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
     try:

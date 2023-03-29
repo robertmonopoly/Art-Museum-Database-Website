@@ -17,21 +17,25 @@
         </div>
     </body>
         <table>
-            <h3>This table shows the number of film/exhibition event tickets sold in a given interval.</h3>
             <tbody>
+                {% if data%}
                 <tr>
+                    <h3>This table shows the number of film/exhibition event tickets sold in a given interval.</h3>
                     <th>Event</th>
                     <th>Ticket Price</th>
                     <th>Date of Transaction</th>
                 </tr>
-                {% for item in data %} 
+                    {% for item in data %} 
                     <tr>
                         <td>{{item[0]}}</td>
                         <td>{{item[1]}}</td>
                         <td>{{item[2]}}</td>
                         <br>
                     </tr>
-                {% endfor %} 
+                    {% endfor %} 
+                {% else %}
+                    <div>{{msg}}</div>
+                {% endif %}
             </tbody>
         </table>
 </html>
