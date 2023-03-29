@@ -13,7 +13,9 @@
 <ul class = "navbarone">
     <li><a href="{{ url_for('home') }}">Home</a></li>
     <li class = "active"><a href="{{ url_for('employees') }}">Employees</a></li>
+    {% if user and user == 'ADMIN' %}
     <li><a href="{{ url_for('add_new_employee') }}">Add New Employee</a></li>
+    {% endif %}
   </ul>
 
 </body>

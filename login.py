@@ -20,8 +20,9 @@ def index():
 @app.route('/home', methods = ['POST', 'GET'])
 def home():
     if request.method == 'GET':
-        user = request.cookies.get('user-role')
+        user = session["user-role"]
         return render_template("home.html", user=user)
+    
 #TODO: setup registration page
 @app.route('/signup', methods=['POST','GET'])
 def signup():
@@ -69,9 +70,24 @@ def artworks():
         user = session["user-role"]
         return render_template('artworks.html', user=user)
 
+#TODO: need to add new artwork
+@app.route('/add_new_artwork', methods=['POST','GET'])
+def add_new_artwork():
+    if request.method == 'POST':
+        artist = request.form['artist']
+        title = request.form['artwork_title']
+        made_on = request.form['made_on']
+        obj_type = request.form['object_number']
+        art_img = request.form['art_img']
+        data = q.insert_art(cur,artist,title,made_on, obj_type, art_img)
+        return render_template('add_new_artwork.html')
+    else:
+        return render_template('add_new_artwork.html')
+    
 @app.get('/exhibitions')
 def exhibitions():
-    return render_template('exhibitions.html')
+    user = request.cookies.get('user-role')
+    return render_template('exhibitions.html', user=user)
 
 @app.get('/add_new_exhibition')
 def add_new_exhibition():
@@ -89,10 +105,8 @@ def add_new_employee():
 def add_new_member():
     return render_template('add_new_member.html')
 
-#TODO: need to add new artwork
-@app.get('/add_new_artwork')
-def add_new_artwork():
-    return render_template('add_new_artwork.html')
+
+
 
 @app.get('/add_new_gift_shop_item')
 def add_new_gift_shop_item():
@@ -100,19 +114,23 @@ def add_new_gift_shop_item():
 
 @app.get('/films')
 def films():
-    return render_template('films.html')
+    user = request.cookies.get('user-role')
+    return render_template('films.html',user=user)
 
 @app.get('/members')
 def members():
-    return render_template('members.html')
+    user = request.cookies.get('user-role')
+    return render_template('members.html',user=user)
 
 @app.get('/gift_shop')
 def gift_shop():
-    return render_template('gift_shop.html')
+    user = request.cookies.get('user-role')
+    return render_template('gift_shop.html', user=user)
 
 @app.get('/employees')
 def employees():
-    return render_template('employees.html')
+    user = request.cookies.get('user-role')
+    return render_template('employees.html', user=user)
 
 @app.get('/Eticket_details')
 def Eticket_details():
@@ -145,7 +163,7 @@ def report_gifts():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if gift_name and start_date and end_date:
-        data = q.insert_gift_rep(cur, gift_name,start_date,end_date)
+        data = q.insert_gift_rep(cur, gift_name, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_gifts.html', msg=msg)
