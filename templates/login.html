@@ -7,32 +7,38 @@
         <meta charset="utf-8">
         <title>Login Page</title>
         <style>
-            .info
-            {
-                width: 100%;
-                max-width: 90%;
-                margin-bottom: 2rem;
-                text-align:center;
-                margin-left: 6%;
-            }
-        </style>
-    </head>
+        .info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+    }
 
-   <body style="background-color: whitesmoke;">
+    .boxed {
+        border: 2px solid black;
+        padding: 20px;
+        text-align: center;
+    }
 
-    <div class="info" style="vertical-align: middle; margin-top:15%">
-    <div class = "boxed" style="margin-left: 19%; border:2px solid black;">
-    <h1 style="font-size: 40px;padding-left: 0%; color: crimson;"> Welcome to The Archive Arts Museum - Database </h1>
-    <div class="login">
-        <form action="/login" method='POST'>
-            <p><h3 style="color:black; padding-left: 0%;" >Please enter your email and password.</h3></p>
-            <input type="email" name="user_email" placeholder="Email" id="email" required />
-            <input type="password" name="user_password" placeholder="Password" id="password" required />
-            <p><input type="submit" value="Login" style="padding:5px"/></p>
-        </form>
+    .login form {
+        margin: auto;
+    }
+</style>
+<body style="background-image: url({{ url_for('static', filename='img/wave.jpg') }}); background-size: cover;">
+    <div class="info" style="margin-top: 10%; display: flex; justify-content: center; align-items: center;">
+        <div class="boxed">
+            <h1 style="font-size: 40px; color: crimson;"> Welcome to The Archive Arts Museum - Database </h1>
+            <div class="login">
+                <form action="/login" method="POST">
+                    <p><h3 style="color:black;">Please enter your email and password.</h3></p>
+                    <input type="email" name="user_email" placeholder="Email" id="email" required />
+                    <input type="password" name="user_password" placeholder="Password" id="password" required />
+                    <p><input type="submit" value="Login" style="padding:5px"/></p>
+                </form>
+            </div>
+        </div>
     </div>
-    </div>
-</div>
+          
 
    </body>
 </html>
