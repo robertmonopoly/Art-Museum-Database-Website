@@ -182,6 +182,49 @@ def delete_exhibit(cur, exhib_id):
         print("An error occurred while deleting the exhibit", e)
  
 
+
+def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
+    sql_query = """UPDATE artworks SET artist = %s, title = %s, made_on = %s, obj_type = %s, obj_num = %s, art_byte = %s WHERE id = %s"""
+    values = (artist, title, made_on, obj_type, obj_num, art_byte, art_id)
+    try:
+        cur.execute(sql_query, values)
+        data = cur.fetchall()
+        cur.commit()
+        print("Art values updated successfully!")
+        return data
+    except Exception as e:
+        print(f"Error updating values in artworks table: {e}")
+
+def update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id):
+    sql_query = """UPDATE gift_shop_item SET sku = %s, name = %s, type = %s, price = %s WHERE id = %s"""
+    values = (gift_sku, gift_name, gift_type, gift_price, gift_id)
+    try:
+        cur.execute(sql_query,values)
+        data = cur.fetchall()
+        cur.commit()
+        print("Gift item updated successfully.")
+        return data
+    except Exception as e:
+        print (f"Error updating gift item: {e}")
+
+
+def update_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+    try:
+        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_price = %s, exhib_gallery = %s, exhib_title = %s, exhib_curator = %s WHERE exhib_id = %s""", (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhib_id))
+        cur.commit()
+        print("Exhibition updated successfully!")
+    except Exception as e:
+        print("An error occurred while updating the exhibition:", e)
+
+def update_films(cur, film_id, film_title, film_price, film_dur, film_dir, film_rate):
+    try:
+        cur.execute("""UPDATE films SET film_title = %s, film_price = %s, film_dur = %s, film_dir = %s, film_rate = %s WHERE film_id = %s""", (film_title, film_price, film_dur, film_dir, film_rate, film_id))
+        cur.commit()
+        print("Film updated successfully!")
+    except Exception as e:
+        print("An error occurred while updating the film:", e)
+
+
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
     rs = conn.execute("SELECT * FROM events")
