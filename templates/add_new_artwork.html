@@ -13,15 +13,13 @@
 
 <ul class = "navbarone">
   <li><a href="{{ url_for('home') }}">Home</a></li>
-  <li class = "active"><a href="{{ url_for('artworks') }}">Artworks</a></li>
-  <li><a href="{{ url_for('exhibitions') }}">Exhibitions</a></li>
-  <li><a href="{{ url_for('members') }}">Members</a></li>
-  <li><a href="{{ url_for('films') }}">Films</a></li>
-  <li><a href="{{ url_for('gift_shop') }}">Gift Shop</a></li>
-  <li><a href="{{ url_for('employees') }}">Employees</a></li>
+  <li><a href="{{ url_for('artworks') }}">Artworks</li>
+    {% if user and user == 'ADMIN' %}
+    <li class ="active"><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
+    {% endif %}
 </ul>
 
-<form method="POST" style="padding:20px">
+<form action="/add_new_artwork" method="POST" style="padding:20px">
   <label for="artist">Artist:</label>
   <input type="text" name="artist" required><br><br>
   <label for="artwork_title">Artwork Title:</label>
