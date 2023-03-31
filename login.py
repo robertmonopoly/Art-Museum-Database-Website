@@ -61,9 +61,14 @@ def login():
     return render_template('login.html') # called when the request.method is not 'POST'
 
 # may or may not implement this lol. not super important
+
+# hmm, i tried to complete this function for u guys, it is probably close to
+# complete, but we would need a logout button, maybe it could be on the navbar
+# or on the top right of our webpages - sincerely, monopoly
 @app.route('/logout', methods=['POST','GET'])
 def logout():
-    return
+    session.clear()
+    return redirect(url_for('login.html'))
 
 @app.get('/artworks')
 def artworks():
@@ -91,26 +96,88 @@ def exhibitions():
 
 @app.get('/add_new_exhibition')
 def add_new_exhibition():
-    return render_template('add_new_exhibition.html')
+    if request.method == 'POST':
+        date_and_time = request.form['exhibition_at']
+        ticket_price = request.form['exhibition_ticket_price']
+        gallery = request.form['exhibition_gallery']
+        title = request.form['exhibition_title']
+        curator = request.form['curator']
+        artists = request.form['exhibition_artists']
+        data = q.insert_art(cur, date_and_time, ticket_price,
+        gallery, title, curator, artists)
+        return render_template('add_new_exhibition.html')
+    else:
+        return render_template('add_new_exhibition.html')
 
 @app.get('/add_new_film')
 def add_new_film():
-    return render_template('add_new_film.html')
+    if request.method == 'POST':
+        num_id = request.form['film_id']
+        location = request.form['viewing_at']
+        title = request.form['film_title']
+        ticket_price = request.form['film_ticket_price']
+        duration = request.form['duration_min']
+        director = request.form['film_director']
+        rating = request.form['film_rating']
+        data = q.insert_art(cur, num_id, location,
+        title, ticket_price, duration, director,
+        rating)
+        return render_template('add_new_film.html')
+    else:
+        return render_template('add_new_film.html')
 
 @app.get('/add_new_employee')
 def add_new_employee():
-    return render_template('add_new_employee.html')
+    if request.method == 'POST':
+        membership = request.form['membership']
+        first_name = request.form['employee_first_name']
+        last_name = request.form['employee_last_name']
+        address = request.form['employee_address']
+        email = request.form['employee_email']
+        ssn = request.form['employee_ssn']
+        phone_number = request.form['employee_phone_number']
+        dob = request.form['employee_date_of_birth']
+        salary = request.form['salary']
+        data = q.insert_art(cur, membership, first_name,
+        last_name, address, email, ssn, phone_number,
+        dob, salary)
+        return render_template('add_new_employee.html')
+    else:
+        return render_template('add_new_employee.html')
+
 
 @app.get('/add_new_member')
 def add_new_member():
-    return render_template('add_new_member.html')
-
-
-
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        gender = request.form['gender']
+        dob = request.form['dob']
+        membership_type = request.form['membership']
+        data = q.insert_art(cur, first_name, last_name,
+        address_line1, address_line2, city, state,
+        zip_code, email, phone_number, gender, dob, membership_type)
+        return render_template('add_new_member.html')
+    else:
+        return render_template('add_new_member.html')
 
 @app.get('/add_new_gift_shop_item')
 def add_new_gift_shop_item():
-    return render_template('add_new_gift_shop_item.html')
+    if request.method == 'POST':
+        sku = request.form['film_id']
+        name = request.form['viewing_at']
+        item_type = request.form['film_title']
+        price = request.form['film_ticket_price']
+        return render_template('add_new_gift_shop_item.html')
+    else:
+        return render_template('add_new_gift_shop_item.html')
 
 @app.get('/films')
 def films():
