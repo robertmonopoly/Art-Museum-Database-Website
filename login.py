@@ -67,10 +67,10 @@ def login():
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
 # or on the top right of our webpages - sincerely, monopoly
-@app.route('/logout', methods=['POST','GET'])
+@app.route('/home', methods=['POST','GET'])
 def logout():
     session.clear()
-    return redirect(url_for('login.html'))
+    return render_template(url_for('login.html'))
 
 @app.get('/artworks')
 def artworks():
