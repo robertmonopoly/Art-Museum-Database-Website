@@ -150,7 +150,35 @@ def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
     except Exception as e:
         print("An error occurred while inserting the film sales record:", e)
 
+def delete_artwork(cur, obj_num):
+    try:
+        cur.execute("DELETE * FROM artworks WHERE obj_num = artworks.obj_num")
+    except Exception as e:
+        print("An error occurred while deleting the artwork", e)
 
+def delete_film(cur, film_id):
+    try:
+        cur.execute("DELETE * FROM films WHERE film_id = films.film_id")
+    except Exception as e:
+        print("An error occurred while deleting the film", e)
+
+def delete_employee(cur, employee_id):
+    try:
+        cur.execute("DELETE * FROM artworks WHERE employee_id = employees.employee_id")
+    except Exception as e:
+        print("An error occurred while deleting the employee's records", e)    
+
+def delete_gift_shop_item(cur, gift_sku):
+    try:
+        cur.execute("DELETE * FROM gift_shop_item WHERE gift_sku = gift_shop_item.gift_sku")
+    except Exception as e:
+        print("An error occurred while deleting the item", e)
+
+def delete_exhibit(cur, exhib_id):
+    try:
+        cur.execute("DELETE * FROM exhibitions WHERE exhib_id = exhibitions.exhib_id")
+    except Exception as e:
+        print("An error occurred while deleting the exhibit", e)  
 
 # these (PSEUDO) functions require mapping
 def get_all_events(conn):
