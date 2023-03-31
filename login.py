@@ -2,6 +2,8 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 import query as q
 import hash_password as hp
+import PIL.Image as Image
+from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
@@ -82,16 +84,26 @@ def add_new_artwork():
         artist = request.form['artist']
         title = request.form['artwork_title']
         made_on = request.form['made_on']
-        obj_type = request.form['object_number']
-        art_img = request.form['art_img']
-        data = q.insert_art(cur,artist,title,made_on, obj_type, art_img)
-        return render_template('add_new_artwork.html')
+        obj_type = request.form['object_type']
+        obj_num = request.form['object_number']
+        upload_art = request.form['art_img']
+
+        # Convert image to bytes
+        pil_im = Image.fromarray(upload_art)
+        b = BytesIO()
+        pil_im.save(b, 'jpeg')
+        im_bytes = b.getvalue()
+        # read_art = upload_art.read()
+        # byte_art = bytearray(read_art)
+        # print("art in byte ", byte_art)
+        data = q.insert_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
+        return render_template('add_new_artwork.html', data=data)
     else:
         return render_template('add_new_artwork.html')
     
 @app.get('/exhibitions')
 def exhibitions():
-    user = request.cookies.get('user-role')
+    user = user = session["user-role"]
     return render_template('exhibitions.html', user=user)
 
 @app.get('/add_new_exhibition')
@@ -181,22 +193,22 @@ def add_new_gift_shop_item():
 
 @app.get('/films')
 def films():
-    user = request.cookies.get('user-role')
+    user = session["user-role"]
     return render_template('films.html',user=user)
 
 @app.get('/members')
 def members():
-    user = request.cookies.get('user-role')
+    user = session["user-role"]
     return render_template('members.html',user=user)
 
 @app.get('/gift_shop')
 def gift_shop():
-    user = request.cookies.get('user-role')
+    user = session["user-role"]
     return render_template('gift_shop.html', user=user)
 
 @app.get('/employees')
 def employees():
-    user = request.cookies.get('user-role')
+    user = session["user-role"]
     return render_template('employees.html', user=user)
 
 @app.get('/Eticket_details')
