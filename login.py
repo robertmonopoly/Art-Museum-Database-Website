@@ -183,10 +183,10 @@ def add_new_member():
 @app.get('/add_new_gift_shop_item')
 def add_new_gift_shop_item():
     if request.method == 'POST':
-        sku = request.form['film_id']
-        name = request.form['viewing_at']
-        item_type = request.form['film_title']
-        price = request.form['film_ticket_price']
+        sku = request.form['sku']
+        name = request.form['name']
+        item_type = request.form['type']
+        price = request.form['price]']
         return render_template('add_new_gift_shop_item.html')
     else:
         return render_template('add_new_gift_shop_item.html')
