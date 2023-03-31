@@ -2,43 +2,46 @@
 <html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-        <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Parisienne">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Parisienne">
         <meta charset="utf-8">
         <title>Login Page</title>
         <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
         .info {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-    }
+        }
 
-    .boxed {
-        border: 2px solid black;
-        padding: 20px;
-        text-align: center;
-    }
+        .boxed {
+            border: 2px solid black;
+            padding: 20px;
+            text-align: center;
+        }
 
-    .login form {
-        margin: auto;
-    }
-</style>
-<body style="background-image: url({{ url_for('static', filename='img/gray.jpeg') }}); background-size: cover;">
-    <div class="info" style="margin-top: 10%; display: flex; justify-content: center; align-items: center;">
-        <div class="boxed">
-            <h1 style="font-size: 40px; color: crimson;"> Welcome to The Archive Arts Museum - Database </h1>
-            <div class="login">
-                <form action="/login" method="POST">
-                    <p><h3 style="color:black;">Please enter your email and password.</h3></p>
-                    <input type="email" name="user_email" placeholder="Email" id="email" required />
-                    <input type="password" name="user_password" placeholder="Password" id="password" required />
-                    <p><input type="submit" value="Login" style="padding:5px"/></p>
-                </form>
+        .login form {
+            margin: auto;
+        }
+        </style>
+    </head>
+    <body style="background-image: url({{ url_for('static', filename='img/gray.jpeg') }}); background-size: cover;">
+        <div class="info" style="margin-top: 10%; display: flex; justify-content: center; align-items: center;">
+            <div class="boxed">
+                <h1 style="font-size: 40px; color: crimson;"> Welcome to The Archive Arts Museum - Database </h1>
+                <div class="login">
+                    <form action="/login" method="POST">
+                        <p><h3 style="color:black;">Please enter your email and password.</h3></p>
+                        <input type="email" name="user_email" placeholder="Email" id="email" required />
+                        <input type="password" name="user_password" placeholder="Password" id="password" required />
+                        <p><input type="submit" value="Login" style="padding:5px"/></p>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-          
-
-   </body>
+    </body>
 </html>
