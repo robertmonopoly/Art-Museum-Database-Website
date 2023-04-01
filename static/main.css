@@ -201,7 +201,7 @@ html {
   }
   
   .blink {
-    animation: blinker 2s linear infinite;
+    animation: blinker 2s linear;
     color: rgb(38, 0, 255);
     
   }
