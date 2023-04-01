@@ -1,0 +1,32 @@
+{% macro navbar(endpoint, name ) %}
+    {% if request.endpoint.endswith(endpoint) %}
+        <li class = "active"><a href="{{ url_for('home') }}">Home</a></li>
+    {% else %}
+    <li><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
+    {% endif %}
+{% endmacro %}
+
+{% macro image_contain(endpoint, image, caption) %}
+<div class="image-container">
+    <a href="{{ url_for(endpoint) }}">
+      <img class="images" src="{{ url_for('static', filename=image) }}"> 
+    </a>
+    <div class="caption-container">
+      <div class="caption">{{caption}}</div>
+    </div>
+  </div>
+
+{% endmacro %}
+
+
+{% macro admin_view(user) %}
+    {% if user == 'ADMIN' %}
+    <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
+    <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
+    {% endif %}
+    {% if user %}
+    <li style="float:right"><a href="{{ url_for('login') }}">Logout</a></li>
+    {% endif %}
+{% endmacro %}
+
+
