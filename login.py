@@ -90,6 +90,30 @@ def add_new_artwork():
         return render_template('add_new_artwork.html', data=data)
     else:
         return render_template('add_new_artwork.html')
+
+
+@app.route('/update_artwork', methods=['POST','GET'])
+def update_artwork():
+    if request.method == 'POST':
+        artist = request.form['artist']
+        title = request.form['artwork_title']
+        made_on = request.form['made_on']
+        obj_type = request.form['object_type']
+        obj_num = request.form['object_number']
+        upload_art = request.form['art_img']
+
+        # Convert image to bytes
+        pil_im = Image.fromarray(upload_art)
+        b = BytesIO()
+        pil_im.save(b, 'jpeg')
+        im_bytes = b.getvalue()
+        # read_art = upload_art.read()
+        # byte_art = bytearray(read_art)
+        # print("art in byte ", byte_art)
+        data = q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
+        return render_template('add_new_artwork.html', data=data)
+    else:
+        return render_template('add_new_artwork.html')        
     
 @app.get('/exhibitions')
 def exhibitions():
@@ -105,7 +129,22 @@ def add_new_exhibition():
         title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
-        data = q.insert_art(cur, date_and_time, ticket_price,
+        data = q.insert_exhibition(cur, date_and_time, ticket_price,
+        gallery, title, curator, artists)
+        return render_template('add_new_exhibition.html')
+    else:
+        return render_template('add_new_exhibition.html')
+
+@app.route('/update_exhibition', methods = ['POST'])
+def update_exhibition():
+    if request.method == 'POST':
+        date_and_time = request.form['exhibition_at']
+        ticket_price = request.form['exhibition_ticket_price']
+        gallery = request.form['exhibition_gallery']
+        title = request.form['exhibition_title']
+        curator = request.form['curator']
+        artists = request.form['exhibition_artists']
+        data = q.update_exhibition(cur, date_and_time, ticket_price,
         gallery, title, curator, artists)
         return render_template('add_new_exhibition.html')
     else:
@@ -128,6 +167,23 @@ def add_new_film():
     else:
         return render_template('add_new_film.html')
 
+@app.route('/update_film', methods = ['POST'])
+def update_film():
+    if request.method == 'POST':
+        num_id = request.form['film_id']
+        location = request.form['viewing_at']
+        title = request.form['film_title']
+        ticket_price = request.form['film_ticket_price']
+        duration = request.form['duration_min']
+        director = request.form['film_director']
+        rating = request.form['film_rating']
+        data = q.update_film(cur, num_id, location,
+        title, ticket_price, duration, director,
+        rating)
+        return render_template('add_new_film.html')
+    else:
+        return render_template('add_new_film.html')
+
 @app.get('/add_new_employee')
 def add_new_employee():
     if request.method == 'POST':
@@ -140,12 +196,31 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.insert_art(cur, membership, first_name,
+        data = q.insert_new_employee(cur, membership, first_name,
         last_name, address, email, ssn, phone_number,
         dob, salary)
         return render_template('add_new_employee.html')
     else:
         return render_template('add_new_employee.html')
+
+@app.route('/update_employee', methods = ['POST'])
+def update_employee():
+    if request.method == 'POST':
+        membership = request.form['membership']
+        first_name = request.form['employee_first_name']
+        last_name = request.form['employee_last_name']
+        address = request.form['employee_address']
+        email = request.form['employee_email']
+        ssn = request.form['employee_ssn']
+        phone_number = request.form['employee_phone_number']
+        dob = request.form['employee_date_of_birth']
+        salary = request.form['salary']
+        data = q.update_employee(cur, membership, first_name,
+        last_name, address, email, ssn, phone_number,
+        dob, salary)
+        return render_template('add_new_employee.html')
+    else:
+        return render_template('add_new_employee.html')        
 
 
 @app.get('/add_new_member')
@@ -163,12 +238,34 @@ def add_new_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.insert_art(cur, first_name, last_name,
+        data = q.insert_member(cur, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')
     else:
         return render_template('add_new_member.html')
+
+@app.route('/update_member', methods = ['POST'])
+def update_member():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        gender = request.form['gender']
+        dob = request.form['dob']
+        membership_type = request.form['membership']
+        data = q.update_member(cur, first_name, last_name,
+        address_line1, address_line2, city, state,
+        zip_code, email, phone_number, gender, dob, membership_type)
+        return render_template('add_new_member.html')
+    else:
+        return render_template('add_new_member.html')        
 
 @app.get('/add_new_gift_shop_item')
 def add_new_gift_shop_item():
@@ -181,25 +278,19 @@ def add_new_gift_shop_item():
     else:
         return render_template('add_new_gift_shop_item.html')
 
-
-
-
-@app.route('/update_new_gift_shop_item', methods=['POST'])
+@app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
     gift_sku = request.form['sku']
     gift_name = request.form['name']
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id)
+        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
         flash('Error updating gift item.')
-    return render_template(url_for('add_new_gift_shop_item'))
-
-
-
+    return render_template('add_new_gift_shop_item.html')
 
 
 @app.get('/films')
