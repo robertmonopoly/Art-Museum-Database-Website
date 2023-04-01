@@ -20,7 +20,7 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-<form action="/add_new_employee" method="post" style="padding:20px;">
+<form action="/add_new_gift_shop_item" method="post" style="padding:20px;">
     <label for="sku">SKU:</label>
     <input type="text" name="sku" required><br><br>
     <label for="name">Name:</label>
@@ -41,7 +41,6 @@
   <input type="text" name="type"><br><br>
   <label for="price">Price:</label>
   <input type="text" name="price"><br><br>
-  <input type="hidden" name="id" value="{{ gift_id }}">
   <input type="submit" value="Update Item">
 </form>
 
