@@ -54,20 +54,18 @@ def login():
             account = cur.fetchone()
             cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
             db_role = cur.fetchone()
-            print("role is ", db_role)
+            print("role is ", db_role[0])
 
             if account:
                 user = q.User(name, email, in_password, db_role[0])
                 session['user-role'] = user.access
-                return render_template('home.html', user=user)
-    return render_template('login.html') # called when the request.method is not 'POST'
-
-# may or may not implement this lol. not super important
+                return redirect(url_for('home'))
+    return render_template('home.html') # called when the request.method is not 'POST'
 
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
 # or on the top right of our webpages - sincerely, monopoly
-@app.route('/home', methods=['POST','GET'])
+@app.route('/logout', methods=['POST','GET'])
 def logout():
     session.clear()
     return render_template(url_for('login.html'))
