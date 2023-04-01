@@ -4,19 +4,15 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
-<title>Antiquities webpage</title>
+<title>Add New Artwork</title>
 </head>
 <body>
 
 <h1>Add New Artwork</h1>
 
-
 <ul class = "navbarone">
   <li><a href="{{ url_for('home') }}">Home</a></li>
-  <li><a href="{{ url_for('artworks') }}">Artworks</li>
-    {% if user and user == 'ADMIN' %}
-    <li class ="active"><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
-    {% endif %}
+  <li><a href="{{ url_for('artworks') }}">Artworks</a></li>
 </ul>
 
 <form action="/add_new_artwork" method="POST" style="padding:20px">
@@ -34,7 +30,5 @@
   <input type="submit" value="Add Artwork">
 </form>
  
-
-</div>
 </body>
 </html>
