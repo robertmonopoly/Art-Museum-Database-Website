@@ -191,6 +191,28 @@ def add_new_gift_shop_item():
     else:
         return render_template('add_new_gift_shop_item.html')
 
+
+
+
+@app.route('/update_gift_shop_item', methods=['POST'])
+def update_gift_shop_item():
+    gift_sku = request.form['sku']
+    gift_name = request.form['name']
+    gift_type = request.form['type']
+    gift_price = request.form['price']
+    gift_id = request.form['id']
+    try:
+        update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id)
+        flash('Gift item updated successfully.')
+    except Exception as e:
+        print (f"Error updating gift item: {e}")
+        flash('Error updating gift item.')
+    return redirect(url_for('gift_shop_items'))
+
+
+
+
+
 @app.get('/films')
 def films():
     user = session["user-role"]

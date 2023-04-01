@@ -17,7 +17,33 @@
   <li class = "active"><a href="{{ url_for('exhibitions') }}">Exhibitions</a></li>
 </ul>
 
+<div style="display: flex; align-items: center; justify-content: center;">
+
 <form action="/add_new_exhibition" method="post" style="padding:20px;">
+  <label for="exhibition_at" style="padding-bottom:20px;">Exhibition Date and Time:</label>
+  <input type="datetime-local" name="exhibition_at" required><br><br>
+
+  <label for="exhibition_ticket_price" style="padding-bottom:20px;">Ticket Price:</label>
+  <input type="number" name="exhibition_ticket_price" required><br><br>
+
+  <label for="exhibition_gallery" style="padding-bottom:20px;">Gallery:</label>
+  <input type="text" name="exhibition_gallery" required><br><br>
+
+  <label for="exhibition_title" style="padding-bottom:20px;">Exhibition Title:</label>
+  <input type="text" name="exhibition_title" required><br><br>
+
+  <label for="curator" style="padding-bottom:20px;">Curator:</label>
+  <input type="text" name="curator" required><br><br>
+
+  <label for="exhibition_artists" style="padding-bottom:20px;">Artists:</label>
+  <input type="text" name="exhibition_artists" required><br><br>
+
+  <input type="submit" value="Add New Exhibition">
+</form>
+
+
+
+<form action="/update_exhibition" method="post" style="padding:20px;">
   <label for="exhibition_at"  style="padding-bottom:20px;">Exhibition Date and Time:</label>
   <input type="datetime-local" name="exhibition_at"><br><br>
 
@@ -36,7 +62,7 @@
   <label for="exhibition_artists" style="padding-bottom:20px;">Artists:</label>
   <input type="text" name="exhibition_artists"><br><br>
 
-  <input type="submit" value="Submit">
+  <input type="submit" value="Update Exhibition">
 </form>
 
 
