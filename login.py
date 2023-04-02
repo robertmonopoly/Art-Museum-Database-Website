@@ -295,7 +295,7 @@ def update_gift_shop_item():
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id)
+        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
