@@ -15,18 +15,19 @@
       <div class="caption">{{caption}}</div>
     </div>
   </div>
-
 {% endmacro %}
 
-
-{% macro admin_view(user) %}
-    {% if user == 'ADMIN' %}
-    <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
-    <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
-    {% endif %}
-    {% if user %}
-    <li style="float:right"><a href="{{ url_for('login') }}">Logout</a></li>
-    {% endif %}
+{% macro art_format(image, alt, name, title, year, type, obj_id) %}
+<div class="responsive" >
+    <div class="gallery">
+        <img src="{{ url_for('static', filename=image) }}" alt=alt width="600" height="400">
+      </a>
+      <div class="desc">
+        {{name}}<br>
+        {{title}}<br>
+        {{year}}<br>
+        {{type}}<br>
+        {{obj_id}}</div>
+    </div>
+  </div>
 {% endmacro %}
-
-
