@@ -46,7 +46,7 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     ON s.gift_sku = i.gift_sku 
     WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
     )
-    data = cur.fetchall()
+    data = cur.fetchall() # is THERE NO NEED TO FETCH WHEN UR INSERTING VALS?
     return data
 
 def insert_ticket_rep(cur, s_date,e_date):
@@ -70,15 +70,13 @@ def insert_member_don(cur):
 # end report functions
 
 # insert functions
-def insert_art(cur, artist, title, made_on, obj_type, obj_num, art_byte):
+def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
     sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s)"""
     values = (artist,title, made_on, obj_type, obj_num, art_byte)
     try:
         cur.execute(sql_query, values)
-        data = cur.fetchall()
-        cur.commit()
         print("Art values inserted successfully!")
-        return data
+        conn.commit() # VERY IMPORTANT because of sql transactions
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    
@@ -120,7 +118,7 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     except Exception as e:
         # If any error occurs, rollback the transaction and return an error message
         cur.rollback()
-        return jsonify({'error': str(e)}), 400
+        #return jsonify({'error': str(e)}), 400
     finally:
         # Close the database connection
         cur.close()
@@ -197,7 +195,7 @@ def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id)
 
 def update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
     sql_query = """UPDATE gift_shop_item SET sku = %s, name = %s, type = %s, price = %s WHERE id = %s"""
-    values = (gift_sku, gift_name, gift_type, gift_price, gift_id)
+    values = (gift_sku, gift_name, gift_type, gift_price)
     try:
         cur.execute(sql_query,values)
         data = cur.fetchall()
@@ -226,19 +224,19 @@ def update_film(cur, film_id, film_title, film_price, film_dur, film_dir, film_r
 
 
 # these (PSEUDO) functions require mapping
-def get_all_events(conn):
-    rs = conn.execute("SELECT * FROM events")
-    events = []
-    for row in event_table:
-        event = convert_row_to_event(row)
-        events.append(event)
-    return events
+# def get_all_events(conn):
+#     rs = conn.execute("SELECT * FROM events")
+#     events = []
+#     for row in event_table:
+#         event = convert_row_to_event(row)
+#         events.append(event)
+#     return events
 
-def get_user_by_id(cur, user_uuid):
-    rs = cur.execute("SELECT * FROM users WHERE id=?", (user_uuid))
-    if rs:
-        # call mapper function here
-        return 
-    else:
-        # no result found
-        return None
+# def get_user_by_id(cur, user_uuid):
+#     rs = cur.execute("SELECT * FROM users WHERE id=?", (user_uuid))
+#     if rs:
+#         # call mapper function here
+#         return 
+#     else:
+#         # no result found
+#         return None

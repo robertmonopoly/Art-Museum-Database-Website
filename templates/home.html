@@ -1,3 +1,4 @@
+{% import "elements.html" as elements %}
 <!DOCTYPE html>
 <html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
 <head>
@@ -7,89 +8,37 @@
 <title>Museum Database Homepage</title>
 </head>
 
-<body>
-<h1 vertical-align="center" style="padding-left: 20px;">Museum Database</h1>
-<!-- {% if user %}
-<li><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
-{% endif %} -->
-<ul class = "navbarone">
-    <li class = "active"><a href="{{ url_for('home') }}">Home</a></li>
-    <li><a href="{{ url_for('artworks') }}">Artworks</a></li>
-    <li><a href="{{ url_for('exhibitions') }}">Exhibitions</a></li>
-    <li><a href="{{ url_for('films') }}">Films</a></li>
-    <li><a href="{{ url_for('gift_shop') }}">Gift Shop</a></li>
-    <li><a href="{{ url_for('members') }}">Members</a></li>
-    <li><a href="{{ url_for('employees') }}">Employees</a></li>
-    {% if user and user == 'ADMIN' %}
-    <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
-    <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
-    {% endif %}
-    {% if user %}
-    <li style="float:right"><a href="{{ url_for('login') }}">Logout</a></li>
-    {% endif %}
-  </ul>
+    <ul class = "navbarone">
 
-  <p class = "homepageDescription" style="text-align: center;">Welcome to the Museum Database. Here, you can find links to webpages 
-  containing data about various aspects of the museum, including 
-  artworks, exhibitions, ticket sales, and more.</p>
+        {{ elements.navbar('home', 'Home')}}
+        {{ elements.navbar('artworks', 'Artworks')}}
+        {{ elements.navbar('exhibitions', 'Exhibitions')}}
+        {{ elements.navbar('films', 'Films')}}
+        {{ elements.navbar('gift_shop', 'Gift Shop')}}
+        {{ elements.navbar('members', 'Members')}}
+        {{ elements.navbar('employees', 'Employees')}}
 
-  
-    <div class="image-container">
-    <a href="{{ url_for('artworks') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/art3.jpeg') }}"> 
-    </a>
-    <div class="caption-container">
-      <div class="caption">Artworks</div>
-    </div>
-  </div>
+        {% if user == 'ADMIN' %}
+          <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
+          <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
+        {% endif %}
+        {% if user %}
+          <li style="float:right"><a href="{{ url_for('login') }}">Logout</a></li>
+        {% endif %}
+    </ul>
 
+    <p class = "homepageDescription" style="text-align: center;">
+      Welcome to the Museum Database. Here, you can find links to webpages 
+      containing data about various aspects of the museum, including 
+      artworks, exhibitions, ticket sales, and more.
+    </p>
 
-  <div class="image-container">
-    <a href="{{ url_for('exhibitions') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/exhibit.png') }}">
-    </a>
-    <div class="caption-container">
-      <div class="caption">Exhibitions</div>
-    </div>
-  </div>
-  
-  <div class="image-container">
-    <a href="{{ url_for('members') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/mems.jpeg') }}">
-    </a>
-    <div class="caption-container">
-      <div class="caption">Members</div>
-    </div>
-  </div>
- 
-  <div class="image-container">
-    <a href="{{ url_for('films') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/films.webp') }}">
-    </a>
-    <div class="caption-container">
-      <div class="caption">Films</div>
-    </div>
-  </div>
+    {{ elements.image_contain('artworks', '/img/art3.jpeg', 'Artworks' )}}
+    {{ elements.image_contain('exhibitions', '/img/exhibit.png', 'Exhibitions' )}}
+    {{ elements.image_contain('members', '/img/mems.jpeg', 'Members' )}}
+    {{ elements.image_contain('films', '/img/films.webp', 'Films' )}}
+    {{ elements.image_contain('gift_shop', '/img/mfah_shop.png', 'Gift Shop' )}}
+    {{ elements.image_contain('employees', '/img/emps.jpeg', 'Employees' )}}
 
-  <div class="image-container">
-    <a href="{{ url_for('gift_shop') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/mfah_shop.png') }}">
-    </a>
-    <div class="caption-container">
-      <div class="caption">Gift Shop</div>
-    </div>
-  </div>
-
-  <div class="image-container">
-    <a href="{{ url_for('employees') }}">
-      <img class="images" src="{{ url_for('static', filename='/img/emps.jpeg') }}">
-    </a>
-    <div class="caption-container">
-      <div class="caption">Employees</div>
-    </div>
-  </div>
-  
-
-
-</body>
+  </body>
 </html>

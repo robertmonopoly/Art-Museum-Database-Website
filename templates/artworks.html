@@ -1,3 +1,4 @@
+{% import "elements.html" as elements %}
 <!DOCTYPE html>
 <html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
 <head>
@@ -30,21 +31,16 @@
     padding: 15px;
     text-align: center;
     width:100%;
-  
-   
   }
   
   * {
     box-sizing: border-box;
-    
-   
   }
   
   .responsive {
     padding: 0 16px;
     float: right;
     width: 20%;
-
   }
   
   @media only screen and (max-width: 700px) {
@@ -89,35 +85,10 @@ Then visit the Museum to experience your favorites in person.</p>
  
 
 <p style="text-align: center; padding-left: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
-  <div class="responsive" >
-    <div class="gallery">
-      <a target="_blank" href="{{ url_for('static', filename='img_5terre.jpg')}}">
-        <img src="{{ url_for('static', filename='/img/artwork1.png')}}" alt="Cinque Terre" width="600" height="400">
-      </a>
-      <div class="desc">George Inness<br>
-        Landscape<br>
-        1866<br>
-        Oil on canvas<br>
-        AL.15</div>
-    </div>
-  </div>
-  <div class="responsive">
-    <div class="gallery">
-      <a target="_blank" href="{{ url_for('static', filename='img_forest.jpg')}}">
-        <img src="{{ url_for('static', filename='/img/artwork2.png')}}" alt="Forest" width="600" height="400">
-      </a>
-      <div class="desc">Jules Dupre<br>Under the Storm<br>19th century<br>Oil on canvas<br>2023.104<br></div>
-    </div>
-  </div>
+  {{ elements.art_format('/img/artwork1.png', 'Cinque Terre', 'George Inness', 'Landscape', '1866', 'Oil on canvas', 'AL.15') }}
+  {{ elements.art_format('/img/artwork2.png', 'Forest', 'Jules Dupre', 'Under the Storm', '1900', 'Oil on canvas', '2023.104') }}
+  {{ elements.art_format('/img/artwork3.png', 'Lion', 'Jean-Leon Gerome', 'Tiger on the Watch', '1888', 'Oil on canvas', 'AL.21') }}
 
-  <div class="responsive">
-    <div class="gallery">
-      <a target="_blank" href="{{ url_for('static', filename='img_mountains.jpg')}}">
-        <img src="{{ url_for('static', filename='/img/artwork3.png')}}" alt="lion" width="600" height="400">
-      </a>
-      <div class="desc">Jean-Leon Gerome<br>Tiger on the Watch<br>c. 1888<br>Oil on canvas<br>AL.21</div>
-    </div>
-  </div>
 
   <div class="responsive">
     <div class="gallery">

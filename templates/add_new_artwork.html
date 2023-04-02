@@ -4,24 +4,20 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
-<title>Antiquities webpage</title>
+<title>Add New Artwork</title>
 </head>
 <body>
 
 <h1>Add New Artwork</h1>
 
-
 <ul class = "navbarone">
   <li><a href="{{ url_for('home') }}">Home</a></li>
-  <li><a href="{{ url_for('artworks') }}">Artworks</li>
-    {% if user and user == 'ADMIN' %}
-    <li class ="active"><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
-    {% endif %}
+  <li><a href="{{ url_for('artworks') }}">Artworks</a></li>
 </ul>
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-<form action="/add_new_artwork" method="POST" style="padding:20px">
+<form action="/add_new_artwork" method="POST" enctype="multipart/form-data" style="padding:20px">
   <label for="artist">Artist:</label>
   <input type="text" name="artist" required><br><br>
   <label for="artwork_title">Artwork Title:</label>
@@ -36,19 +32,6 @@
   <input type="submit" value="Add Artwork">
 </form>
  
-<form action="/update_artwork" method="POST" style="padding:20px">
-  <label for="artist">Artist:</label>
-  <input type="text" name="artist" ><br><br>
-  <label for="artwork_title">Artwork Title:</label>
-  <input type="text" name="artwork_title" ><br><br>
-  <label for="made_on">Made On:</label>
-  <input type="date" name="made_on" ><br><br>
-  <label for="object_type">Object Type:</label>
-  <input type="text" name="object_type" ><br><br>
-  <label for="object_number">Object Number:</label>
-  <input type="text" name="object_number"><br><br>
-  <input type="file" id="art-img" name="art_img">
-  <input type="submit" value="Add Artwork">
 
 </div>
 </body>

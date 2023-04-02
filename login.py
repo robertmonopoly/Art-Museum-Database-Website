@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 import query as q
 import hash_password as hp
-# import PIL.Image as Image
+import PIL.Image as Image
 from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -54,13 +54,21 @@ def login():
             account = cur.fetchone()
             cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
             db_role = cur.fetchone()
-            print("role is ", db_role)
+            print("role is ", db_role[0])
 
             if account:
                 user = q.User(name, email, in_password, db_role[0])
                 session['user-role'] = user.access
-                return render_template('home.html', user=user)
-    return render_template('login.html') # called when the request.method is not 'POST'
+                return redirect(url_for('home'))
+    return render_template('home.html') # called when the request.method is not 'POST'
+
+# hmm, i tried to complete this function for u guys, it is probably close to
+# complete, but we would need a logout button, maybe it could be on the navbar
+# or on the top right of our webpages - sincerely, monopoly
+@app.route('/logout', methods=['POST','GET'])
+def logout():
+    session.clear()
+    return render_template(url_for('login.html'))
 
 @app.get('/artworks')
 def artworks():
@@ -76,18 +84,20 @@ def add_new_artwork():
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
         obj_num = request.form['object_number']
-        upload_art = request.form['art_img']
-
-        # Convert image to bytes
-        pil_im = Image.fromarray(upload_art)
+        art_file = request.files['art_img']
+ 
+       # Convert image to bytes
+        pil_im = Image.open(art_file, mode = 'r')
+        border = (20, 20, 100, 100)
+        cropped = pil_im.crop(border)
         b = BytesIO()
-        pil_im.save(b, 'jpeg')
+
+        cropped.save(b, 'jpeg')
         im_bytes = b.getvalue()
-        # read_art = upload_art.read()
-        # byte_art = bytearray(read_art)
-        # print("art in byte ", byte_art)
-        data = q.insert_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
-        return render_template('add_new_artwork.html', data=data)
+        #print("my bytes ", im_bytes)
+    
+        q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
+        return render_template('add_new_artwork.html')
     else:
         return render_template('add_new_artwork.html')
 
@@ -285,7 +295,7 @@ def update_gift_shop_item():
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id)
+        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
