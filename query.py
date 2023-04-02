@@ -46,7 +46,7 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     ON s.gift_sku = i.gift_sku 
     WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
     )
-    data = cur.fetchall()
+    data = cur.fetchall() # is THERE NO NEED TO FETCH WHEN UR INSERTING VALS?
     return data
 
 def insert_ticket_rep(cur, s_date,e_date):
@@ -70,15 +70,13 @@ def insert_member_don(cur):
 # end report functions
 
 # insert functions
-def insert_art(cur, artist, title, made_on, obj_type, obj_num, art_byte):
+def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
     sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s)"""
     values = (artist,title, made_on, obj_type, obj_num, art_byte)
     try:
         cur.execute(sql_query, values)
-        data = cur.fetchall()
-        cur.commit()
         print("Art values inserted successfully!")
-        return data
+        conn.commit() # VERY IMPORTANT because of sql transactions
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    
