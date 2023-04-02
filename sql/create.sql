@@ -64,8 +64,8 @@ CREATE TABLE artworks (
     artwork_title VARCHAR (256) UNIQUE NOT NULL,
     made_on DATE NOT NULL,
     object_type TEXT NOT NULL,
-    object_number INT PRIMARY KEY
-    
+    object_number VARCHAR PRIMARY KEY,
+    id BYTEA UNIQUE NOT NULL
 );
 
 CREATE TABLE user_account (
@@ -174,3 +174,6 @@ CREATE TABLE user_login (
     login_at TIMESTAMP NOT NULL
 );
 	
+CREATE TABLE image_byte (
+    id BYTEA PRIMARY KEY REFERENCES artworks(id)
+);

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS image_byte;
+
 DROP TABLE IF EXISTS user_login;
 
 DROP TABLE IF EXISTS donation;
