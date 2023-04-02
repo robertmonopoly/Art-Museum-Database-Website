@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -11,13 +11,16 @@
 <h1>Add New Gift Shop Item</h1>
 
 
-<ul class = "navbarone">
+<ul class="navbarone">
   <li><a href="{{ url_for('home') }}">Home</a></li>
   <li><a href="{{ url_for('films') }}">Gift Shop</a></li>
-  <li class = "active"><a href="{{ url_for('add_new_gift_shop_item') }}">Add New Gift Shop Item</a></li>
+  <li class="active"><a href="{{ url_for('add_new_gift_shop_item') }}">Add New Gift Shop Item</a></li>
 </ul>
 
-<form action="/add_new_employee" method="post" style="padding:20px;">
+
+<div style="display: flex; align-items: center; justify-content: center;">
+
+<form action="/add_new_gift_shop_item" method="post" style="padding:20px;">
     <label for="sku">SKU:</label>
     <input type="text" name="sku" required><br><br>
     <label for="name">Name:</label>
@@ -29,6 +32,17 @@
     <input type="submit" value="Add Item">
 </form>
 
+<form action="/update_gift_shop_item" method="post" style="padding:20px;">
+  <label for="sku">SKU:</label>
+  <input type="text" name="sku"><br><br>
+  <label for="name">Name:</label>
+  <input type="text" name="name"><br><br>
+  <label for="type">Type:</label>
+  <input type="text" name="type"><br><br>
+  <label for="price">Price:</label>
+  <input type="text" name="price"><br><br>
+  <input type="submit" value="Update Item">
+</form>
 
 
 </div>

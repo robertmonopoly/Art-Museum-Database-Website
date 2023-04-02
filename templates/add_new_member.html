@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -16,6 +16,8 @@
   <li><a href="{{ url_for('members') }}">Members</a></li>
   <li class = "active"><a href="{{ url_for('add_new_gift_shop_item') }}">Add New Member</a></li>
 </ul>
+
+<div style="display: flex; align-items: center; justify-content: center;">
 
 <form action="/add_new_member" method="post" style="padding:20px;">
     <label for="first_name">First Name:</label>
@@ -47,10 +49,41 @@
         <option value="Silver">Silver</option>
         <option value="Gold">Gold</option>
     </select><br><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Add New Member">
 </form>    
 
-
+<form action="/update_member" method="post" style="padding:20px;">
+  <label for="first_name">First Name:</label>
+  <input type="text" name="first_name" ><br><br>
+  <label for="last_name">Last Name:</label>
+  <input type="text" name="last_name" ><br><br>
+  <label for="address_line1">Address Line 1:</label>
+  <input type="text" name="address_line1" ><br><br>
+  <label for="address_line2">Address Line 2:</label>
+  <input type="text" name="address_line2"><br><br>
+  <label for="city">City:</label>
+  <input type="text" name="city" ><br><br>
+  <label for="state">State:</label>
+  <input type="text" name="state" ><br><br>
+  <label for="zip">Zip Code:</label>
+  <input type="text" name="zip" ><br><br>
+  <label for="email">Email:</label>
+  <input type="email" name="email" ><br><br>
+  <label for="phone_number">Phone Number:</label>
+  <input type="text" name="phone_number" ><br><br>
+  <label for="sex">Sex:</label>
+  <input type="text" name="gender" ><br><br>
+  <label for="dob">Date of Birth:</label>
+  <input type="date" id="dob" name="dob" ><br><br>
+  <label for="membership">Membership Type:</label>
+  <select id="membership" name="membership" >
+      <option value="">Select Membership Type</option>
+      <option value="Basic">Basic</option>
+      <option value="Silver">Silver</option>
+      <option value="Gold">Gold</option>
+  </select><br><br>
+  <input type="submit" value="Update Member">
+</form>    
 
 </div>
 </body>

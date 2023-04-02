@@ -193,7 +193,7 @@ def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id)
     except Exception as e:
         print(f"Error updating values in artworks table: {e}")
 
-def update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price, gift_id):
+def update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
     sql_query = """UPDATE gift_shop_item SET sku = %s, name = %s, type = %s, price = %s WHERE id = %s"""
     values = (gift_sku, gift_name, gift_type, gift_price, gift_id)
     try:
@@ -214,7 +214,7 @@ def update_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib
     except Exception as e:
         print("An error occurred while updating the exhibition:", e)
 
-def update_films(cur, film_id, film_title, film_price, film_dur, film_dir, film_rate):
+def update_film(cur, film_id, film_title, film_price, film_dur, film_dir, film_rate):
     try:
         cur.execute("""UPDATE films SET film_title = %s, film_price = %s, film_dur = %s, film_dir = %s, film_rate = %s WHERE film_id = %s""", (film_title, film_price, film_dur, film_dir, film_rate, film_id))
         cur.commit()

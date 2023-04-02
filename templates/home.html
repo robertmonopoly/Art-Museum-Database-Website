@@ -1,14 +1,12 @@
 {% import "elements.html" as elements %}
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Parisienne">
-    <title>Museum Database Homepage</title>
-  </head>
-  <body>
-    <h1 vertical-align="center" style="padding-left: 20px;">Museum Database</h1>
+<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Parisienne">
+<title>Museum Database Homepage</title>
+</head>
 
     <ul class = "navbarone">
 
