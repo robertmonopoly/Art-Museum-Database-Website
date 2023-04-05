@@ -80,15 +80,13 @@ def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    
-def insert_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
+def insert_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
     sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
     values = (gift_sku, gift_name, gift_type, gift_price)
     try:
         cur.execute(sql_query,values)
-        data = cur.fetchall()
-        cur.commit()
+        conn.commit()
         print("Gift item inserted successfully.") 
-        return data
     except Exception as e:
         print (f"Error inserting gift item: {e}")
    
@@ -167,9 +165,11 @@ def delete_employee(cur, employee_id):
     except Exception as e:
         print("An error occurred while deleting the employee's records", e)    
 
-def delete_gift_shop_item(cur, gift_sku):
+def delete_gift_shop_item(cur, conn, gift_sku):
     try:
         cur.execute("DELETE FROM gift_shop_item WHERE gift_sku = %s", (gift_sku,))
+        conn.commit()
+        print("Item deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the item", e)
 
@@ -193,15 +193,13 @@ def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id)
     except Exception as e:
         print(f"Error updating values in artworks table: {e}")
 
-def update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price):
-    sql_query = """UPDATE gift_shop_item SET sku = %s, name = %s, type = %s, price = %s WHERE id = %s"""
-    values = (gift_sku, gift_name, gift_type, gift_price)
+def update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
+    sql_query = """UPDATE gift_shop_item SET gift_name = %s, gift_type = %s, gift_price = %s WHERE gift_SKU = %s"""
+    values = (gift_name, gift_type, gift_price, gift_sku)
     try:
         cur.execute(sql_query,values)
-        data = cur.fetchall()
-        cur.commit()
+        conn.commit()
         print("Gift item updated successfully.")
-        return data
     except Exception as e:
         print (f"Error updating gift item: {e}")
 

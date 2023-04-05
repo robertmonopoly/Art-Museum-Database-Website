@@ -32,6 +32,15 @@ def signup():
     if request.method == 'POST':
         email = request.form['user_email']
         password = request.form['user_password']
+    return render_template("signup.html")
+
+@app.route('/registration', methods=['POST','GET'])
+def registration():
+    msg = ""
+    if request.method == 'POST':
+        email = request.form['user_email']
+        password = request.form['user_password']
+    return render_template("registration.html")
 
 @app.route('/login', methods =['POST','GET'])
 def login():
@@ -277,16 +286,20 @@ def update_member():
     else:
         return render_template('add_new_member.html')        
 
-@app.get('/add_new_gift_shop_item')
+@app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
         sku = request.form['sku']
         name = request.form['name']
         item_type = request.form['type']
-        price = request.form['price]']
-        return render_template('add_new_gift_shop_item.html')
-    else:
-        return render_template('add_new_gift_shop_item.html')
+        price = request.form['price']
+        try:
+            q.insert_gift_item(cur, conn, sku, name, item_type, price)
+            flash('Gift item added successfully.')
+        except Exception as e:
+            print(f"Error adding gift item: {e}")
+            flash('Error adding gift item.')
+    return render_template('add_new_gift_shop_item.html')
 
 @app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
@@ -295,13 +308,24 @@ def update_gift_shop_item():
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price)
+        q.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
         flash('Error updating gift item.')
     return render_template('add_new_gift_shop_item.html')
 
+
+@app.route('/delete_gift_shop_item', methods=['POST'])
+def delete_gift_shop_item():
+    gift_sku = request.form['sku']
+    try:
+        q.delete_gift_shop_item(cur, conn, gift_sku)
+        flash('Gift item deleted successfully')
+    except Exception as e:
+        print (f"Error deleting gift item: {e}")
+        flash('Error deleting gift item.')
+    return render_template('add_new_gift_shop_item.html')    
 
 @app.get('/films')
 def films():
