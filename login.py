@@ -169,7 +169,7 @@ def update_exhibition():
     else:
         return render_template('add_new_exhibition.html')
 
-@app.get('/add_new_film')
+@app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
         num_id = request.form['film_id']
@@ -179,7 +179,7 @@ def add_new_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.insert_art(cur, num_id, location,
+        data = q.insert_films(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
@@ -196,12 +196,24 @@ def update_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.update_film(cur, num_id, location,
+        data = q.update_film(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
     else:
         return render_template('add_new_film.html')
+
+
+@app.route('/delete_film', methods = ['POST'])
+def delete_film():
+    num_id = request.form['film_id']
+    try:
+        q.delete_film(cur, conn, num_id)
+        flash('Film deleted successfully')
+    except Exception as e:
+        print (f"Error deleting film: {e}")
+        flash('Error deleting film.')
+    return render_template('add_new_film.html') 
 
 @app.get('/add_new_employee')
 def add_new_employee():

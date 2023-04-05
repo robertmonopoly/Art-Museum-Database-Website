@@ -137,8 +137,15 @@ def insert_exhib_sales(cur, exhib_transac_id, user_id, exhib_id, exhib_transac_a
         print("An error occurred while inserting the exhibition sales record:", e)
 
 # ALERT: might change film_rate to an ENUM of value 1-5 stars!!!!!!!!!!!!!!
-def insert_films(cur,film_id, film_title, film_price, film_dur, film_dir, film_rate):
-    cur.execute("""INSERT INTO films VALUES (%s, %s, %s, %s, %s, %s)""", (film_id, film_title, film_price, film_dur, film_dir, film_rate))
+def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
+    try:
+        cur.execute("""INSERT INTO films (film_id, viewing_at, film_title, film_ticket_price, duration_min, film_director, film_rating)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                (film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate))
+        conn.commit()
+        print("Film inserted successfully")
+    except Exception as e:
+        print("An error occurred while inserting the film", e)
 
 def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
     try:
@@ -153,9 +160,11 @@ def delete_artwork(cur, obj_num):
         print("An error occurred while deleting the artwork", e)
 
 
-def delete_film(cur, film_id):
+def delete_film(cur, conn, film_id):
     try:
         cur.execute("DELETE FROM films WHERE film_id = %s", (film_id,))
+        conn.commit()
+        print("Film deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the film", e)
 
@@ -212,10 +221,10 @@ def update_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib
     except Exception as e:
         print("An error occurred while updating the exhibition:", e)
 
-def update_film(cur, film_id, film_title, film_price, film_dur, film_dir, film_rate):
+def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:
-        cur.execute("""UPDATE films SET film_title = %s, film_price = %s, film_dur = %s, film_dir = %s, film_rate = %s WHERE film_id = %s""", (film_title, film_price, film_dur, film_dir, film_rate, film_id))
-        cur.commit()
+        cur.execute("""UPDATE films SET film_title = %s, viewing_at = %s, film_ticket_price = %s, duration_min = %s, film_director = %s, film_rating = %s WHERE film_id = %s""", (film_title, viewing_at, film_price, film_dur, film_dir, film_rate, film_id))
+        conn.commit()
         print("Film updated successfully!")
     except Exception as e:
         print("An error occurred while updating the film:", e)
