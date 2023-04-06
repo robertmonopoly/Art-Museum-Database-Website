@@ -14,7 +14,6 @@ class User():
         return self.access == 'ADMIN'
 
 
-# @app.route('/registration', methods=['POST']) -> use this when connecting db and routing html
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
     user_uuid = str(uuid.uuid4())
@@ -27,15 +26,6 @@ def insert_user_login(cur, user_role, user_name, pw, login_at ):
     hashed = hw.hash_pw(pw)
     cur.execute("""INSERT INTO user_login VALUES (%s, %s, %s, %s, %s)""", (user_uuid,user_role, user_name, hashed, login_at))
     
-    # note: this part is completely separate from this function; we will use it when connecting to db!
-    # try:
-        # call the insert_user_login function!
-    #     insert_user_login(cur, user_name, user_password, login_at)
-    #     cur.commit()
-    #     return 'User registered successfully!'
-    # except:
-    #     cur.rollback()
-    #     return 'User registration failed.'
                    
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
@@ -123,9 +113,12 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
 
 
 
-def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
-        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator))
+        exhib_id = str(uuid.uuid4())
+        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists))
+        conn.commit()
+        print("Exhibition inserted sucessfully")
     except Exception as e:
         print("An error occurred while inserting the exhibition:", e)
 
@@ -147,18 +140,43 @@ def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_du
     except Exception as e:
         print("An error occurred while inserting the film", e)
 
+def insert_employee(cur, conn, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary):
+    query = """
+        INSERT INTO employees (employee_id, employee_membership, employee_first_name, employee_last_name, employee_address, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    try:
+        employee_id = uuid.uuid4()
+        cur.execute(query, (employee_id, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary))
+        conn.commit()
+        print("New employee added successfully")
+    except Exception as e:
+        print("An error occurred while adding the new employee: ", e)
+
+
 def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
     try:
         cur.execute("""INSERT INTO film_ticket_sales VALUES (%s, %s, %s, %s, %s)""", (film_transac_id, user_id, film_id, film_transac_at))
     except Exception as e:
         print("An error occurred while inserting the film sales record:", e)
 
-def delete_artwork(cur, obj_num):
+
+def delete_artwork(cur, conn, obj_num):
     try:
         cur.execute("DELETE FROM artworks WHERE obj_num = ?", (obj_num,))
+        conn.commit()
     except Exception as e:
         print("An error occurred while deleting the artwork", e)
 
+
+def delete_member(cur, conn, user_account_id):
+    try:
+        cur.execute("UPDATE user_account SET account_status = %s WHERE user_id = %s", 
+            (0, user_account_id))
+        conn.commit()
+        print("User account deleted successfully")
+    except Exception as e:
+        print("An error occurred while deleting the user account: ", e)
 
 def delete_film(cur, conn, film_id):
     try:
@@ -182,21 +200,22 @@ def delete_gift_shop_item(cur, conn, gift_sku):
     except Exception as e:
         print("An error occurred while deleting the item", e)
 
-def delete_exhibit(cur, exhib_id):
+def delete_exhibit(cur, conn, exhib_id):
     try:
         cur.execute("DELETE FROM exhibitions WHERE exhib_id = %s", (exhib_id,))
+        conn.commit()
+        print("Exhibit deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the exhibit", e)
  
 
 
-def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
+def update_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
     sql_query = """UPDATE artworks SET artist = %s, title = %s, made_on = %s, obj_type = %s, obj_num = %s, art_byte = %s WHERE id = %s"""
     values = (artist, title, made_on, obj_type, obj_num, art_byte, art_id)
     try:
         cur.execute(sql_query, values)
-        data = cur.fetchall()
-        cur.commit()
+        conn.commit()
         print("Art values updated successfully!")
         return data
     except Exception as e:
@@ -213,13 +232,15 @@ def update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
         print (f"Error updating gift item: {e}")
 
 
-def update_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+def update_exhibition(cur, conn, exhibition_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
-        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_price = %s, exhib_gallery = %s, exhib_title = %s, exhib_curator = %s WHERE exhib_id = %s""", (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhib_id))
-        cur.commit()
+        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_ticket_price = %s, exhib_gallery = %s, exhib_title = %s, curator = %s, exhib_artists = %s WHERE exhib_id = %s""",
+         (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, exhibition_id))
+        conn.commit()
         print("Exhibition updated successfully!")
     except Exception as e:
         print("An error occurred while updating the exhibition:", e)
+       
 
 def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:

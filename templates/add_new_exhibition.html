@@ -24,7 +24,7 @@
   <input type="datetime-local" name="exhibition_at" required><br><br>
 
   <label for="exhibition_ticket_price" style="padding-bottom:20px;">Ticket Price:</label>
-  <input type="number" name="exhibition_ticket_price" required><br><br>
+  <input type="text" name="exhibition_ticket_price" required><br><br>
 
   <label for="exhibition_gallery" style="padding-bottom:20px;">Gallery:</label>
   <input type="text" name="exhibition_gallery" required><br><br>
@@ -44,11 +44,14 @@
 
 
 <form action="/update_exhibition" method="post" style="padding:20px;">
+  <label for="exhibition_id" style="padding-bottom:20px;">Exhibition ID:</label>
+  <input type="text" name="exhibition_id" required><br><br>
+
   <label for="exhibition_at"  style="padding-bottom:20px;">Exhibition Date and Time:</label>
   <input type="datetime-local" name="exhibition_at"><br><br>
 
   <label for="exhibition_ticket_price" style="padding-bottom:20px;">Ticket Price:</label>
-  <input type="number" name="exhibition_ticket_price"><br><br>
+  <input type="text" name="exhibition_ticket_price"><br><br>
 
   <label for="exhibition_gallery" style="padding-bottom:20px;">Gallery:</label>
   <input type="text" name="exhibition_gallery"><br><br>
@@ -65,6 +68,11 @@
   <input type="submit" value="Update Exhibition">
 </form>
 
+<form action="/delete_exhibition" method="post" style="padding:20px;">
+  <label for="exhibition_id" style="padding-bottom:20px;">Exhibition ID:</label>
+  <input type="text" name="exhibition_id" required><br><br>
+  <input type="submit" value="Delete Exhibition">
+  </form>
 
 </div>
 </body>
