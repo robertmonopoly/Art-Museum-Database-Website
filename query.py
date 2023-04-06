@@ -14,13 +14,20 @@ class User():
         return self.access == 'ADMIN'
 
 
-def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
+def insert_user(cur, conn, user_fname, user_lname, user_email, user_dob):
     # generate uuid
     user_uuid = str(uuid.uuid4())
+    active_account = 1
+    membership_lvl = "NONE"
    # insert user into database
-    cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname,user_lname, user_addr, p_number, user_sex, user_dob,membership))
+    try:
+        cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname, user_lname, user_email, user_dob, membership_lvl, active_account))
+        conn.commit()
+        print("user successfully inserted")
+    except Exception as e:
+        print("There was an error creating the account:", {e})
 
-def insert_user_login(cur, user_role, user_name, pw, login_at ):
+def insert_user_login(cur, conn, user_role, user_name, pw, login_at ):
     # email is used as username
     user_uuid = cur.execute("""SELECT * FROM user_account WHERE email=?""", user_name)
     hashed = hw.hash_pw(pw)

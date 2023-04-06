@@ -243,7 +243,7 @@ def delete_film():
 @app.route('/add_new_employee', methods = ['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
-        membership = request.form['membership']
+        membership = request.form['employee_membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
         address = request.form['employee_address']
