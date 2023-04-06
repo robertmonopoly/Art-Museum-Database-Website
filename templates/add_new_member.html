@@ -19,29 +19,9 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
+{% if user != 'ADMIN' %}
+
 <form action="/add_new_member" method="post" style="padding:20px;">
-    <label for="first_name">First Name:</label>
-    <input type="text" name="first_name" required><br><br>
-    <label for="last_name">Last Name:</label>
-    <input type="text" name="last_name" required><br><br>
-    <label for="address_line1">Address Line 1:</label>
-    <input type="text" name="address_line1" required><br><br>
-    <label for="address_line2">Address Line 2:</label>
-    <input type="text" name="address_line2"><br><br>
-    <label for="city">City:</label>
-    <input type="text" name="city" required><br><br>
-    <label for="state">State:</label>
-    <input type="text" name="state" required><br><br>
-    <label for="zip">Zip Code:</label>
-    <input type="text" name="zip" required><br><br>
-    <label for="email">Email:</label>
-    <input type="email" name="email" required><br><br>
-    <label for="phone_number">Phone Number:</label>
-    <input type="text" name="phone_number" required><br><br>
-    <label for="sex">Sex:</label>
-    <input type="text" name="gender" required><br><br>
-    <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" name="dob" required><br><br>
     <label for="membership">Membership Type:</label>
     <select id="membership" name="membership" required>
         <option value="">Select Membership Type</option>
@@ -52,37 +32,12 @@
     <input type="submit" value="Add New Member">
 </form>    
 
-<form action="/update_member" method="post" style="padding:20px;">
-  <label for="first_name">First Name:</label>
-  <input type="text" name="first_name" ><br><br>
-  <label for="last_name">Last Name:</label>
-  <input type="text" name="last_name" ><br><br>
-  <label for="address_line1">Address Line 1:</label>
-  <input type="text" name="address_line1" ><br><br>
-  <label for="address_line2">Address Line 2:</label>
-  <input type="text" name="address_line2"><br><br>
-  <label for="city">City:</label>
-  <input type="text" name="city" ><br><br>
-  <label for="state">State:</label>
-  <input type="text" name="state" ><br><br>
-  <label for="zip">Zip Code:</label>
-  <input type="text" name="zip" ><br><br>
-  <label for="email">Email:</label>
-  <input type="email" name="email" ><br><br>
-  <label for="phone_number">Phone Number:</label>
-  <input type="text" name="phone_number" ><br><br>
-  <label for="sex">Sex:</label>
-  <input type="text" name="gender" ><br><br>
-  <label for="dob">Date of Birth:</label>
-  <input type="date" id="dob" name="dob" ><br><br>
-  <label for="membership">Membership Type:</label>
-  <select id="membership" name="membership" >
-      <option value="">Select Membership Type</option>
-      <option value="Basic">Basic</option>
-      <option value="Silver">Silver</option>
-      <option value="Gold">Gold</option>
-  </select><br><br>
-  <input type="submit" value="Update Member">
+{% endif %}
+
+<form action="/delete_member" method="post" style="padding:20px;">
+  <label for="account_id">Account ID:</label>
+  <input type="text" name="account_id" ><br><br>
+  <input type="submit" value="Delete Member Account">
 </form>    
 
 </div>

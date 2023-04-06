@@ -10,8 +10,11 @@ app.secret_key = 'my_secret'
 
 # Local Connection
 try:
-    conn = psycopg2.connect(dbname="test")
+    with open("config.toml") as tomlfile:
+        content = tomlfile.read()
+    conn = psycopg2.connect(content)
     cur = conn.cursor()
+    
     print("Connected to Postgres")
 except Exception as e:
     print("An error occurred while connecting: ", e)
@@ -63,6 +66,7 @@ def login():
             cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
             account = cur.fetchone()
             cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
+            # db_role is printed out as a tuple
             db_role = cur.fetchone()
             print("role is ", db_role[0])
 
@@ -85,7 +89,8 @@ def artworks():
         user = session["user-role"]
         return render_template('artworks.html', user=user)
 
-#TODO: need to add new artwork
+#TODO: now do image upload
+#TODO: remember to pass in the connector for SQL commits
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
@@ -105,12 +110,12 @@ def add_new_artwork():
         cropped.save(b, 'jpeg')
         im_bytes = b.getvalue()
         #print("my bytes ", im_bytes)
-    
+
         q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
+        # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
         return render_template('add_new_artwork.html')
     else:
         return render_template('add_new_artwork.html')
-
 
 @app.route('/update_artwork', methods=['POST','GET'])
 def update_artwork():
@@ -312,12 +317,24 @@ def update_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.update_member(cur, first_name, last_name,
+        data = q.update_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')
     else:
-        return render_template('add_new_member.html')        
+        return render_template('add_new_member.html')
+
+@app.route('/delete_member', methods = ['POST'])
+def delete_member():        
+    if request.method == 'POST':
+        member_id = request.form['account_id']
+        try:
+            q.delete_member(cur, conn, member_id)
+            flash('User account deleted successfully')
+        except Exception as e:
+            print(f"Error deleting user account: {e}")
+            flash('Error deleting user account.')
+    return render_template('add_new_member.html')
 
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
