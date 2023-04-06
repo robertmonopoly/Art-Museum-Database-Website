@@ -241,7 +241,7 @@ def delete_film():
         flash('Error deleting film.')
     return render_template('add_new_film.html') 
 
-@app.get('/add_new_employee')
+@app.route('/add_new_employee', methods = ['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
         membership = request.form['membership']
@@ -253,9 +253,12 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.insert_new_employee(cur, membership, first_name,
-        last_name, address, email, ssn, phone_number,
-        dob, salary)
+        try:
+            q.insert_employee(cur, conn, membership, first_name,
+            last_name, address, email, ssn, phone_number,
+            dob, salary)
+        except Exception as e:
+            print("Inserting employee failed: ", {e})    
         return render_template('add_new_employee.html')
     else:
         return render_template('add_new_employee.html')
@@ -295,7 +298,7 @@ def add_new_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.insert_member(cur, first_name, last_name,
+        data = q.insert_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')

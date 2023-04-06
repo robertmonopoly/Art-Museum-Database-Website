@@ -140,15 +140,31 @@ def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_du
     except Exception as e:
         print("An error occurred while inserting the film", e)
 
+def insert_employee(cur, conn, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary):
+    query = """
+        INSERT INTO employees (employee_id, employee_membership, employee_first_name, employee_last_name, employee_address, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    try:
+        employee_id = uuid.uuid4()
+        cur.execute(query, (employee_id, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary))
+        conn.commit()
+        print("New employee added successfully")
+    except Exception as e:
+        print("An error occurred while adding the new employee: ", e)
+
+
 def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
     try:
         cur.execute("""INSERT INTO film_ticket_sales VALUES (%s, %s, %s, %s, %s)""", (film_transac_id, user_id, film_id, film_transac_at))
     except Exception as e:
         print("An error occurred while inserting the film sales record:", e)
 
-def delete_artwork(cur, obj_num):
+
+def delete_artwork(cur, conn, obj_num):
     try:
         cur.execute("DELETE FROM artworks WHERE obj_num = ?", (obj_num,))
+        conn.commit()
     except Exception as e:
         print("An error occurred while deleting the artwork", e)
 
@@ -194,13 +210,12 @@ def delete_exhibit(cur, conn, exhib_id):
  
 
 
-def update_art(cur, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
+def update_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
     sql_query = """UPDATE artworks SET artist = %s, title = %s, made_on = %s, obj_type = %s, obj_num = %s, art_byte = %s WHERE id = %s"""
     values = (artist, title, made_on, obj_type, obj_num, art_byte, art_id)
     try:
         cur.execute(sql_query, values)
-        data = cur.fetchall()
-        cur.commit()
+        conn.commit()
         print("Art values updated successfully!")
         return data
     except Exception as e:
