@@ -258,7 +258,7 @@ def add_new_employee():
                               last_name, address, email, ssn, phone_number,
                               dob, salary)
             logging.info("Employee inserted successfully.")
-            return redirect(url_for('employee_list'))
+            return render_template('add_new_employee.html')
         except Exception as e:
             logging.error(f"Error inserting employee: {e}")
             return render_template('add_new_employee.html', error=str(e))
