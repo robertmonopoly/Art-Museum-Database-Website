@@ -3,6 +3,7 @@ import psycopg2
 import uuid
 import query as q
 import hash_password as hp
+import logging
 #import PIL.Image as Image
 from io import BytesIO
 app = Flask(__name__)
@@ -240,25 +241,27 @@ def delete_film():
         flash('Error deleting film.')
     return render_template('add_new_film.html') 
 
-@app.route('/add_new_employee', methods = ['GET', 'POST'])
+@app.route('/add_new_employee', methods=['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
-        membership = request.form['employee_membership']
-        first_name = request.form['employee_first_name']
-        last_name = request.form['employee_last_name']
-        address = request.form['employee_address']
-        email = request.form['employee_email']
-        ssn = request.form['employee_ssn']
-        phone_number = request.form['employee_phone_number']
-        dob = request.form['employee_date_of_birth']
-        salary = request.form['salary']
         try:
+            membership = request.form['employee_membership']
+            first_name = request.form['employee_first_name']
+            last_name = request.form['employee_last_name']
+            address = request.form['employee_address']
+            email = request.form['employee_email']
+            ssn = request.form['employee_ssn']
+            phone_number = request.form['employee_phone_number']
+            dob = request.form['employee_date_of_birth']
+            salary = request.form['salary']
             q.insert_employee(cur, conn, membership, first_name,
-            last_name, address, email, ssn, phone_number,
-            dob, salary)
+                              last_name, address, email, ssn, phone_number,
+                              dob, salary)
+            logging.info("Employee inserted successfully.")
+            return redirect(url_for('employee_list'))
         except Exception as e:
-            print("Inserting employee failed: ", {e})    
-        return render_template('add_new_employee.html')
+            logging.error(f"Error inserting employee: {e}")
+            return render_template('add_new_employee.html', error=str(e))
     else:
         return render_template('add_new_employee.html')
 

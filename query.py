@@ -2,6 +2,7 @@
 import uuid
 import hash_password as hw
 
+
 # User Class
 class User():
     def __init__(self, name, email, password, access='USER'):
