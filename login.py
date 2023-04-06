@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
+import uuid
 import query as q
 import hash_password as hp
 #import PIL.Image as Image
@@ -132,23 +133,26 @@ def update_artwork():
         data = q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
         return render_template('add_new_artwork.html', data=data)
     else:
-        return render_template('add_new_artwork.html')        
+        return render_template('add_new_artwork.html')
+
+
     
 @app.get('/exhibitions')
 def exhibitions():
     user = user = session["user-role"]
     return render_template('exhibitions.html', user=user)
 
-@app.get('/add_new_exhibition')
+@app.route('/add_new_exhibition', methods = ['GET', 'POST'])
 def add_new_exhibition():
     if request.method == 'POST':
+       
         date_and_time = request.form['exhibition_at']
         ticket_price = request.form['exhibition_ticket_price']
         gallery = request.form['exhibition_gallery']
         title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
-        data = q.insert_exhibition(cur, date_and_time, ticket_price,
+        data = q.insert_exhibition(cur, conn, date_and_time, ticket_price,
         gallery, title, curator, artists)
         return render_template('add_new_exhibition.html')
     else:
@@ -157,16 +161,33 @@ def add_new_exhibition():
 @app.route('/update_exhibition', methods = ['POST'])
 def update_exhibition():
     if request.method == 'POST':
+        exhibit_id = request.form['exhibition_id']
         date_and_time = request.form['exhibition_at']
         ticket_price = request.form['exhibition_ticket_price']
         gallery = request.form['exhibition_gallery']
         title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
-        data = q.update_exhibition(cur, date_and_time, ticket_price,
+        try:
+            data = q.update_exhibition(cur, conn, exhibit_id, date_and_time, ticket_price,
         gallery, title, curator, artists)
+            flash('Exhibition updated successfully.')
+        except Exception as e:
+            print(f"Error updating exhibition: {e}")
+            flash('Error updating exhibition.')
         return render_template('add_new_exhibition.html')
     else:
+        return render_template('add_new_exhibition.html')
+
+@app.route('/delete_exhibition', methods = ['POST'])
+def delete_exhibition():
+    if request.method == 'POST':
+        exhibit_id = request.form['exhibition_id']
+        try:
+            data = q.delete_exhibit(cur, conn, exhibit_id)
+        except Exception as e:
+            print(f"Error deleting exhibition: {e}")
+            flash('Error deleting exhibition.')
         return render_template('add_new_exhibition.html')
 
 @app.route('/add_new_film', methods=['GET', 'POST'])

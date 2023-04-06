@@ -123,9 +123,12 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
 
 
 
-def insert_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
-        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator))
+        exhib_id = str(uuid.uuid4())
+        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists))
+        conn.commit()
+        print("Exhibition inserted sucessfully")
     except Exception as e:
         print("An error occurred while inserting the exhibition:", e)
 
@@ -182,9 +185,11 @@ def delete_gift_shop_item(cur, conn, gift_sku):
     except Exception as e:
         print("An error occurred while deleting the item", e)
 
-def delete_exhibit(cur, exhib_id):
+def delete_exhibit(cur, conn, exhib_id):
     try:
         cur.execute("DELETE FROM exhibitions WHERE exhib_id = %s", (exhib_id,))
+        conn.commit()
+        print("Exhibit deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the exhibit", e)
  
@@ -213,13 +218,15 @@ def update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
         print (f"Error updating gift item: {e}")
 
 
-def update_exhibition(cur, exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator):
+def update_exhibition(cur, conn, exhibition_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
-        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_price = %s, exhib_gallery = %s, exhib_title = %s, exhib_curator = %s WHERE exhib_id = %s""", (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhib_id))
-        cur.commit()
+        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_ticket_price = %s, exhib_gallery = %s, exhib_title = %s, curator = %s, exhib_artists = %s WHERE exhib_id = %s""",
+         (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, exhibition_id))
+        conn.commit()
         print("Exhibition updated successfully!")
     except Exception as e:
         print("An error occurred while updating the exhibition:", e)
+       
 
 def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:
