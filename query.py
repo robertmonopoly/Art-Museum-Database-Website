@@ -14,7 +14,6 @@ class User():
         return self.access == 'ADMIN'
 
 
-# @app.route('/registration', methods=['POST']) -> use this when connecting db and routing html
 def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
     # generate uuid
     user_uuid = str(uuid.uuid4())
@@ -27,15 +26,6 @@ def insert_user_login(cur, user_role, user_name, pw, login_at ):
     hashed = hw.hash_pw(pw)
     cur.execute("""INSERT INTO user_login VALUES (%s, %s, %s, %s, %s)""", (user_uuid,user_role, user_name, hashed, login_at))
     
-    # note: this part is completely separate from this function; we will use it when connecting to db!
-    # try:
-        # call the insert_user_login function!
-    #     insert_user_login(cur, user_name, user_password, login_at)
-    #     cur.commit()
-    #     return 'User registered successfully!'
-    # except:
-    #     cur.rollback()
-    #     return 'User registration failed.'
                    
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
@@ -159,6 +149,16 @@ def delete_artwork(cur, obj_num):
     except Exception as e:
         print("An error occurred while deleting the artwork", e)
 
+
+def delete_member(cur, conn, user_account_id):
+    try:
+        cur.execute("DELETE FROM user_login WHERE user_id = %s "
+            "CASCADE (SELECT id FROM user_account WHERE user_id = %s)", 
+            (user_account_id, user_account_id))
+        conn.commit()
+        print("User account deleted successfully")
+    except Exception as e:
+        print("An error occurred while deleting the user account: ", e)
 
 def delete_film(cur, conn, film_id):
     try:

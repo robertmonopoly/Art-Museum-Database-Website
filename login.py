@@ -9,7 +9,9 @@ app.secret_key = 'my_secret'
 
 # Local Connection
 try:
-    conn = psycopg2.connect(dbname="test")
+    with open("config.toml") as tomlfile:
+        content = tomlfile.read()
+    conn = psycopg2.connect(content)
     cur = conn.cursor()
     print("Connected to Postgres")
 except Exception as e:
@@ -296,7 +298,19 @@ def update_member():
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')
     else:
-        return render_template('add_new_member.html')        
+        return render_template('add_new_member.html')
+
+@app.route('/delete_member', methods = ['POST'])
+def delete_member():        
+    if request.method == 'POST':
+        member_id = request.form['account_id']
+        try:
+            q.delete_member(cur, conn, member_id)
+            flash('User account deleted successfully')
+        except Exception as e:
+            print(f"Error deleting user account: {e}")
+            flash('Error deleting user account.')
+    return render_template('add_new_member.html')
 
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
