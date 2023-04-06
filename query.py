@@ -70,10 +70,11 @@ def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    
-def insert_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
-    sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
-    values = (gift_sku, gift_name, gift_type, gift_price)
+def insert_gift_item(cur, conn, gift_name, gift_type, gift_price):
     try:
+        gift_sku = str(uuid.uuid4())
+        sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
+        values = (gift_sku, gift_name, gift_type, gift_price)
         cur.execute(sql_query,values)
         conn.commit()
         print("Gift item inserted successfully.") 
@@ -130,8 +131,9 @@ def insert_exhib_sales(cur, exhib_transac_id, user_id, exhib_id, exhib_transac_a
         print("An error occurred while inserting the exhibition sales record:", e)
 
 # ALERT: might change film_rate to an ENUM of value 1-5 stars!!!!!!!!!!!!!!
-def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
+def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:
+        film_id = str(uuid.uuid4())
         cur.execute("""INSERT INTO films (film_id, viewing_at, film_title, film_ticket_price, duration_min, film_director, film_rating)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)""",
                 (film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate))

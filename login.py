@@ -198,14 +198,13 @@ def delete_exhibition():
 @app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
-        num_id = request.form['film_id']
         location = request.form['viewing_at']
         title = request.form['film_title']
         ticket_price = request.form['film_ticket_price']
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.insert_films(cur, conn, num_id, location,
+        data = q.insert_films(cur, conn, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
@@ -342,12 +341,11 @@ def delete_member():
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
-        sku = request.form['sku']
         name = request.form['name']
         item_type = request.form['type']
         price = request.form['price']
         try:
-            q.insert_gift_item(cur, conn, sku, name, item_type, price)
+            q.insert_gift_item(cur, conn, name, item_type, price)
             flash('Gift item added successfully.')
         except Exception as e:
             print(f"Error adding gift item: {e}")
