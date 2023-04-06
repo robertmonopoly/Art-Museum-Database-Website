@@ -9,8 +9,11 @@ app.secret_key = 'my_secret'
 
 # Local Connection
 try:
-    conn = psycopg2.connect(dbname="test")
+    with open("config.toml") as tomlfile:
+        content = tomlfile.read()
+    conn = psycopg2.connect(content)
     cur = conn.cursor()
+    
     print("Connected to Postgres")
 except Exception as e:
     print("An error occurred while connecting: ", e)
@@ -53,6 +56,7 @@ def login():
             cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
             account = cur.fetchone()
             cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
+            # db_role is printed out as a tuple
             db_role = cur.fetchone()
             print("role is ", db_role[0])
 
@@ -75,7 +79,8 @@ def artworks():
         user = session["user-role"]
         return render_template('artworks.html', user=user)
 
-#TODO: need to add new artwork
+#TODO: now do image upload
+#TODO: remember to pass in the connector for SQL commits
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
@@ -95,12 +100,12 @@ def add_new_artwork():
         cropped.save(b, 'jpeg')
         im_bytes = b.getvalue()
         #print("my bytes ", im_bytes)
-    
+
         q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
+        # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
         return render_template('add_new_artwork.html')
     else:
         return render_template('add_new_artwork.html')
-
 
 @app.route('/update_artwork', methods=['POST','GET'])
 def update_artwork():
