@@ -291,7 +291,7 @@ def update_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.update_member(cur, first_name, last_name,
+        data = q.update_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')
