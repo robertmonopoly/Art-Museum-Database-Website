@@ -130,8 +130,9 @@ def insert_exhib_sales(cur, exhib_transac_id, user_id, exhib_id, exhib_transac_a
         print("An error occurred while inserting the exhibition sales record:", e)
 
 # ALERT: might change film_rate to an ENUM of value 1-5 stars!!!!!!!!!!!!!!
-def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
+def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:
+        film_id = str(uuid.uuid4())
         cur.execute("""INSERT INTO films (film_id, viewing_at, film_title, film_ticket_price, duration_min, film_director, film_rating)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)""",
                 (film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate))
@@ -141,12 +142,12 @@ def insert_films(cur, conn, film_id, viewing_at, film_title, film_price, film_du
         print("An error occurred while inserting the film", e)
 
 def insert_employee(cur, conn, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary):
+    employee_id = uuid.uuid4()
     query = """
         INSERT INTO employees (employee_id, employee_membership, employee_first_name, employee_last_name, employee_address, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     try:
-        employee_id = uuid.uuid4()
         cur.execute(query, (employee_id, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary))
         conn.commit()
         print("New employee added successfully")

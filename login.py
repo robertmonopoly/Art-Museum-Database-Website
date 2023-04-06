@@ -198,14 +198,13 @@ def delete_exhibition():
 @app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
-        num_id = request.form['film_id']
         location = request.form['viewing_at']
         title = request.form['film_title']
         ticket_price = request.form['film_ticket_price']
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.insert_films(cur, conn, num_id, location,
+        data = q.insert_films(cur, conn, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
@@ -259,9 +258,8 @@ def add_new_employee():
             dob, salary)
         except Exception as e:
             print("Inserting employee failed: ", {e})    
-        return render_template('add_new_employee.html')
-    else:
-        return render_template('add_new_employee.html')
+    return render_template('add_new_employee.html')
+    
 
 @app.route('/update_employee', methods = ['POST'])
 def update_employee():
