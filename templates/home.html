@@ -17,6 +17,8 @@
         {{ elements.navbar('gift_shop', 'Gift Shop')}}
         {{ elements.navbar('members', 'Members')}}
         {{ elements.navbar('employees', 'Employees')}}
+        {{ elements.navbar('signup', 'Signup')}}
+        {{ elements.navbar('registration', 'Registration')}}
 
         {% if user == 'ADMIN' %}
           <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>

@@ -34,7 +34,7 @@
   <input type="text" name="film_director" required><br><br>
   <label for="film_rating">Rating:</label>
   <input type="text" name="film_rating" required><br><br>
-  <input type="submit" value="Add New Artwork">
+  <input type="submit" value="Add New Film">
 </form>
 
 <form action="/update_film" method="POST" style="padding:20px;">
@@ -52,10 +52,14 @@
   <input type="text" name="film_director"><br><br>
   <label for="film_rating">Rating:</label>
   <input type="text" name="film_rating"><br><br>
-  <input type="submit" value="Update Artwork">
+  <input type="submit" value="Update Film">
 </form>
 
-
+<form action="/delete_film" method="POST" style="padding:20px;">
+  <label for="film_id">Film ID:</label>
+  <input type="text" name="film_id"><br><br>
+  <input type="submit" value="Delete Film">
+</form>
 
 </div>
 </body>

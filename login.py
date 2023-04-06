@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 import query as q
 import hash_password as hp
-import PIL.Image as Image
+#import PIL.Image as Image
 from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -35,6 +35,15 @@ def signup():
     if request.method == 'POST':
         email = request.form['user_email']
         password = request.form['user_password']
+    return render_template("signup.html")
+
+@app.route('/registration', methods=['POST','GET'])
+def registration():
+    msg = ""
+    if request.method == 'POST':
+        email = request.form['user_email']
+        password = request.form['user_password']
+    return render_template("registration.html")
 
 @app.route('/login', methods =['POST','GET'])
 def login():
@@ -165,7 +174,7 @@ def update_exhibition():
     else:
         return render_template('add_new_exhibition.html')
 
-@app.get('/add_new_film')
+@app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
         num_id = request.form['film_id']
@@ -175,7 +184,7 @@ def add_new_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.insert_art(cur, num_id, location,
+        data = q.insert_films(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
@@ -192,12 +201,24 @@ def update_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.update_film(cur, num_id, location,
+        data = q.update_film(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
         return render_template('add_new_film.html')
     else:
         return render_template('add_new_film.html')
+
+
+@app.route('/delete_film', methods = ['POST'])
+def delete_film():
+    num_id = request.form['film_id']
+    try:
+        q.delete_film(cur, conn, num_id)
+        flash('Film deleted successfully')
+    except Exception as e:
+        print (f"Error deleting film: {e}")
+        flash('Error deleting film.')
+    return render_template('add_new_film.html') 
 
 @app.get('/add_new_employee')
 def add_new_employee():
@@ -275,23 +296,27 @@ def update_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.update_member(cur, first_name, last_name,
+        data = q.update_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
         return render_template('add_new_member.html')
     else:
         return render_template('add_new_member.html')        
 
-@app.get('/add_new_gift_shop_item')
+@app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
         sku = request.form['sku']
         name = request.form['name']
         item_type = request.form['type']
-        price = request.form['price]']
-        return render_template('add_new_gift_shop_item.html')
-    else:
-        return render_template('add_new_gift_shop_item.html')
+        price = request.form['price']
+        try:
+            q.insert_gift_item(cur, conn, sku, name, item_type, price)
+            flash('Gift item added successfully.')
+        except Exception as e:
+            print(f"Error adding gift item: {e}")
+            flash('Error adding gift item.')
+    return render_template('add_new_gift_shop_item.html')
 
 @app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
@@ -300,13 +325,24 @@ def update_gift_shop_item():
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        q.update_gift_item(cur, gift_sku, gift_name, gift_type, gift_price)
+        q.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
         flash('Error updating gift item.')
     return render_template('add_new_gift_shop_item.html')
 
+
+@app.route('/delete_gift_shop_item', methods=['POST'])
+def delete_gift_shop_item():
+    gift_sku = request.form['sku']
+    try:
+        q.delete_gift_shop_item(cur, conn, gift_sku)
+        flash('Gift item deleted successfully')
+    except Exception as e:
+        print (f"Error deleting gift item: {e}")
+        flash('Error deleting gift item.')
+    return render_template('add_new_gift_shop_item.html')    
 
 @app.get('/films')
 def films():
