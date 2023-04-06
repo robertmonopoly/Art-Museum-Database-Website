@@ -77,7 +77,8 @@ CREATE TABLE user_account (
     phone_number TEXT NOT NULL,
     sex Sex NOT NULL,
     date_of_birth DATE NOT NULL,
-    membership MembershipType NOT NULL
+    membership MembershipType NOT NULL,
+    account_status VARCHAR(2) NOT NULL
 );
 
 CREATE TABLE gift_shop_item (

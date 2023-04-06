@@ -152,9 +152,8 @@ def delete_artwork(cur, obj_num):
 
 def delete_member(cur, conn, user_account_id):
     try:
-        cur.execute("DELETE FROM user_login WHERE user_id = %s "
-            "CASCADE (SELECT id FROM user_account WHERE user_id = %s)", 
-            (user_account_id, user_account_id))
+        cur.execute("UPDATE user_account SET account_status = %s WHERE user_id = %s", 
+            (0, user_account_id))
         conn.commit()
         print("User account deleted successfully")
     except Exception as e:
