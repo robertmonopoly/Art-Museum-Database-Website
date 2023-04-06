@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 import query as q
 import hash_password as hp
-#import PIL.Image as Image
+import PIL.Image as Image
 from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
