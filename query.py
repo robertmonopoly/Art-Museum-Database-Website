@@ -2,6 +2,7 @@
 import uuid
 import hash_password as hw
 
+
 # User Class
 class User():
     def __init__(self, name, email, password, access='USER'):
@@ -14,13 +15,20 @@ class User():
         return self.access == 'ADMIN'
 
 
-def insert_user(cur, user_fname,user_lname, user_addr,p_number,user_sex, user_dob,membership):
+def insert_user(cur, conn, user_fname, user_lname, user_email, user_dob):
     # generate uuid
     user_uuid = str(uuid.uuid4())
+    active_account = 1
+    membership_lvl = "NONE"
    # insert user into database
-    cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname,user_lname, user_addr, p_number, user_sex, user_dob,membership))
+    try:
+        cur.execute("""INSERT INTO user_account VALUES (%s, %s, %s, %s, %s, %s, %s)""", (user_uuid, user_fname, user_lname, user_email, user_dob, membership_lvl, active_account))
+        conn.commit()
+        print("user successfully inserted")
+    except Exception as e:
+        print("There was an error creating the account:", {e})
 
-def insert_user_login(cur, user_role, user_name, pw, login_at ):
+def insert_user_login(cur, conn, user_role, user_name, pw, login_at ):
     # email is used as username
     user_uuid = cur.execute("""SELECT * FROM user_account WHERE email=?""", user_name)
     hashed = hw.hash_pw(pw)
@@ -70,10 +78,11 @@ def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    
-def insert_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
-    sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
-    values = (gift_sku, gift_name, gift_type, gift_price)
+def insert_gift_item(cur, conn, gift_name, gift_type, gift_price):
     try:
+        gift_sku = str(uuid.uuid4())
+        sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
+        values = (gift_sku, gift_name, gift_type, gift_price)
         cur.execute(sql_query,values)
         conn.commit()
         print("Gift item inserted successfully.") 
