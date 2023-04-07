@@ -4,6 +4,7 @@ import uuid
 import query as q
 import hash_password as hp
 import PIL.Image as Image
+
 from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -239,7 +240,7 @@ def delete_film():
         flash('Error deleting film.')
     return render_template('add_new_film.html') 
 
-@app.route('/add_new_employee', methods = ['GET', 'POST'])
+@app.route('/add_new_employee', methods=['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
         membership = request.form['membership']
@@ -338,12 +339,11 @@ def delete_member():
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
-        sku = request.form['sku']
         name = request.form['name']
         item_type = request.form['type']
         price = request.form['price']
         try:
-            q.insert_gift_item(cur, conn, sku, name, item_type, price)
+            q.insert_gift_item(cur, conn, name, item_type, price)
             flash('Gift item added successfully.')
         except Exception as e:
             print(f"Error adding gift item: {e}")
