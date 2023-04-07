@@ -168,7 +168,6 @@ CREATE TABLE user_login (
     user_role User_Role NOT NULL,
     user_name TEXT NOT NULL UNIQUE,
     hashed_password TEXT NOT NULL UNIQUE,
-    login_at TIMESTAMP NOT NULL
 );
 	
 CREATE TABLE image_byte (
