@@ -103,7 +103,6 @@ CREATE TABLE employees (
     employee_membership MembershipType NOT NULL,
     employee_first_name VARCHAR (60) NOT NULL,  
     employee_last_name VARCHAR (60) NOT NULL,
-    employee_address User_Address NOT NULL,
     employee_email VARCHAR (100) NOT NULL,
     employee_ssn TEXT NOT NULL,
     employee_phone_number TEXT NOT NULL,
@@ -169,7 +168,6 @@ CREATE TABLE user_login (
     user_role User_Role NOT NULL,
     user_name TEXT NOT NULL UNIQUE,
     hashed_password TEXT NOT NULL UNIQUE,
-    login_at TIMESTAMP NOT NULL
 );
 	
 CREATE TABLE image_byte (
