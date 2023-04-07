@@ -1,7 +1,7 @@
 # This file is just a library of SQL functions; no connection is actually being done here.
 import uuid
 import hash_password as hw
-
+from datetime import date
 
 # User Class
 class User():
@@ -119,6 +119,19 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     finally:
         # Close the database connection
         cur.close()
+
+
+
+def insert_donation(cur, conn, first_name, last_name, email_address, money_amount):
+    try:
+        transac_id = str(uuid.uuid4())
+        donation_date = date.today()
+        cur.execute("INSERT INTO donation (donation_transaction_id, donator_first_name, donator_last_name, donator_email, donation_on, donation_amount) VALUES (%s, %s, %s, %s, %s, %s)", 
+        (transac_id, first_name, last_name, email_address, donation_date, money_amount))
+        conn.commit()
+        print("Donation added successfully")
+    except Exception as e:
+        print(f"Error inserting donation: {e}")
 
 
 

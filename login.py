@@ -3,7 +3,7 @@ import psycopg2
 import uuid
 import query as q
 import hash_password as hp
-import PIL.Image as Image
+#import PIL.Image as Image
 
 from io import BytesIO
 app = Flask(__name__)
@@ -141,6 +141,23 @@ def update_artwork():
         return render_template('add_new_artwork.html')
 
 
+@app.get('/donations')
+def donations():
+    user = user = session["user-role"]
+    return render_template('donations.html', user=user)
+
+@app.route('/add_new_donation', methods = ['GET', 'POST'])
+def add_new_donation():
+    if request.method == 'POST':
+        first_name = request.form['f_name']
+        last_name = request.form['l_name']
+        email_address = request.form['email']
+        money_amount = request.form['donation_amount']
+        data = q.insert_donation(cur, conn, first_name, last_name,
+        email_address, money_amount)
+        return render_template('donations.html')
+    else:
+        return render_template('donations.html')
     
 @app.get('/exhibitions')
 def exhibitions():

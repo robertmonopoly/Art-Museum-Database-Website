@@ -19,6 +19,7 @@
         {{ elements.navbar('employees', 'Employees')}}
         {{ elements.navbar('signup', 'Signup')}}
         {{ elements.navbar('registration', 'Registration')}}
+        {{ elements.navbar('donations', 'Donations')}}
 
         {% if user == 'ADMIN' %}
           <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
