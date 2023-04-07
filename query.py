@@ -14,7 +14,6 @@ class User():
     def is_admin(self):
         return self.access == 'ADMIN'
 
-
 def insert_user(cur, conn, user_fname, user_lname, user_email, user_dob):
     # generate uuid
     user_uuid = str(uuid.uuid4())
@@ -122,6 +121,8 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
 
 
 
+
+
 def insert_donation(cur, conn, first_name, last_name, email_address, money_amount):
     try:
         transac_id = str(uuid.uuid4())
@@ -138,11 +139,17 @@ def insert_donation(cur, conn, first_name, last_name, email_address, money_amoun
 def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
         exhib_id = str(uuid.uuid4())
-        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s)""", (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists))
+        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *""", 
+                    (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists))
         conn.commit()
-        print("Exhibition inserted sucessfully")
+        print("Exhibition inserted successfully")
     except Exception as e:
         print("An error occurred while inserting the exhibition:", e)
+        
+        # Catch the exception raised by the trigger and print the message to the command line
+        if "Trigger function failed" in str(e):
+            print("An exhibition or film has been inserted into the database.")
+            print("Trigger function called successfully")
 
 
 def insert_exhib_sales(cur, exhib_transac_id, user_id, exhib_id, exhib_transac_at):

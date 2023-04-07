@@ -144,16 +144,6 @@ CREATE TABLE film_ticket_sales (
     film_transac_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE calendar (
-    calendar_event_id UUID PRIMARY KEY,
-    event_name TEXT NOT NULL,
-    event_start DATE NOT NULL,
-    event_end DATE NOT NULL,
-    time_of_event_start TIME NOT NULL,
-    time_of_event_end TIME NOT NULL,
-    event_object_id UUID 
-);
-
 CREATE TABLE donation (
     donation_transaction_id UUID PRIMARY KEY,
     donator_first_name VARCHAR (60) NOT NULL,
@@ -173,3 +163,4 @@ CREATE TABLE user_login (
 CREATE TABLE image_byte (
     id BYTEA PRIMARY KEY REFERENCES artworks(id)
 );
+

@@ -36,6 +36,8 @@ DROP TYPE User_Address;
 
 DROP TYPE US_State;
 
+DROP TRIGGER IF EXISTS insert_exhibition_trigger ON exhibitions;
 
 
+DROP TRIGGER IF EXISTS insert_films_trigger ON films;
 

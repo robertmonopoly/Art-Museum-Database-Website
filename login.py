@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import uuid
 import query as q
 import hash_password as hp
@@ -9,16 +10,53 @@ from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
+
 # Local Connection
 try:
     with open("config.toml") as tomlfile:
         content = tomlfile.read()
     conn = psycopg2.connect(content)
     cur = conn.cursor()
-    
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     print("Connected to Postgres")
 except Exception as e:
     print("An error occurred while connecting: ", e)
+
+
+try:
+    # Create the trigger function
+    cur.execute("""
+        CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
+        $$
+        BEGIN
+            RAISE NOTICE 'An exhibition or film has been inserted into the database.';
+            RAISE NOTICE 'Trigger function called successfully';
+            RETURN NEW;
+        END;
+        $$ LANGUAGE plpgsql;
+    """)
+
+    # Create the trigger for exhibitions
+    cur.execute("""
+        CREATE TRIGGER insert_exhibition_trigger
+        AFTER INSERT ON exhibitions
+        FOR EACH ROW
+        EXECUTE FUNCTION display_message();
+    """)
+
+    # Create the trigger for films
+    cur.execute("""
+        CREATE TRIGGER insert_films_trigger
+        AFTER INSERT ON films
+        FOR EACH ROW
+        EXECUTE FUNCTION display_message();
+    """)
+    conn.commit()
+    print("Triggers created successfully")
+except Exception as e:
+    print("An error occurred while creating the triggers:", e)
+
+
 
 @app.route("/")
 def index():
