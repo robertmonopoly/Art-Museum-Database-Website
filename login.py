@@ -268,12 +268,9 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        try:
-            q.insert_employee(cur, conn, membership, first_name,
-            last_name, email, ssn, phone_number,
-            dob, salary)
-        except Exception as e:
-            print("Inserting employee failed: ", {e})    
+        q.insert_employee(cur, conn, membership, first_name,
+        last_name, email, ssn, phone_number,
+        dob, salary)
     return render_template('add_new_employee.html')
     
 

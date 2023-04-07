@@ -240,7 +240,7 @@ def update_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte, a
         cur.execute(sql_query, values)
         conn.commit()
         print("Art values updated successfully!")
-        return data
+      
     except Exception as e:
         print(f"Error updating values in artworks table: {e}")
 
