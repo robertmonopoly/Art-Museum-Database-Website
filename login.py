@@ -3,8 +3,8 @@ import psycopg2
 import uuid
 import query as q
 import hash_password as hp
-import logging
-#import PIL.Image as Image
+import PIL.Image as Image
+
 from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -114,9 +114,8 @@ def add_new_artwork():
 
         q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
         # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
-        return render_template('add_new_artwork.html')
-    else:
-        return render_template('add_new_artwork.html')
+    return render_template('add_new_artwork.html')
+  
 
 @app.route('/update_artwork', methods=['POST','GET'])
 def update_artwork():
@@ -244,26 +243,22 @@ def delete_film():
 @app.route('/add_new_employee', methods=['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
+        membership = request.form['membership']
+        first_name = request.form['employee_first_name']
+        last_name = request.form['employee_last_name']       
+        email = request.form['employee_email']
+        ssn = request.form['employee_ssn']
+        phone_number = request.form['employee_phone_number']
+        dob = request.form['employee_date_of_birth']
+        salary = request.form['salary']
         try:
-            membership = request.form['employee_membership']
-            first_name = request.form['employee_first_name']
-            last_name = request.form['employee_last_name']
-            address = request.form['employee_address']
-            email = request.form['employee_email']
-            ssn = request.form['employee_ssn']
-            phone_number = request.form['employee_phone_number']
-            dob = request.form['employee_date_of_birth']
-            salary = request.form['salary']
             q.insert_employee(cur, conn, membership, first_name,
-                              last_name, address, email, ssn, phone_number,
-                              dob, salary)
-            logging.info("Employee inserted successfully.")
-            return render_template('add_new_employee.html')
+            last_name, email, ssn, phone_number,
+            dob, salary)
         except Exception as e:
-            logging.error(f"Error inserting employee: {e}")
-            return render_template('add_new_employee.html', error=str(e))
-    else:
-        return render_template('add_new_employee.html')
+            print("Inserting employee failed: ", {e})    
+    return render_template('add_new_employee.html')
+    
 
 @app.route('/update_employee', methods = ['POST'])
 def update_employee():

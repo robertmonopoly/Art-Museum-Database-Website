@@ -150,14 +150,14 @@ def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_d
     except Exception as e:
         print("An error occurred while inserting the film", e)
 
-def insert_employee(cur, conn, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary):
+def insert_employee(cur, conn, membership, first_name, last_name, email, ssn, phone_number, dob, salary):
+    employee_id = str(uuid.uuid4())
     query = """
-        INSERT INTO employees (employee_id, employee_membership, employee_first_name, employee_last_name, employee_address, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO employees (employee_id, employee_membership, employee_first_name, employee_last_name, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     try:
-        employee_id = uuid.uuid4()
-        cur.execute(query, (employee_id, membership, first_name, last_name, address, email, ssn, phone_number, dob, salary))
+        cur.execute(query, (employee_id, membership, first_name, last_name, email, ssn, phone_number, dob, salary))
         conn.commit()
         print("New employee added successfully")
     except Exception as e:

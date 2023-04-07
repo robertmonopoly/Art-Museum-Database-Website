@@ -21,11 +21,11 @@
 
   <form action="/add_new_employee" method="post" style="padding:20px;">
     <label for="employee_membership">Membership Type:</label>
-    <select id="employee_membership" name="employee_membership" required>
+    <select id="employee_membership" name="membership" required>
       <option value="">Select Membership Type</option>
-      <option value="Basic">Basic</option>
-      <option value="Silver">Silver</option>
-      <option value="Gold">Gold</option>
+      <option value='BASIC'>Basic</option>
+      <option value='SILVER'>Silver</option>
+      <option value='GOLD'>Gold</option>
     </select><br><br>
 
   <label for="employee_first_name">First Name:</label>
@@ -33,12 +33,6 @@
   
   <label for="employee_last_name">Last Name:</label>
   <input type="text" name="employee_last_name" required><br><br>
-  
-  <label for="employee_address">Address:</label>
-  <input type="text" name="employee_address_street" placeholder="Street Address" required><br><br>
-  <input type="text" name="employee_address_city" placeholder="City" required>
-  <input type="text" name="employee_address_state" placeholder="State" required>
-  <input type="text" name="employee_address_zip" placeholder="Zip Code" required><br><br>
   
   <label for="employee_email">Email:</label>
   <input type="email" name="employee_email" required><br><br>
