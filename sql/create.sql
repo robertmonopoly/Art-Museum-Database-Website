@@ -167,7 +167,7 @@ CREATE TABLE user_login (
     user_id UUID PRIMARY KEY REFERENCES user_account(user_id),
     user_role User_Role NOT NULL,
     user_name TEXT NOT NULL UNIQUE,
-    hashed_password TEXT NOT NULL UNIQUE,
+    hashed_password TEXT NOT NULL UNIQUE
 );
 	
 CREATE TABLE image_byte (
