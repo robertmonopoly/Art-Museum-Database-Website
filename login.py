@@ -113,9 +113,8 @@ def add_new_artwork():
 
         q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
         # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
-        return render_template('add_new_artwork.html')
-    else:
-        return render_template('add_new_artwork.html')
+    return render_template('add_new_artwork.html')
+  
 
 @app.route('/update_artwork', methods=['POST','GET'])
 def update_artwork():
@@ -245,8 +244,7 @@ def add_new_employee():
     if request.method == 'POST':
         membership = request.form['membership']
         first_name = request.form['employee_first_name']
-        last_name = request.form['employee_last_name']
-        address = request.form['employee_address']
+        last_name = request.form['employee_last_name']       
         email = request.form['employee_email']
         ssn = request.form['employee_ssn']
         phone_number = request.form['employee_phone_number']
@@ -254,7 +252,7 @@ def add_new_employee():
         salary = request.form['salary']
         try:
             q.insert_employee(cur, conn, membership, first_name,
-            last_name, address, email, ssn, phone_number,
+            last_name, email, ssn, phone_number,
             dob, salary)
         except Exception as e:
             print("Inserting employee failed: ", {e})    
