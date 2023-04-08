@@ -463,7 +463,8 @@ def employees():
 
 @app.get('/Fticket_details')
 def Fticket_details():
-    return render_template('Fticket_details')
+    user = session["user-role"]
+    return render_template('Fticket_details.html', user=user)
 
 
 # TODO: need to create page
