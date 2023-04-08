@@ -178,6 +178,11 @@ def update_artwork():
         return render_template('add_new_artwork.html')
 
 
+@app.get('/Eticket_details')
+def Eticket_details():
+    user = session["user-role"]
+    return render_template('Eticket_details.html', user=user)
+
 @app.get('/donations')
 def donations():
     user = user = session["user-role"]
@@ -458,16 +463,14 @@ def employees():
     user = session["user-role"]
     return render_template('employees.html', user=user)
 
-
-@app.route('/Eticket_details', methods=['GET', 'POST'])
+@app.get('/Eticket_details')
 def Eticket_details():
-    user = session["user-role"]
-    return render_template('Eticket_details', user=user)
+    return render_template('Eticket_details')
 
 @app.get('/Fticket_details')
 def Fticket_details():
     user = session["user-role"]
-    return render_template('Fticket_details', user=user)
+    return render_template('Fticket_details.html', user=user)
 
 
 # TODO: need to create page
