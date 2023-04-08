@@ -13,7 +13,7 @@
 <ul class = "navbarone">
     <li><a href="{{ url_for('home') }}">Home</a></li>
     <li class = "active"><a href="{{ url_for('members') }}">Members</a></li>
-    {% if user and user == 'ADMIN' %}
+    {% if session['user-role'] == 'ADMIN' %}
     <li><a href="{{ url_for('add_new_member') }}">Add New Member</a></li>
     {% endif %}
   </ul>

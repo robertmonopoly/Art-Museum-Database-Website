@@ -19,13 +19,13 @@
         {{ elements.navbar('employees', 'Employees')}}
         {{ elements.navbar('donations', 'Donations')}}
 
-        {% if user == 'ADMIN' %}
+        {% if session['user-role'] == 'ADMIN' %}
           <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
           <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
         {% endif %}
-        {% if user %}
+        
           <li style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
-        {% endif %}
+        
     </ul>
 
     <p class = "homepageDescription" style="text-align: center;">
