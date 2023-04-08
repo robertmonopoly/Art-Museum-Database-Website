@@ -17,7 +17,6 @@
         {{ elements.navbar('gift_shop', 'Gift Shop')}}
         {{ elements.navbar('members', 'Members')}}
         {{ elements.navbar('employees', 'Employees')}}
-        {{ elements.navbar('registration', 'Registration')}}
         {{ elements.navbar('donations', 'Donations')}}
 
         {% if user == 'ADMIN' %}
@@ -25,7 +24,7 @@
           <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
         {% endif %}
         {% if user %}
-          <li style="float:right"><a href="{{ url_for('login') }}">Logout</a></li>
+          <li style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
         {% endif %}
     </ul>
 

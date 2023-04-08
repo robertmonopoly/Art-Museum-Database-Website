@@ -112,7 +112,7 @@ def login():
                 user = q.User(name, email, in_password, db_role[0])
                 session['user-role'] = user.access
                 return redirect(url_for('home'))
-    return render_template('home.html') # called when the request.method is not 'POST'
+    return render_template('login.html') # called when the request.method is not 'POST'
 
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
@@ -120,7 +120,7 @@ def login():
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     session.clear()
-    return render_template(url_for('login.html'))
+    return render_template('login.html')
 
 @app.get('/artworks')
 def artworks():
