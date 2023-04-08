@@ -330,6 +330,15 @@ def update_employee():
         return render_template('add_new_employee.html')        
 
 
+@app.route('/delete_employee', methods = ['POST'])
+def delete_employee():
+    if request.method == 'POST':
+        id_num = request.form['emp_id']
+        data = q.delete_employee(cur, conn, id_num)
+        return render_template('add_new_employee.html')
+    else:
+        return render_template('add_new_employee.html') 
+
 @app.get('/add_new_member')
 def add_new_member():
     if request.method == 'POST':
