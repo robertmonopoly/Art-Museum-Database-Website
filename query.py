@@ -34,6 +34,7 @@ def insert_user_login(cur, conn, user_name, pw):
         user_uuid = cur.fetchone()
         user_role = "USER"
         hashed = hw.hash_pw(pw)
+        hashed = hashed.decode("utf-8")
         cur.execute("INSERT INTO user_login VALUES (%s, %s, %s, %s)", (user_uuid, user_role, user_name, hashed))
         conn.commit()
         print("login successfully inserted")
