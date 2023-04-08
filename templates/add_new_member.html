@@ -58,7 +58,7 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-{% if user != 'ADMIN' %}
+{% if session['user-role'] == 'USER' %}
 
 <form action="/add_new_member" method="post" style="padding:20px;">
     <label for="membership">Membership Type:</label>
@@ -73,11 +73,14 @@
 
 {% endif %}
 
+{% if session['user-role'] == 'ADMIN' %}
 <form action="/delete_member" method="post" style="padding:20px;">
   <label for="account_id">Account ID:</label>
   <input type="text" name="account_id" ><br><br>
   <input type="submit" value="Delete Member Account">
 </form>    
+
+{% endif %}
 
 </div>
 </body>
