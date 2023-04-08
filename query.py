@@ -55,6 +55,12 @@ def retrieve_member_data(cur):
     data = cur.fetchall()
     return data    
 
+
+def retrieve_donations_data(cur):
+    cur.execute("""SELECT * FROM donation""")
+    data = cur.fetchall()
+    return data   
+
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
     cur.execute("""

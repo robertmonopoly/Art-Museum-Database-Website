@@ -185,8 +185,16 @@ def Eticket_details():
 
 @app.get('/donations')
 def donations():
-    user = user = session["user-role"]
-    return render_template('donations.html', user=user)
+    user = session["user-role"]
+    msg = ""
+    data = q.retrieve_donations_data(cur)
+    if data == []:
+        msg = "No Donation Data Available"
+        app.logger.info(data)
+        return render_template('donations.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('donations.html', data=data)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
