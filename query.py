@@ -43,7 +43,18 @@ def insert_user_login(cur, conn, user_name, pw):
         print("Error occurred while inserting user login:", e)
         raise
 
-                   
+
+def retrieve_employee_data(cur):
+    cur.execute("""SELECT * FROM employees""")
+    data = cur.fetchall()
+    return data
+
+
+def retrieve_member_data(cur):
+    cur.execute("""SELECT * FROM user_account""")
+    data = cur.fetchall()
+    return data    
+
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
     cur.execute("""

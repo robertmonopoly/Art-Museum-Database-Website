@@ -449,7 +449,15 @@ def films():
 @app.get('/members')
 def members():
     user = session["user-role"]
-    return render_template('members.html',user=user)
+    msg = ""
+    data = q.retrieve_member_data(cur)
+    if data == []:
+        msg = "No Member Data Available"
+        app.logger.info(data)
+        return render_template('members.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('members.html', data=data)
 
 @app.get('/gift_shop')
 def gift_shop():
@@ -459,7 +467,16 @@ def gift_shop():
 @app.get('/employees')
 def employees():
     user = session["user-role"]
-    return render_template('employees.html', user=user)
+    msg = ""
+    data = q.retrieve_employee_data(cur)
+    if data == []:
+        msg = "No Employee Data Available"
+        app.logger.info(data)
+        return render_template('employees.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('employees.html', data=data)
+
 
 @app.get('/Fticket_details')
 def Fticket_details():
@@ -480,6 +497,7 @@ def user_info():
     sex = request.form['sex']
     dob = request.form['dob']
     q.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+
 
 # the reports
 @app.get('/report_gifts')
