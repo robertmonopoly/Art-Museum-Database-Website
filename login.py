@@ -178,6 +178,11 @@ def update_artwork():
         return render_template('add_new_artwork.html')
 
 
+@app.get('/Eticket_details')
+def Eticket_details():
+    user = session["user-role"]
+    return render_template('Eticket_details.html', user=user)
+
 @app.get('/donations')
 def donations():
     user = user = session["user-role"]
@@ -455,10 +460,6 @@ def gift_shop():
 def employees():
     user = session["user-role"]
     return render_template('employees.html', user=user)
-
-@app.get('/Eticket_details')
-def Eticket_details():
-    return render_template('Eticket_details')
 
 @app.get('/Fticket_details')
 def Fticket_details():
