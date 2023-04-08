@@ -75,13 +75,12 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        data = q.insert_user(cur, conn, fname, lname,
+        q.insert_user(cur, conn, fname, lname,
         email, birthdate)
         password = request.form['user_password']
         q.insert_user_login(cur, conn, email, password)
-        return render_template('registration.html')
-    else:
-        return render_template('registration.html')
+    return render_template('registration.html')
+
 
 
 @app.route('/login', methods =['POST','GET'])
