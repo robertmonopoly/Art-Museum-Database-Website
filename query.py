@@ -131,8 +131,6 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
 
 
 
-
-
 def insert_donation(cur, conn, first_name, last_name, email_address, money_amount):
     try:
         transac_id = str(uuid.uuid4())
@@ -251,8 +249,6 @@ def delete_exhibit(cur, conn, exhib_id):
         print("An error occurred while deleting the exhibit", e)
 
 
- 
-
 
 def update_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
     sql_query = """UPDATE artworks SET artist = %s, title = %s, made_on = %s, obj_type = %s, obj_num = %s, art_byte = %s WHERE id = %s"""
@@ -309,7 +305,8 @@ def update_employee(cur, conn, membership, employee_first_name, employee_last_na
 
 
 
-
+def book_Etickets()
+    
 
 # these (PSEUDO) functions require mapping
 # def get_all_events(conn):
