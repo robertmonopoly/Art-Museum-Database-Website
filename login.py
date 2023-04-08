@@ -463,9 +463,7 @@ def employees():
     user = session["user-role"]
     return render_template('employees.html', user=user)
 
-@app.get('/Eticket_details')
-def Eticket_details():
-    return render_template('Eticket_details')
+
 
 @app.get('/Fticket_details')
 def Fticket_details():

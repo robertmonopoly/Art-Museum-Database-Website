@@ -305,7 +305,6 @@ def update_employee(cur, conn, membership, employee_first_name, employee_last_na
 
 
 
-    
 
 # these (PSEUDO) functions require mapping
 # def get_all_events(conn):
