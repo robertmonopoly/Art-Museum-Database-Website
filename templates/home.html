@@ -39,7 +39,9 @@
     {{ elements.image_contain('members', '/img/mems.jpeg', 'Members' )}}
     {{ elements.image_contain('films', '/img/films.webp', 'Films' )}}
     {{ elements.image_contain('gift_shop', '/img/mfah_shop.png', 'Gift Shop' )}}
+    {% if session['user-role'] == 'ADMIN' %}
     {{ elements.image_contain('employees', '/img/emps.jpeg', 'Employees' )}}
+    {% endif %}
 
   </body>
 </html>
