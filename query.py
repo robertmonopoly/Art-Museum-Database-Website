@@ -226,9 +226,11 @@ def delete_film(cur, conn, film_id):
     except Exception as e:
         print("An error occurred while deleting the film", e)
 
-def delete_employee(cur, employee_id):
+def delete_employee(cur, conn, employee_id):
     try:
         cur.execute("DELETE FROM employees WHERE employee_id = %s", (employee_id,))
+        conn.commit()
+        print("Employee's records deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the employee's records", e)    
 
