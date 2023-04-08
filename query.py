@@ -53,7 +53,7 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     ON s.gift_sku = i.gift_sku 
     WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
     )
-    data = cur.fetchall() # is THERE NO NEED TO FETCH WHEN UR INSERTING VALS?
+    data = cur.fetchall() #TODO: test if need to insert data?
     return data
 
 def insert_ticket_rep(cur, s_date,e_date):
