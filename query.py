@@ -305,7 +305,6 @@ def update_employee(cur, conn, membership, employee_first_name, employee_last_na
 
 
 
-def book_Etickets()
     
 
 # these (PSEUDO) functions require mapping
