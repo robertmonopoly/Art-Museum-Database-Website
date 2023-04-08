@@ -1,60 +1,3 @@
-CREATE TYPE US_State AS ENUM (
-        'AL',
-        'AK',
-        'AR',
-        'AZ',
-        'CA',
-        'CO',
-        'CT',
-        'DC',
-        'DE',
-        'FL',
-        'GA',
-        'HI',
-        'IA',
-        'ID',
-        'IL',
-        'IN',
-        'KS',
-        'KY',
-        'LA',
-        'MA',
-        'MD',
-        'ME',
-        'MI',
-        'MN',
-        'MO',
-        'MS',
-        'MT',
-        'NC',
-        'ND',
-        'NE',
-        'NH',
-        'NJ',
-        'NM',
-        'NV',
-        'NY',
-        'OK',
-        'OH',
-        'OR',
-        'PA',
-        'RI',
-        'SC',
-        'SD',
-        'TN',
-        'TX',
-        'UT',
-        'VA',
-        'VT',
-        'WA',
-        'WI',
-        'WV',
-        'WY');
-CREATE TYPE User_Address AS (
-    line_1 TEXT,
-    city TEXT,
-    us_state US_State,
-    zip TEXT);
 CREATE TYPE User_Role AS ENUM ('USER','ADMIN');
 CREATE TYPE Sex AS ENUM ('FEMALE', 'MALE', 'OTHER');
 CREATE TYPE MembershipType AS ENUM ('NONE','BASIC', 'SILVER','GOLD');
@@ -76,6 +19,13 @@ CREATE TABLE user_account (
     date_of_birth DATE NOT NULL,
     membership MembershipType NOT NULL,
     account_status VARCHAR(2) NOT NULL
+);
+
+CREATE TABLE user_login (
+    user_id UUID PRIMARY KEY REFERENCES user_account(user_id),
+    user_role User_Role NOT NULL,
+    user_name TEXT NOT NULL UNIQUE,
+    hashed_password TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE gift_shop_item (
@@ -153,12 +103,6 @@ CREATE TABLE donation (
     donation_amount MONEY NOT NULL
 );
 
-CREATE TABLE user_login (
-    user_id UUID PRIMARY KEY REFERENCES user_account(user_id),
-    user_role User_Role NOT NULL,
-    user_name TEXT NOT NULL UNIQUE,
-    hashed_password TEXT NOT NULL UNIQUE
-);
 	
 CREATE TABLE image_byte (
     id BYTEA PRIMARY KEY REFERENCES artworks(id)

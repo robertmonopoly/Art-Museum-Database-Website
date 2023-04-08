@@ -68,22 +68,21 @@ def home():
         user = session["user-role"]
         return render_template("home.html", user=user)
     
-#TODO: setup registration page
-@app.route('/signup', methods=['POST','GET'])
-def signup():
-    msg = ""
-    if request.method == 'POST':
-        email = request.form['user_email']
-        password = request.form['user_password']
-    return render_template("signup.html")
-
 @app.route('/registration', methods=['POST','GET'])
 def registration():
-    msg = ""
     if request.method == 'POST':
+        fname = request.form['user_fname']
+        lname = request.form['user_lname']
         email = request.form['user_email']
+        birthdate = request.form['bdate']
+        data = q.insert_user(cur, conn, fname, lname,
+        email, birthdate)
         password = request.form['user_password']
-    return render_template("registration.html")
+        q.insert_user_login(cur, conn, email, password)
+        return render_template('registration.html')
+    else:
+        return render_template('registration.html')
+
 
 @app.route('/login', methods =['POST','GET'])
 def login():

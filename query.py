@@ -27,12 +27,21 @@ def insert_user(cur, conn, user_fname, user_lname, user_email, user_dob):
     except Exception as e:
         print("There was an error creating the account:", {e})
 
-def insert_user_login(cur, conn, user_role, user_name, pw, login_at ):
+def insert_user_login(cur, conn, user_name, pw):
     # email is used as username
-    user_uuid = cur.execute("""SELECT * FROM user_account WHERE email=?""", user_name)
-    hashed = hw.hash_pw(pw)
-    cur.execute("""INSERT INTO user_login VALUES (%s, %s, %s, %s, %s)""", (user_uuid,user_role, user_name, hashed, login_at))
-    
+    try:
+        cur.execute("SELECT user_id FROM user_account WHERE email = %s", (user_name,))
+        user_uuid = cur.fetchone()
+        user_role = "USER"
+        hashed = hw.hash_pw(pw)
+        cur.execute("INSERT INTO user_login VALUES (%s, %s, %s, %s)", (user_uuid, user_role, user_name, hashed))
+        conn.commit()
+        print("login successfully inserted")
+    except Exception as e:
+        conn.rollback()
+        print("Error occurred while inserting user login:", e)
+        raise
+
                    
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
