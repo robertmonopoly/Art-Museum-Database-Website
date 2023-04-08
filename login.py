@@ -317,14 +317,13 @@ def update_employee():
         membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
-        address = request.form['employee_address']
         email = request.form['employee_email']
         ssn = request.form['employee_ssn']
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.update_employee(cur, membership, first_name,
-        last_name, address, email, ssn, phone_number,
+        data = q.update_employee(cur, conn, membership, first_name,
+        last_name, email, ssn, phone_number,
         dob, salary)
         return render_template('add_new_employee.html')
     else:
@@ -425,7 +424,10 @@ def delete_gift_shop_item():
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
-    return render_template('add_new_gift_shop_item.html')    
+    return render_template('add_new_gift_shop_item.html')  
+
+ 
+
 
 @app.get('/films')
 def films():
@@ -447,13 +449,16 @@ def employees():
     user = session["user-role"]
     return render_template('employees.html', user=user)
 
-@app.get('/Eticket_details')
+
+@app.route('/Eticket_details', methods=['GET', 'POST'])
 def Eticket_details():
-    return render_template('Eticket_details')
+    user = session["user-role"]
+    return render_template('Eticket_details', user=user)
 
 @app.get('/Fticket_details')
 def Fticket_details():
-    return render_template('Fticket_details')
+    user = session["user-role"]
+    return render_template('Fticket_details', user=user)
 
 
 # TODO: need to create page
