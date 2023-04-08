@@ -57,7 +57,6 @@
 </ul>
 
 <div style="display: flex; align-items: center; justify-content: center;">
-
   <form action="/add_new_employee" method="post" style="padding:20px;">
     <label for="employee_membership">Membership Type:</label>
     <select id="employee_membership" name="membership" required>
@@ -106,8 +105,6 @@
     <label for="employee_last_name">Last Name:</label>
     <input type="text" name="employee_last_name" ><br><br>
     
-    <label for="employee_address">Address:</label>
-    <input type="text" name="employee_address" ><br><br>
     
     <label for="employee_email">Email:</label>
     <input type="email" name="employee_email" ><br><br>
@@ -126,14 +123,9 @@
   
     <input type="submit" value="Update Employee">
     </form>
-
-    <form action="/delete_employee" method="POST" style="padding:20px;">
-      <label for="emp_id">Employee ID:</label>
-      <input type="text" name="emp_id" required><br><br>
-      <input type="submit" value="Delete Employee Records">
-  </form>
-  
 </div>
+
+
 
 </body>
 </html>

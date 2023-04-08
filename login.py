@@ -322,14 +322,13 @@ def update_employee():
         membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
-        address = request.form['employee_address']
         email = request.form['employee_email']
         ssn = request.form['employee_ssn']
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.update_employee(cur, membership, first_name,
-        last_name, address, email, ssn, phone_number,
+        data = q.update_employee(cur, conn, membership, first_name,
+        last_name, email, ssn, phone_number,
         dob, salary)
         return render_template('add_new_employee.html')
     else:
@@ -439,7 +438,10 @@ def delete_gift_shop_item():
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
-    return render_template('add_new_gift_shop_item.html')    
+    return render_template('add_new_gift_shop_item.html')  
+
+ 
+
 
 @app.get('/films')
 def films():
@@ -476,6 +478,7 @@ def employees():
     else:
         app.logger.info(data)
         return render_template('employees.html', data=data)
+
 
 
 @app.get('/Fticket_details')
