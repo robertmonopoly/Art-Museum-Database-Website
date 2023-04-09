@@ -84,35 +84,46 @@ def registration():
         return render_template('registration.html')
 
 
-@app.route('/login', methods =['POST','GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        email = request.form['user_email'] 
+        email = request.form['user_email']
         in_password = request.form['user_password']
         try:
-            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name= %s""", (email,))
+            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name = %s""", (email,))
             db_password = cur.fetchone()
         except psycopg2.Error as e:
-            print("error",e)
-    
-        valid_password = hp.isValidPw(in_password,db_password)
-        print (valid_password)
+            print("error", e)
+
+        valid_password = hp.isValidPw(in_password, db_password)
+        print(valid_password)
 
         if valid_password:
-            cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""", (email,))
-            name = cur.fetchone()
-            cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
+            cur.execute("""SELECT * FROM user_login WHERE user_name = %s""", (email,))
             account = cur.fetchone()
-            cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
-            # db_role is printed out as a tuple
-            db_role = cur.fetchone()
-            print("role is ", db_role[0])
-
             if account:
-                user = q.User(name, email, in_password, db_role[0])
-                session['user-role'] = user.access
-                return redirect(url_for('home'))
-    return render_template('login.html') # called when the request.method is not 'POST'
+                account_id = account[0]
+                cur.execute("""SELECT account_status FROM user_account WHERE user_id = %s""", (account_id,))
+                account_status_value = cur.fetchone()[0]
+                if account_status_value == '1':
+                    cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""",
+                                (email,))
+                    name = cur.fetchone()
+                    cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""", (email,))
+                    db_role = cur.fetchone()
+                    print("role is ", db_role[0])
+
+                    user = q.User(name, email, in_password, db_role[0])
+                    session['user-role'] = user.access
+                    return redirect(url_for('home'))
+                else:
+                    # account_status is not 1, don't render home.html
+                    return "Account status is not active"
+            else:
+                # account doesn't exist, don't render home.html
+                return "Invalid credentials"
+    return render_template('login.html')
+
 
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
