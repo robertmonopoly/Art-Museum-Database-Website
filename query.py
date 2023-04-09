@@ -1,6 +1,6 @@
 # This file is just a library of SQL functions; no connection is actually being done here.
 import uuid
-import hash_password as hw
+import helper as hw
 from datetime import date
 
 # User Class
@@ -70,7 +70,7 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     ON s.gift_sku = i.gift_sku 
     WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
     )
-    data = cur.fetchall() # is THERE NO NEED TO FETCH WHEN UR INSERTING VALS?
+    data = cur.fetchall() #TODO: test if need to insert data?
     return data
 
 def insert_ticket_rep(cur, s_date,e_date):
@@ -94,13 +94,14 @@ def insert_member_don(cur):
 # end report functions
 
 # insert functions
-def insert_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte):
+def insert_art(cur, conn, obj_num, artist, title, made_on, obj_type, img_uuid):
     sql_query = """INSERT INTO artworks VALUES (%s, %s, %s, %s, %s, %s)"""
-    values = (artist,title, made_on, obj_type, obj_num, art_byte)
+    values = (obj_num, artist,title, made_on, obj_type, img_uuid)
     try:
         cur.execute(sql_query, values)
         print("Art values inserted successfully!")
-        conn.commit() # VERY IMPORTANT because of sql transactions
+         # very important to commit sql transactions
+        conn.commit()
     except Exception as e:
         print(f"Error inserting values into artworks table: {e}")
    

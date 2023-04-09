@@ -1,12 +1,11 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-import uuid
-import query as q
-import hash_password as hp
-#import PIL.Image as Image
 
-from io import BytesIO
+import query as q
+import helper as hp
+import src.art as art
+
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
@@ -23,38 +22,38 @@ except Exception as e:
     print("An error occurred while connecting: ", e)
 
 
-try:
-    # Create the trigger function
-    cur.execute("""
-        CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
-        $$
-        BEGIN
-            RAISE NOTICE 'An exhibition or film has been inserted into the database.';
-            RAISE NOTICE 'Trigger function called successfully';
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
-    """)
+# try:
+#     # Create the trigger function
+#     cur.execute("""
+#         CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
+#         $$
+#         BEGIN
+#             RAISE NOTICE 'An exhibition or film has been inserted into the database.';
+#             RAISE NOTICE 'Trigger function called successfully';
+#             RETURN NEW;
+#         END;
+#         $$ LANGUAGE plpgsql;
+#     """)
 
-    # Create the trigger for exhibitions
-    cur.execute("""
-        CREATE TRIGGER insert_exhibition_trigger
-        AFTER INSERT ON exhibitions
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
+#     # Create the trigger for exhibitions
+#     cur.execute("""
+#         CREATE TRIGGER insert_exhibition_trigger
+#         AFTER INSERT ON exhibitions
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
 
-    # Create the trigger for films
-    cur.execute("""
-        CREATE TRIGGER insert_films_trigger
-        AFTER INSERT ON films
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
-    conn.commit()
-    print("Triggers created successfully")
-except Exception as e:
-    print("An error occurred while creating the triggers:", e)
+#     # Create the trigger for films
+#     cur.execute("""
+#         CREATE TRIGGER insert_films_trigger
+#         AFTER INSERT ON films
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
+#     conn.commit()
+#     print("Triggers created successfully")
+# except Exception as e:
+#     print("An error occurred while creating the triggers:", e)
 
 
 
@@ -75,13 +74,12 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        data = q.insert_user(cur, conn, fname, lname,
+        q.insert_user(cur, conn, fname, lname,
         email, birthdate)
         password = request.form['user_password']
         q.insert_user_login(cur, conn, email, password)
-        return render_template('registration.html')
-    else:
-        return render_template('registration.html')
+    return render_template('registration.html')
+
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -136,32 +134,37 @@ def logout():
 @app.get('/artworks')
 def artworks():
         user = session["user-role"]
-        return render_template('artworks.html', user=user)
+        cur.execute("""SELECT * FROM artworks""")
+        rows = cur.fetchall()
+        artworks = []
+        for row in rows:
+            art_obj = art.Artwork(row[0], row[1], row[2], row[3], row[4], row[5])
+            artworks.append(art_obj)
+        return render_template('artworks.html', user=user, artworks=artworks)
 
-#TODO: now do image upload
-#TODO: remember to pass in the connector for SQL commits
+@app.get('/image/<id>')
+def get_image(id):
+    cur.execute("""SELECT bytes FROM images WHERE image_id = %s """, (id,))
+    row = cur.fetchone()
+    # convert memview to bytes
+    image_binary = bytes(row[0])
+    print(image_binary)
+    response = make_response(image_binary)
+    # send custom header
+    response.mimetype = "image/jpeg"
+    return response
+
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
+        obj_num = request.form['object_number']
         artist = request.form['artist']
         title = request.form['artwork_title']
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
-        obj_num = request.form['object_number']
-        art_file = request.files['art_img']
- 
-       # Convert image to bytes
-        pil_im = Image.open(art_file, mode = 'r')
-        border = (20, 20, 100, 100)
-        cropped = pil_im.crop(border)
-        b = BytesIO()
-
-        cropped.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        #print("my bytes ", im_bytes)
-
-        q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
-        # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
+        img_file = request.files['art_img']
+        img_uuid = hp.insert_image(cur, conn, img_file)
+        q.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
   
 
@@ -175,18 +178,10 @@ def update_artwork():
         obj_num = request.form['object_number']
         upload_art = request.form['art_img']
 
-        # Convert image to bytes
-        pil_im = Image.fromarray(upload_art)
-        b = BytesIO()
-        pil_im.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        # read_art = upload_art.read()
-        # byte_art = bytearray(read_art)
-        # print("art in byte ", byte_art)
-        data = q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
-        return render_template('add_new_artwork.html', data=data)
-    else:
-        return render_template('add_new_artwork.html')
+       
+        q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
+    return render_template('add_new_artwork.html')
+
 
 
 @app.get('/Eticket_details')

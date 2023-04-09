@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 
 <head>
     <title>Gift Item Report</title>
@@ -87,7 +87,7 @@
 
 <table class="my-table">
     <tbody>
-        {% if data%}
+        {% if data %}
         <tr>
             <h3>This table shows how many of an item were sold in a day.</h3>
             <th>SKU</th>
