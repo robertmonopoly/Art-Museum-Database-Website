@@ -17,7 +17,7 @@
   </div>
 {% endmacro %}
 
-{% macro art_format(image, alt, name, title, year, type, obj_id) %}
+{% macro art_format(obj_num, name, title, year, type, image) %}
 <div class="responsive" >
     <div class="gallery">
         <img src="{{ url_for('static', filename=image) }}" alt=alt width="600" height="400">
@@ -27,7 +27,7 @@
         {{title}}<br>
         {{year}}<br>
         {{type}}<br>
-        {{obj_id}}</div>
+        {{obj_num}}</div>
     </div>
   </div>
 {% endmacro %}
