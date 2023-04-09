@@ -70,7 +70,7 @@
   <li><a href="{{ url_for('home') }}">Home</a></li>
   <li class = "active"><a href="{{ url_for('artworks') }}">Artworks</a></li>
 
-    {% if user and user == 'ADMIN' %}
+    {% if session['user-role'] == 'ADMIN' %}
     <li><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
     {% endif %}
 

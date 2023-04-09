@@ -82,35 +82,46 @@ def registration():
 
 
 
-@app.route('/login', methods =['POST','GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        email = request.form['user_email'] 
+        email = request.form['user_email']
         in_password = request.form['user_password']
         try:
-            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name= %s""", (email,))
+            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name = %s""", (email,))
             db_password = cur.fetchone()
         except psycopg2.Error as e:
-            print("error",e)
-    
-        valid_password = hp.isValidPw(in_password,db_password)
-        print (valid_password)
+            print("error", e)
+
+        valid_password = hp.isValidPw(in_password, db_password)
+        print(valid_password)
 
         if valid_password:
-            cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""", (email,))
-            name = cur.fetchone()
-            cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
+            cur.execute("""SELECT * FROM user_login WHERE user_name = %s""", (email,))
             account = cur.fetchone()
-            cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
-            # db_role is printed out as a tuple
-            db_role = cur.fetchone()
-            print("role is ", db_role[0])
-
             if account:
-                user = q.User(name, email, in_password, db_role[0])
-                session['user-role'] = user.access
-                return redirect(url_for('home'))
-    return render_template('home.html') # called when the request.method is not 'POST'
+                account_id = account[0]
+                cur.execute("""SELECT account_status FROM user_account WHERE user_id = %s""", (account_id,))
+                account_status_value = cur.fetchone()[0]
+                if account_status_value == '1':
+                    cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""",
+                                (email,))
+                    name = cur.fetchone()
+                    cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""", (email,))
+                    db_role = cur.fetchone()
+                    print("role is ", db_role[0])
+
+                    user = q.User(name, email, in_password, db_role[0])
+                    session['user-role'] = user.access
+                    return redirect(url_for('home'))
+                else:
+                    # account_status is not 1, don't render home.html
+                    return "Account status is not active"
+            else:
+                # account doesn't exist, don't render home.html
+                return "Invalid credentials"
+    return render_template('login.html')
+
 
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
@@ -118,7 +129,7 @@ def login():
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     session.clear()
-    return render_template(url_for('login.html'))
+    return render_template('login.html')
 
 @app.get('/artworks')
 def artworks():
@@ -173,10 +184,23 @@ def update_artwork():
 
 
 
+@app.get('/Eticket_details')
+def Eticket_details():
+    user = session["user-role"]
+    return render_template('Eticket_details.html', user=user)
+
 @app.get('/donations')
 def donations():
-    user = user = session["user-role"]
-    return render_template('donations.html', user=user)
+    user = session["user-role"]
+    msg = ""
+    data = q.retrieve_donations_data(cur)
+    if data == []:
+        msg = "No Donation Data Available"
+        app.logger.info(data)
+        return render_template('donations.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('donations.html', data=data)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
@@ -312,19 +336,27 @@ def update_employee():
         membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
-        address = request.form['employee_address']
         email = request.form['employee_email']
         ssn = request.form['employee_ssn']
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.update_employee(cur, membership, first_name,
-        last_name, address, email, ssn, phone_number,
+        data = q.update_employee(cur, conn, membership, first_name,
+        last_name, email, ssn, phone_number,
         dob, salary)
         return render_template('add_new_employee.html')
     else:
         return render_template('add_new_employee.html')        
 
+
+@app.route('/delete_employee', methods = ['POST'])
+def delete_employee():
+    if request.method == 'POST':
+        id_num = request.form['emp_id']
+        data = q.delete_employee(cur, conn, id_num)
+        return render_template('add_new_employee.html')
+    else:
+        return render_template('add_new_employee.html') 
 
 @app.get('/add_new_member')
 def add_new_member():
@@ -420,7 +452,10 @@ def delete_gift_shop_item():
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
-    return render_template('add_new_gift_shop_item.html')    
+    return render_template('add_new_gift_shop_item.html')  
+
+ 
+
 
 @app.get('/films')
 def films():
@@ -430,7 +465,15 @@ def films():
 @app.get('/members')
 def members():
     user = session["user-role"]
-    return render_template('members.html',user=user)
+    msg = ""
+    data = q.retrieve_member_data(cur)
+    if data == []:
+        msg = "No Member Data Available"
+        app.logger.info(data)
+        return render_template('members.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('members.html', data=data)
 
 @app.get('/gift_shop')
 def gift_shop():
@@ -440,15 +483,22 @@ def gift_shop():
 @app.get('/employees')
 def employees():
     user = session["user-role"]
-    return render_template('employees.html', user=user)
+    msg = ""
+    data = q.retrieve_employee_data(cur)
+    if data == []:
+        msg = "No Employee Data Available"
+        app.logger.info(data)
+        return render_template('employees.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('employees.html', data=data)
 
-@app.get('/Eticket_details')
-def Eticket_details():
-    return render_template('Eticket_details')
+
 
 @app.get('/Fticket_details')
 def Fticket_details():
-    return render_template('Fticket_details')
+    user = session["user-role"]
+    return render_template('Fticket_details.html', user=user)
 
 
 # TODO: need to create page
@@ -464,6 +514,7 @@ def user_info():
     sex = request.form['sex']
     dob = request.form['dob']
     q.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+
 
 # the reports
 @app.get('/report_gifts')

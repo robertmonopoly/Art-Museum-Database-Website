@@ -43,7 +43,24 @@ def insert_user_login(cur, conn, user_name, pw):
         print("Error occurred while inserting user login:", e)
         raise
 
-                   
+
+def retrieve_employee_data(cur):
+    cur.execute("""SELECT * FROM employees""")
+    data = cur.fetchall()
+    return data
+
+
+def retrieve_member_data(cur):
+    cur.execute("""SELECT * FROM user_account""")
+    data = cur.fetchall()
+    return data    
+
+
+def retrieve_donations_data(cur):
+    cur.execute("""SELECT * FROM donation""")
+    data = cur.fetchall()
+    return data   
+
 # report functions
 def insert_gift_rep(cur, g_name, s_date, e_date):
     cur.execute("""
@@ -129,8 +146,6 @@ def insert_gift_sales(cur, transac_id, gift_sku, transac_at, user_id):
     finally:
         # Close the database connection
         cur.close()
-
-
 
 
 
@@ -227,9 +242,11 @@ def delete_film(cur, conn, film_id):
     except Exception as e:
         print("An error occurred while deleting the film", e)
 
-def delete_employee(cur, employee_id):
+def delete_employee(cur, conn, employee_id):
     try:
         cur.execute("DELETE FROM employees WHERE employee_id = %s", (employee_id,))
+        conn.commit()
+        print("Employee's records deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the employee's records", e)    
 
@@ -248,7 +265,7 @@ def delete_exhibit(cur, conn, exhib_id):
         print("Exhibit deleted successfully")
     except Exception as e:
         print("An error occurred while deleting the exhibit", e)
- 
+
 
 
 def update_art(cur, conn, artist, title, made_on, obj_type, obj_num, art_byte, art_id):
@@ -290,6 +307,21 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
         print("Film updated successfully!")
     except Exception as e:
         print("An error occurred while updating the film:", e)
+
+
+def update_employee(cur, conn, membership, employee_first_name, employee_last_name, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary):
+    try: 
+        cur.execute("""UPDATE employees SET employee_membership = %s, employee_first_name = %s,
+                     employee_last_name = %s, employee_email = %s, employee_phone_number = %s, 
+                     employee_date_of_birth = %s, salary = %s WHERE employee_ssn = %s""", 
+                    (membership, employee_first_name, employee_last_name, employee_email, 
+                     employee_phone_number,employee_date_of_birth, salary, employee_ssn))
+        conn.commit()
+        print("Employee updated successfully!")
+    except Exception as e:
+        print("An error occurred while updating the employee:", e)
+
+
 
 
 # these (PSEUDO) functions require mapping

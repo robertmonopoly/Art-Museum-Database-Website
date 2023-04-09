@@ -94,7 +94,7 @@
     <li><a href="{{url_for('home')}}">Home</a></li>
     <li class = "active"><a href="{{url_for('films')}}">Films</a></li>
     <li class="topnav"><input type="text" placeholder="Search..."></li>
-    {% if user and user == 'ADMIN' %}
+    {% if session['user-role'] == 'ADMIN' %}
     <li><a href="{{url_for('add_new_film')}}">Add New Film</a></li>
     {% endif %}
   </ul>

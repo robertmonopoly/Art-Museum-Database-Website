@@ -5,6 +5,45 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Add New Member</title>
+<style>
+  form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.3);
+    margin: 20px;
+  }
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  input[type="submit"]:hover {
+    background-color: #3e8e41;
+  }
+
+  input[type="text"],
+  input[type="datetime-local"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+</style>
 </head>
 <body>
 
@@ -19,26 +58,29 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-{% if user != 'ADMIN' %}
+{% if session['user-role'] == 'USER' %}
 
 <form action="/add_new_member" method="post" style="padding:20px;">
     <label for="membership">Membership Type:</label>
     <select id="membership" name="membership" required>
         <option value="">Select Membership Type</option>
-        <option value="Basic">Basic</option>
-        <option value="Silver">Silver</option>
-        <option value="Gold">Gold</option>
+        <option value="BASIC">Basic</option>
+        <option value="SILVER">Silver</option>
+        <option value="GOLD">Gold</option>
     </select><br><br>
     <input type="submit" value="Add New Member">
 </form>    
 
 {% endif %}
 
+{% if session['user-role'] == 'ADMIN' %}
 <form action="/delete_member" method="post" style="padding:20px;">
   <label for="account_id">Account ID:</label>
   <input type="text" name="account_id" ><br><br>
   <input type="submit" value="Delete Member Account">
 </form>    
+
+{% endif %}
 
 </div>
 </body>

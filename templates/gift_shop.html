@@ -94,7 +94,7 @@
 <ul class = "navbarone">
     <li><a href="{{url_for('home')}}">Home</a></li>
     <li class = "active"><a href="{{url_for('gift_shop')}}">Gift Shop</a></li>
-    {% if user and user == 'ADMIN' %}
+    {% if session['user-role'] == 'ADMIN' %}
     <li><a href="{{url_for('add_new_gift_shop_item')}}">Add New Gift Shop Item</a></li>
     {% endif %}
 </ul>
