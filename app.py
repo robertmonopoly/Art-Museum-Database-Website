@@ -1,9 +1,10 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
 import query as q
 import helper as hp
-
+import src.art as art
 
 app = Flask(__name__)
 app.secret_key = 'my_secret'
@@ -123,29 +124,36 @@ def logout():
 def artworks():
         user = session["user-role"]
         cur.execute("""SELECT * FROM artworks""")
-        rows = cur.getall()
+        rows = cur.fetchall()
         artworks = []
         for row in rows:
-            this_artwork = {}
-            this_artwork["title"] = row[0]
+            art_obj = art.Artwork(row[0], row[1], row[2], row[3], row[4], row[5])
+            artworks.append(art_obj)
         return render_template('artworks.html', user=user, artworks=artworks)
 
-@app.route('/image')
-#TODO: now do image upload
+@app.get('/image/<id>')
+def get_image(id):
+    cur.execute("""SELECT bytes FROM images WHERE image_id = %s """, (id,))
+    row = cur.fetchone()
+    # convert memview to bytes
+    image_binary = bytes(row[0])
+    print(image_binary)
+    response = make_response(image_binary)
+    # send custom header
+    response.mimetype = "image/jpeg"
+    return response
 
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
+        obj_num = request.form['object_number']
         artist = request.form['artist']
         title = request.form['artwork_title']
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
-        obj_num = request.form['object_number']
         img_file = request.files['art_img']
- 
-    q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
-       
-       
+        img_uuid = hp.insert_image(cur, conn, img_file)
+        q.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
   
 
@@ -159,14 +167,7 @@ def update_artwork():
         obj_num = request.form['object_number']
         upload_art = request.form['art_img']
 
-        # Convert image to bytes
-        pil_im = Image.fromarray(upload_art)
-        b = BytesIO()
-        pil_im.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        # read_art = upload_art.read()
-        # byte_art = bytearray(read_art)
-        # print("art in byte ", byte_art)
+       
         q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
     return render_template('add_new_artwork.html')
 

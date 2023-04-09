@@ -1,6 +1,6 @@
 {% import "elements.html" as elements %}
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -85,10 +85,12 @@ Then visit the Museum to experience your favorites in person.</p>
  
 
 <p style="text-align: center; padding-left: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
-  {{ elements.art_format('/img/artwork1.png', 'Cinque Terre', 'George Inness', 'Landscape', '1866', 'Oil on canvas', 'AL.15') }}
-  {{ elements.art_format('/img/artwork2.png', 'Forest', 'Jules Dupre', 'Under the Storm', '1900', 'Oil on canvas', '2023.104') }}
-  {{ elements.art_format('/img/artwork3.png', 'Lion', 'Jean-Leon Gerome', 'Tiger on the Watch', '1888', 'Oil on canvas', 'AL.21') }}
-
+  {% for art in artworks %}  
+    {{elements.art_format(art.obj_num, art.artist, art.title, art.year, art.type, art.image_id )}}
+  {% endfor %}
+    {{ elements.art_format('AL.15', 'Cinque Terre', 'George Inness', '1866', 'Oil on canvas',  '/img/artwork1.png') }}
+    {{ elements.art_format('2023.104',  'Forest', 'Jules Dupre', '1900', 'Oil on canvas', '/img/artwork2.png') }}
+    {{ elements.art_format('AL.21', 'Lion', 'Jean-Leon Gerome', '1888', 'Oil on canvas', '/img/artwork3.png') }}
 
   <div class="responsive">
     <div class="gallery">
