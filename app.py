@@ -1,12 +1,10 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-import uuid
 import query as q
-import hash_password as hp
-#import PIL.Image as Image
+import helper as hp
 
-from io import BytesIO
+
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
@@ -23,38 +21,38 @@ except Exception as e:
     print("An error occurred while connecting: ", e)
 
 
-try:
-    # Create the trigger function
-    cur.execute("""
-        CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
-        $$
-        BEGIN
-            RAISE NOTICE 'An exhibition or film has been inserted into the database.';
-            RAISE NOTICE 'Trigger function called successfully';
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
-    """)
+# try:
+#     # Create the trigger function
+#     cur.execute("""
+#         CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
+#         $$
+#         BEGIN
+#             RAISE NOTICE 'An exhibition or film has been inserted into the database.';
+#             RAISE NOTICE 'Trigger function called successfully';
+#             RETURN NEW;
+#         END;
+#         $$ LANGUAGE plpgsql;
+#     """)
 
-    # Create the trigger for exhibitions
-    cur.execute("""
-        CREATE TRIGGER insert_exhibition_trigger
-        AFTER INSERT ON exhibitions
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
+#     # Create the trigger for exhibitions
+#     cur.execute("""
+#         CREATE TRIGGER insert_exhibition_trigger
+#         AFTER INSERT ON exhibitions
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
 
-    # Create the trigger for films
-    cur.execute("""
-        CREATE TRIGGER insert_films_trigger
-        AFTER INSERT ON films
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
-    conn.commit()
-    print("Triggers created successfully")
-except Exception as e:
-    print("An error occurred while creating the triggers:", e)
+#     # Create the trigger for films
+#     cur.execute("""
+#         CREATE TRIGGER insert_films_trigger
+#         AFTER INSERT ON films
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
+#     conn.commit()
+#     print("Triggers created successfully")
+# except Exception as e:
+#     print("An error occurred while creating the triggers:", e)
 
 
 
@@ -124,10 +122,17 @@ def logout():
 @app.get('/artworks')
 def artworks():
         user = session["user-role"]
-        return render_template('artworks.html', user=user)
+        cur.execute("""SELECT * FROM artworks""")
+        rows = cur.getall()
+        artworks = []
+        for row in rows:
+            this_artwork = {}
+            this_artwork["title"] = row[0]
+        return render_template('artworks.html', user=user, artworks=artworks)
 
+@app.route('/image')
 #TODO: now do image upload
-#TODO: remember to pass in the connector for SQL commits
+
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
@@ -136,20 +141,11 @@ def add_new_artwork():
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
         obj_num = request.form['object_number']
-        art_file = request.files['art_img']
+        img_file = request.files['art_img']
  
-       # Convert image to bytes
-        pil_im = Image.open(art_file, mode = 'r')
-        border = (20, 20, 100, 100)
-        cropped = pil_im.crop(border)
-        b = BytesIO()
-
-        cropped.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        #print("my bytes ", im_bytes)
-
-        q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
-        # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
+    q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
+       
+       
     return render_template('add_new_artwork.html')
   
 
@@ -171,10 +167,9 @@ def update_artwork():
         # read_art = upload_art.read()
         # byte_art = bytearray(read_art)
         # print("art in byte ", byte_art)
-        data = q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
-        return render_template('add_new_artwork.html', data=data)
-    else:
-        return render_template('add_new_artwork.html')
+        q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
+    return render_template('add_new_artwork.html')
+
 
 
 @app.get('/donations')

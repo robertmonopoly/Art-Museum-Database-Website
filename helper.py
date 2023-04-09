@@ -1,4 +1,10 @@
 import bcrypt
+import PIL.Image as Image
+from io import BytesIO
+import uuid
+
+class Artwork:
+
 
 def hash_pw(password):
     # encoding user password
@@ -20,6 +26,24 @@ def isValidPw(in_password,hash):
     print("passed!")
     return result
 
+def insert_image(cur, img_file):
+    # open image
+    pil_im = Image.open(img_file, mode = 'r')
+    # crop image
+    border = (20, 20, 100, 100)
+    cropped = pil_im.crop(border)
+    # save new image to bytes in memory
+    b = BytesIO()
+    cropped.save(b, 'jpeg')
+
+    # generate new ID
+    img_uuid = str(uuid.uuid4())
+
+    cur.execute("""INSERT INTO imag""")
+    im_bytes = b.getvalue()
+
+
+# Testing Hash Functions
 # print("first admin: ",hash_pw("admin"), isValidPw("admin", hash_pw("admin")))
 # print("first user: ", hash_pw("user"))
 # print("second user pw: ",hash_pw("user1"))
