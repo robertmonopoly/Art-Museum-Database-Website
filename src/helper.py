@@ -3,8 +3,6 @@ import PIL.Image as Image
 from io import BytesIO
 import uuid
 
-
-
 def hash_pw(password):
     # encoding user password
     bytes = password.encode('utf-8')
