@@ -16,12 +16,12 @@
         {{ elements.navbar('films', 'Films')}}
         {{ elements.navbar('gift_shop', 'Gift Shop')}}
         {{ elements.navbar('members', 'Members')}}
-        {{ elements.navbar('employees', 'Employees')}}
-        {{ elements.navbar('donations', 'Donations')}}
-
+        
         {% if session['user-role'] == 'ADMIN' %}
-          <li><a href="{{ url_for('report_gifts') }}">Gift Report</a></li>
-          <li><a href="{{ url_for('report_tickets') }}">Ticket Report</a></li>
+          {{ elements.navbar('report_gifts', 'Gift Report')}}
+          {{ elements.navbar('report_tickets', 'Ticket Report')}}
+          {{ elements.navbar('employees', 'Employees')}}
+          {{ elements.navbar('donations', 'Donations')}}
         {% endif %}
         
           <li style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
