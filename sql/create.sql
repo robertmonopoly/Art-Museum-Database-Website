@@ -2,13 +2,18 @@ CREATE TYPE User_Role AS ENUM ('USER','ADMIN');
 CREATE TYPE Sex AS ENUM ('FEMALE', 'MALE', 'OTHER');
 CREATE TYPE MembershipType AS ENUM ('NONE','BASIC', 'SILVER','GOLD');
 
+CREATE TABLE images (
+    image_id UUID PRIMARY KEY,
+    bytes BYTEA NOT NULL
+);
+
 CREATE TABLE artworks (
+    object_number VARCHAR PRIMARY KEY,
     artist TEXT NOT NULL,
     artwork_title VARCHAR (256) UNIQUE NOT NULL,
     made_on DATE NOT NULL,
     object_type TEXT NOT NULL,
-    object_number VARCHAR PRIMARY KEY,
-    id BYTEA UNIQUE NOT NULL
+    image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
 );
 
 CREATE TABLE user_account (
@@ -104,7 +109,17 @@ CREATE TABLE donation (
 );
 
 	
-CREATE TABLE image_byte (
-    id BYTEA PRIMARY KEY REFERENCES artworks(id)
+
+
+CREATE TABLE notifs (
+    event_title = TEXT NOT NULL,
+    event_at = TIMESTAMP NOT NULL
 );
 
+CREATE TRIGGER new_exhib
+    AFTER INSERT ON exhibitions as e
+    FOR EACH ROW
+    INSERT INTO notifs VALUES (e.exhib_title AND e.exhib_at);
+
+CREATE TRIGGER new_film
+    AFTER INSERT ON films

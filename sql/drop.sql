@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS image_byte;
-
 DROP TABLE IF EXISTS user_login;
 
 DROP TABLE IF EXISTS donation;
@@ -25,6 +23,8 @@ DROP TABLE IF EXISTS gift_shop_item;
 DROP TABLE IF EXISTS user_account;
 
 DROP TABLE IF EXISTS artworks;
+
+DROP TABLE IF EXISTS images;
 
 DROP TYPE MembershipType;
 
