@@ -60,6 +60,15 @@
         <div class="info">
             <div class="boxed">
                 <h1>Welcome to The Archive Arts Museum</h1>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
                 <div class="register">
                     <form action="/registration" method="POST">
                         <p><h3>Please enter your first name, last name, email, and password.</h3></p>
