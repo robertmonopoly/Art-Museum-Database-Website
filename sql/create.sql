@@ -101,8 +101,6 @@ CREATE TABLE film_ticket_sales (
 
 CREATE TABLE donation (
     donation_transaction_id UUID PRIMARY KEY,
-    donator_first_name VARCHAR (60) NOT NULL,
-    donator_last_name VARCHAR (60) NOT NULL,
     donator_email VARCHAR (100) NOT NULL,
     donation_on DATE NOT NULL,
     donation_amount MONEY NOT NULL
