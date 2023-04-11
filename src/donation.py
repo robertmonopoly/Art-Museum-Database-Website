@@ -3,7 +3,12 @@ import uuid
 from datetime import date
 
 def retrieve_donations_data(cur):
-    cur.execute("""SELECT * FROM donation""")
+    cur.execute("""SELECT d.donation_transaction_id, u.first_name, u.last_name, 
+    d.donator_email, d.donation_amount, u.membership, d.donation_on
+    FROM donation as d
+    INNER JOIN user_account as u
+    ON d.donator_email = u.email
+    """)
     data = cur.fetchall()
     return data 
 
