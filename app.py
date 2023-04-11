@@ -180,12 +180,9 @@ def donations():
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
     if request.method == 'POST':
-        first_name = request.form['f_name']
-        last_name = request.form['l_name']
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
-        data = don.insert_donation(cur, conn, first_name, last_name,
-        email_address, money_amount)
+        data = don.insert_donation(cur, conn, email_address, money_amount)
         return render_template('donations.html')
     else:
         return render_template('donations.html')

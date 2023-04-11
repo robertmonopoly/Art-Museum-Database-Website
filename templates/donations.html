@@ -82,10 +82,6 @@ border-radius: 4px;
 <div style="display: flex; align-items: center; justify-content: center;">
   
 <form action="/add_new_donation" method="post" style="padding:20px;">
-    <label for="f_name">First Name</label>
-    <input type="text" name="f_name" required><br><br>
-    <label for="l_name">Last Name</label>
-    <input type="text" name="l_name" required><br><br>
     <label for="email">Email</label>
     <input type="text" name="email" required><br><br>
     <label for="donation_amount">Donation Amount</label>
@@ -96,6 +92,7 @@ border-radius: 4px;
 </div>
 {% endif %}
 
+{% if session['user-role'] == 'ADMIN' %}
 <table class="my-table">
   <tbody>
       {% if data %}
@@ -104,8 +101,9 @@ border-radius: 4px;
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
-          <th>Date</th>
           <th>Amount</th>
+          <th>Membership</th>
+          <th>Donation Date</th>
       </tr>
       {% for item in data %}
       <tr>
@@ -115,14 +113,21 @@ border-radius: 4px;
           <td>{{item[3]}}</td>
           <td>{{item[4]}}</td>
           <td>{{item[5]}}</td>
+          <td>{{item[6]}}</td>
       </tr>
       {% endfor %}
+      <tr>
+          <td colspan="4"></td>
+          <td>{{ data[0][4] }}</td>
+          <td colspan="2"></td>
+      </tr>
       {% else %}
       <div>{{msg}}</div>
       {% endif %}
   </tbody>
 </table>
 
+{% endif %}
 
 
 </body>
