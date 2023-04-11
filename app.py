@@ -1,12 +1,18 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-import uuid
-import query as q
-import hash_password as hp
-#import PIL.Image as Image
+# modules
+import src.helper as hp
+import src.art as art
+import src.donation as don
+import src.employee as emp
+import src.exhibition as exhib
+import src.film as film
+import src.gift as gift
+import src.member as mem
+import src.report as rep
+import src.user as user
 
-from io import BytesIO
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
@@ -23,38 +29,38 @@ except Exception as e:
     print("An error occurred while connecting: ", e)
 
 
-try:
-    # Create the trigger function
-    cur.execute("""
-        CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
-        $$
-        BEGIN
-            RAISE NOTICE 'An exhibition or film has been inserted into the database.';
-            RAISE NOTICE 'Trigger function called successfully';
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
-    """)
+# try:
+#     # Create the trigger function
+#     cur.execute("""
+#         CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
+#         $$
+#         BEGIN
+#             RAISE NOTICE 'An exhibition or film has been inserted into the database.';
+#             RAISE NOTICE 'Trigger function called successfully';
+#             RETURN NEW;
+#         END;
+#         $$ LANGUAGE plpgsql;
+#     """)
 
-    # Create the trigger for exhibitions
-    cur.execute("""
-        CREATE TRIGGER insert_exhibition_trigger
-        AFTER INSERT ON exhibitions
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
+#     # Create the trigger for exhibitions
+#     cur.execute("""
+#         CREATE TRIGGER insert_exhibition_trigger
+#         AFTER INSERT ON exhibitions
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
 
-    # Create the trigger for films
-    cur.execute("""
-        CREATE TRIGGER insert_films_trigger
-        AFTER INSERT ON films
-        FOR EACH ROW
-        EXECUTE FUNCTION display_message();
-    """)
-    conn.commit()
-    print("Triggers created successfully")
-except Exception as e:
-    print("An error occurred while creating the triggers:", e)
+#     # Create the trigger for films
+#     cur.execute("""
+#         CREATE TRIGGER insert_films_trigger
+#         AFTER INSERT ON films
+#         FOR EACH ROW
+#         EXECUTE FUNCTION display_message();
+#     """)
+#     conn.commit()
+#     print("Triggers created successfully")
+# except Exception as e:
+#     print("An error occurred while creating the triggers:", e)
 
 
 
@@ -75,44 +81,55 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        data = q.insert_user(cur, conn, fname, lname,
+        user.insert_user(cur, conn, fname, lname,
         email, birthdate)
         password = request.form['user_password']
-        q.insert_user_login(cur, conn, email, password)
-        return render_template('registration.html')
-    else:
-        return render_template('registration.html')
+        user.insert_user_login(cur, conn, email, password)
+        flash("Registration successful!")
+    return render_template('registration.html')
 
-
-@app.route('/login', methods =['POST','GET'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        email = request.form['user_email'] 
+        email = request.form['user_email']
         in_password = request.form['user_password']
+        valid_password = ""
         try:
-            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name= %s""", (email,))
+            cur.execute("""SELECT hashed_password FROM user_login WHERE user_name = %s""", (email,))
             db_password = cur.fetchone()
+            valid_password = hp.isValidPw(in_password, db_password)
+            print(valid_password)
         except psycopg2.Error as e:
-            print("error",e)
-    
-        valid_password = hp.isValidPw(in_password,db_password)
-        print (valid_password)
+            print("error", e)        
 
         if valid_password:
-            cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""", (email,))
-            name = cur.fetchone()
-            cur.execute("""SELECT * FROM user_login WHERE user_name=%s""", (email,))
+            cur.execute("""SELECT * FROM user_login WHERE user_name = %s""", (email,))
             account = cur.fetchone()
-            cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""",(email,))
-            # db_role is printed out as a tuple
-            db_role = cur.fetchone()
-            print("role is ", db_role[0])
-
             if account:
-                user = q.User(name, email, in_password, db_role[0])
-                session['user-role'] = user.access
-                return redirect(url_for('home'))
-    return render_template('login.html') # called when the request.method is not 'POST'
+                account_id = account[0]
+                cur.execute("""SELECT account_status FROM user_account WHERE user_id = %s""", (account_id,))
+                account_status_value = cur.fetchone()[0]
+                if account_status_value == '1':
+                    cur.execute("""SELECT first_name FROM user_account as ua, user_login as ul WHERE ua.user_id = ul.user_id AND user_name=%s""",
+                                (email,))
+                    name = cur.fetchone()
+                    cur.execute("""SELECT user_role FROM user_login WHERE user_name=%s""", (email,))
+                    db_role = cur.fetchone()
+                    print("role is ", db_role[0])
+
+                    usr = user.User(name, email, in_password, db_role[0])
+                    session['user-role'] = usr.access
+                    return redirect(url_for('home'))
+                else:
+                    # account_status is not 1, don't render home.html
+                    flash("Account status is not active")
+                    return render_template('login.html')
+            else:
+                # account doesn't exist, don't render home.html
+                flash("Account doesn't exist")
+                return render_template('login.html')
+    return render_template('login.html')
+
 
 # hmm, i tried to complete this function for u guys, it is probably close to
 # complete, but we would need a logout button, maybe it could be on the navbar
@@ -125,58 +142,51 @@ def logout():
 @app.get('/artworks')
 def artworks():
         user = session["user-role"]
-        return render_template('artworks.html', user=user)
+        cur.execute("""SELECT * FROM artworks""")
+        rows = cur.fetchall()
+        artworks = []
+        for row in rows:
+            art_obj = art.Artwork(row[0], row[1], row[2], row[3], row[4], row[5])
+            artworks.append(art_obj)
+        return render_template('artworks.html', user=user, artworks=artworks)
 
-#TODO: now do image upload
-#TODO: remember to pass in the connector for SQL commits
+@app.get('/image/<id>')
+def get_image(id):
+    cur.execute("""SELECT bytes FROM images WHERE image_id = %s """, (id,))
+    row = cur.fetchone()
+    # convert memview to bytes
+    image_binary = bytes(row[0])
+    print(image_binary)
+    response = make_response(image_binary)
+    # send custom header
+    response.mimetype = "image/jpeg"
+    return response
+
 @app.route('/add_new_artwork', methods=['POST','GET'])
 def add_new_artwork():
     if request.method == 'POST':
+        obj_num = request.form['object_number']
         artist = request.form['artist']
         title = request.form['artwork_title']
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
-        obj_num = request.form['object_number']
-        art_file = request.files['art_img']
- 
-       # Convert image to bytes
-        pil_im = Image.open(art_file, mode = 'r')
-        border = (20, 20, 100, 100)
-        cropped = pil_im.crop(border)
-        b = BytesIO()
-
-        cropped.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        #print("my bytes ", im_bytes)
-
-        q.insert_art(cur, conn, artist,title,made_on, obj_type, obj_num, im_bytes)
-        # after insert, send to artworks page and then update page by calling the latest query from the artworks table and pass it into macro template
+        img_file = request.files['art_img']
+        img_uuid = hp.insert_image(cur, conn, img_file)
+        art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
   
-
 @app.route('/update_artwork', methods=['POST','GET'])
 def update_artwork():
     if request.method == 'POST':
+        obj_num = request.form['object_number']
         artist = request.form['artist']
         title = request.form['artwork_title']
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
-        obj_num = request.form['object_number']
-        upload_art = request.form['art_img']
-
-        # Convert image to bytes
-        pil_im = Image.fromarray(upload_art)
-        b = BytesIO()
-        pil_im.save(b, 'jpeg')
-        im_bytes = b.getvalue()
-        # read_art = upload_art.read()
-        # byte_art = bytearray(read_art)
-        # print("art in byte ", byte_art)
-        data = q.update_art(cur,artist,title,made_on, obj_type, obj_num, im_bytes)
-        return render_template('add_new_artwork.html', data=data)
-    else:
-        return render_template('add_new_artwork.html')
-
+        img_file = request.files['art_img']
+        img_uuid = hp.insert_image(cur, conn, img_file)
+        art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
+    return render_template('add_new_artwork.html')
 
 @app.get('/Eticket_details')
 def Eticket_details():
@@ -185,8 +195,16 @@ def Eticket_details():
 
 @app.get('/donations')
 def donations():
-    user = user = session["user-role"]
-    return render_template('donations.html', user=user)
+    user = session["user-role"]
+    msg = ""
+    data = don.retrieve_donations_data(cur)
+    if data == []:
+        msg = "No Donation Data Available"
+        app.logger.info(data)
+        return render_template('donations.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('donations.html', data=data)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
@@ -195,7 +213,7 @@ def add_new_donation():
         last_name = request.form['l_name']
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
-        data = q.insert_donation(cur, conn, first_name, last_name,
+        data = don.insert_donation(cur, conn, first_name, last_name,
         email_address, money_amount)
         return render_template('donations.html')
     else:
@@ -216,11 +234,10 @@ def add_new_exhibition():
         title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
-        data = q.insert_exhibition(cur, conn, date_and_time, ticket_price,
+        exhib.insert_exhibition(cur, conn, date_and_time, ticket_price,
         gallery, title, curator, artists)
-        return render_template('add_new_exhibition.html')
-    else:
-        return render_template('add_new_exhibition.html')
+    return render_template('add_new_exhibition.html')
+   
 
 @app.route('/update_exhibition', methods = ['POST'])
 def update_exhibition():
@@ -233,22 +250,21 @@ def update_exhibition():
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
         try:
-            data = q.update_exhibition(cur, conn, exhibit_id, date_and_time, ticket_price,
+            exhib.update_exhibition(cur, conn, exhibit_id, date_and_time, ticket_price,
         gallery, title, curator, artists)
             flash('Exhibition updated successfully.')
         except Exception as e:
             print(f"Error updating exhibition: {e}")
             flash('Error updating exhibition.')
-        return render_template('add_new_exhibition.html')
-    else:
-        return render_template('add_new_exhibition.html')
+    return render_template('add_new_exhibition.html')
+   
 
 @app.route('/delete_exhibition', methods = ['POST'])
 def delete_exhibition():
     if request.method == 'POST':
         exhibit_id = request.form['exhibition_id']
         try:
-            data = q.delete_exhibit(cur, conn, exhibit_id)
+            exhib.delete_exhibit(cur, conn, exhibit_id)
         except Exception as e:
             print(f"Error deleting exhibition: {e}")
             flash('Error deleting exhibition.')
@@ -263,12 +279,11 @@ def add_new_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.insert_films(cur, conn, location,
+        film.insert_films(cur, conn, location,
         title, ticket_price, duration, director,
         rating)
-        return render_template('add_new_film.html')
-    else:
-        return render_template('add_new_film.html')
+    return render_template('add_new_film.html')
+   
 
 @app.route('/update_film', methods = ['POST'])
 def update_film():
@@ -280,19 +295,18 @@ def update_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        data = q.update_film(cur, conn, num_id, location,
+        film.update_film(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
-        return render_template('add_new_film.html')
-    else:
-        return render_template('add_new_film.html')
+    return render_template('add_new_film.html')
+   
 
 
 @app.route('/delete_film', methods = ['POST'])
 def delete_film():
     num_id = request.form['film_id']
     try:
-        q.delete_film(cur, conn, num_id)
+        film.delete_film(cur, conn, num_id)
         flash('Film deleted successfully')
     except Exception as e:
         print (f"Error deleting film: {e}")
@@ -310,12 +324,11 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        q.insert_employee(cur, conn, membership, first_name,
+        emp.insert_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
     return render_template('add_new_employee.html')
     
-
 @app.route('/update_employee', methods = ['POST'])
 def update_employee():
     if request.method == 'POST':
@@ -327,22 +340,19 @@ def update_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        data = q.update_employee(cur, conn, membership, first_name,
+        emp.update_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
-        return render_template('add_new_employee.html')
-    else:
-        return render_template('add_new_employee.html')        
-
+    return render_template('add_new_employee.html')
+   
 
 @app.route('/delete_employee', methods = ['POST'])
 def delete_employee():
     if request.method == 'POST':
         id_num = request.form['emp_id']
-        data = q.delete_employee(cur, conn, id_num)
-        return render_template('add_new_employee.html')
-    else:
-        return render_template('add_new_employee.html') 
+        emp.delete_employee(cur, conn, id_num)
+    return render_template('add_new_employee.html')
+   
 
 @app.get('/add_new_member')
 def add_new_member():
@@ -359,12 +369,11 @@ def add_new_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.insert_member(cur, conn, first_name, last_name,
+        mem.insert_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
-        return render_template('add_new_member.html')
-    else:
-        return render_template('add_new_member.html')
+    return render_template('add_new_member.html')
+    
 
 @app.route('/update_member', methods = ['POST'])
 def update_member():
@@ -381,19 +390,18 @@ def update_member():
         gender = request.form['gender']
         dob = request.form['dob']
         membership_type = request.form['membership']
-        data = q.update_member(cur, conn, first_name, last_name,
+        mem.update_member(cur, conn, first_name, last_name,
         address_line1, address_line2, city, state,
         zip_code, email, phone_number, gender, dob, membership_type)
-        return render_template('add_new_member.html')
-    else:
-        return render_template('add_new_member.html')
+    return render_template('add_new_member.html')
+    
 
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
     if request.method == 'POST':
         member_id = request.form['account_id']
         try:
-            q.delete_member(cur, conn, member_id)
+            mem.delete_member(cur, conn, member_id)
             flash('User account deleted successfully')
         except Exception as e:
             print(f"Error deleting user account: {e}")
@@ -407,7 +415,7 @@ def add_new_gift_shop_item():
         item_type = request.form['type']
         price = request.form['price']
         try:
-            q.insert_gift_item(cur, conn, name, item_type, price)
+            gift.insert_gift_item(cur, conn, name, item_type, price)
             flash('Gift item added successfully.')
         except Exception as e:
             print(f"Error adding gift item: {e}")
@@ -421,7 +429,7 @@ def update_gift_shop_item():
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        q.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
+        gift.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
@@ -433,15 +441,12 @@ def update_gift_shop_item():
 def delete_gift_shop_item():
     gift_sku = request.form['sku']
     try:
-        q.delete_gift_shop_item(cur, conn, gift_sku)
+        gift.delete_gift_shop_item(cur, conn, gift_sku)
         flash('Gift item deleted successfully')
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
     return render_template('add_new_gift_shop_item.html')  
-
- 
-
 
 @app.get('/films')
 def films():
@@ -451,7 +456,15 @@ def films():
 @app.get('/members')
 def members():
     user = session["user-role"]
-    return render_template('members.html',user=user)
+    msg = ""
+    data = mem.retrieve_member_data(cur)
+    if data == []:
+        msg = "No Member Data Available"
+        app.logger.info(data)
+        return render_template('members.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('members.html', data=data)
 
 @app.get('/gift_shop')
 def gift_shop():
@@ -461,14 +474,20 @@ def gift_shop():
 @app.get('/employees')
 def employees():
     user = session["user-role"]
-    return render_template('employees.html', user=user)
-
+    msg = ""
+    data = emp.retrieve_employee_data(cur)
+    if data == []:
+        msg = "No Employee Data Available"
+        app.logger.info(data)
+        return render_template('employees.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('employees.html', data=data)
 
 @app.get('/Fticket_details')
 def Fticket_details():
     user = session["user-role"]
     return render_template('Fticket_details.html', user=user)
-
 
 # TODO: need to create page
 @app.route('/user_info')
@@ -482,7 +501,7 @@ def user_info():
     phone_number = request.form['phone_number']
     sex = request.form['sex']
     dob = request.form['dob']
-    q.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
+    user.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
 # the reports
 @app.get('/report_gifts')
@@ -492,7 +511,7 @@ def report_gifts():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if gift_name and start_date and end_date:
-        data = q.insert_gift_rep(cur, gift_name, start_date, end_date)
+        data = rep.insert_gift_rep(cur, gift_name, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_gifts.html', msg=msg)
@@ -507,7 +526,7 @@ def report_tickets():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if start_date and end_date:
-        data = q.insert_ticket_rep(cur, start_date, end_date)
+        data = rep.insert_ticket_rep(cur, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_tickets.html', msg=msg)

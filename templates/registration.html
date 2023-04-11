@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/gray.jpeg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
     <head>
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Parisienne">
@@ -60,6 +60,15 @@
         <div class="info">
             <div class="boxed">
                 <h1>Welcome to The Archive Arts Museum</h1>
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <ul class=flashes>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
                 <div class="register">
                     <form action="/registration" method="POST">
                         <p><h3>Please enter your first name, last name, email, and password.</h3></p>
