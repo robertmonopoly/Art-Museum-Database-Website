@@ -1,8 +1,10 @@
+DROP TRIGGER new_exhib ON exhibitions;
+
+DROP FUNCTION IF EXISTS exhibit_insert_trigger_fnc;
+
 DROP TABLE IF EXISTS user_login;
 
 DROP TABLE IF EXISTS donation;
-
-DROP TABLE IF EXISTS calendar;
 
 DROP TABLE IF EXISTS film_ticket_sales;
 
@@ -31,13 +33,4 @@ DROP TYPE MembershipType;
 DROP TYPE Sex;
 
 DROP TYPE User_Role;
-
-DROP TYPE User_Address;
-
-DROP TYPE US_State;
-
-DROP TRIGGER IF EXISTS insert_exhibition_trigger ON exhibitions;
-
-
-DROP TRIGGER IF EXISTS insert_films_trigger ON films;
 
