@@ -4,6 +4,8 @@ DROP FUNCTION IF EXISTS exhibit_insert_trigger_fnc;
 
 DROP TABLE IF EXISTS user_login;
 
+DROP TABLE IF EXISTS notifs; 
+
 DROP TABLE IF EXISTS donation;
 
 DROP TABLE IF EXISTS film_ticket_sales;

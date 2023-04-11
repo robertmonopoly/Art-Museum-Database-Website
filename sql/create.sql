@@ -106,6 +106,12 @@ CREATE TABLE donation (
     donation_amount MONEY NOT NULL
 );
 
+CREATE TABLE notifs (
+    event_id UUID PRIMARY KEY,
+    event_title TEXT NOT NULL,
+    event_at TIMESTAMP NOT NULL
+);
+
 CREATE FUNCTION exhibit_insert_trigger_fnc()
   RETURNS trigger AS
 $$
@@ -122,19 +128,8 @@ CREATE TRIGGER new_exhib
     ON "exhibitions"
     FOR EACH ROW
     EXECUTE PROCEDURE exhibit_insert_trigger_fnc();
-    
-CREATE FUNCTION film_insert_trigger_fnc()
-  RETURNS trigger AS
-$$
-BEGIN
-    INSERT INTO "notifs" ("event_id", "event_title" ,"event_at")
-        VALUES (NEW."film_id", NEW."film_title", NEW."film_at");
-RETURN NEW;
-END;
-$$
-LANGUAGE 'plpgsql';
 
-CREATE TRIGGER new_film
-        AFTER INSERT ON films
-        FOR EACH ROW
-        EXECUTE FUNCTION film_insert_trigger_fnc();
+-- CREATE TRIGGER new_film
+--         AFTER INSERT ON films
+--         FOR EACH ROW
+--         EXECUTE FUNCTION film_insert_trigger_fnc();
