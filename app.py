@@ -1,6 +1,9 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash
+from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+from datetime import datetime
+import time
+
 # modules
 import src.helper as hp
 import src.art as art
@@ -16,7 +19,6 @@ import src.user as user
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 
-
 # Local Connection
 try:
     with open("config.toml") as tomlfile:
@@ -28,42 +30,6 @@ try:
 except Exception as e:
     print("An error occurred while connecting: ", e)
 
-
-# try:
-#     # Create the trigger function
-#     cur.execute("""
-#         CREATE OR REPLACE FUNCTION display_message() RETURNS TRIGGER AS 
-#         $$
-#         BEGIN
-#             RAISE NOTICE 'An exhibition or film has been inserted into the database.';
-#             RAISE NOTICE 'Trigger function called successfully';
-#             RETURN NEW;
-#         END;
-#         $$ LANGUAGE plpgsql;
-#     """)
-
-#     # Create the trigger for exhibitions
-#     cur.execute("""
-#         CREATE TRIGGER insert_exhibition_trigger
-#         AFTER INSERT ON exhibitions
-#         FOR EACH ROW
-#         EXECUTE FUNCTION display_message();
-#     """)
-
-#     # Create the trigger for films
-#     cur.execute("""
-#         CREATE TRIGGER insert_films_trigger
-#         AFTER INSERT ON films
-#         FOR EACH ROW
-#         EXECUTE FUNCTION display_message();
-#     """)
-#     conn.commit()
-#     print("Triggers created successfully")
-# except Exception as e:
-#     print("An error occurred while creating the triggers:", e)
-
-
-
 @app.route("/")
 def index():
     return render_template("login.html") 
@@ -72,6 +38,9 @@ def index():
 def home():
     if request.method == 'GET':
         user = session["user-role"]
+        req = request.cookies.get('e_title')
+        if req:
+            flash(req)
         return render_template("home.html", user=user)
     
 @app.route('/registration', methods=['POST','GET'])
@@ -97,11 +66,11 @@ def login():
         try:
             cur.execute("""SELECT hashed_password FROM user_login WHERE user_name = %s""", (email,))
             db_password = cur.fetchone()
-            valid_password = hp.isValidPw(in_password, db_password)
-            print(valid_password)
         except psycopg2.Error as e:
             print("error", e)        
 
+        valid_password = hp.isValidPw(in_password, db_password)
+        # print(valid_password)
         if valid_password:
             cur.execute("""SELECT * FROM user_login WHERE user_name = %s""", (email,))
             account = cur.fetchone()
@@ -130,10 +99,6 @@ def login():
                 return render_template('login.html')
     return render_template('login.html')
 
-
-# hmm, i tried to complete this function for u guys, it is probably close to
-# complete, but we would need a logout button, maybe it could be on the navbar
-# or on the top right of our webpages - sincerely, monopoly
 @app.route('/logout', methods=['POST','GET'])
 def logout():
     session.clear()
@@ -233,8 +198,13 @@ def add_new_exhibition():
         artists = request.form['exhibition_artists']
         exhib.insert_exhibition(cur, conn, date_and_time, ticket_price,
         gallery, title, curator, artists)
-    return render_template('add_new_exhibition.html')
-   
+        
+        resp = make_response(render_template('add_new_exhibition.html'))
+        resp.set_cookie('e_title', title, max_age=80)
+        return resp
+    else:
+        return render_template('add_new_exhibition.html')
+
 
 @app.route('/update_exhibition', methods = ['POST'])
 def update_exhibition():
