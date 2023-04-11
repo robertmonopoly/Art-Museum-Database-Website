@@ -56,18 +56,21 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     data = cur.fetchall() # is THERE NO NEED TO FETCH WHEN UR INSERTING VALS?
     return data
 
-def insert_ticket_rep(cur, s_date,e_date):
+def insert_ticket_rep(cur, s_date,e_date, num_tickets, ticket_price):
     cur.execute("""
-        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
+        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at), SUM (num_tickets) as et_total
         FROM exhibitions as e
             INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
-        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
+        WHERE e.exhib_title = %s AND DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
         UNION
-        SELECT film_title, film_ticket_price, DATE(film_transac_at)
+        SELECT film_title, film_ticket_price, DATE(film_transac_at), SUM(num_tickets) as ft_total
         FROM films as f
             INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
-        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
-        """, [s_date, e_date, s_date,e_date])
+        WHERE f.film_title = %s AND DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
+        """, [s_date, e_date, s_date,e_date]
+        )
+    
+    total_price = num_tickets * ticket_price
     data = cur.fetchall()
     return data
 
@@ -303,6 +306,37 @@ def update_employee(cur, conn, membership, employee_first_name, employee_last_na
     except Exception as e:
         print("An error occurred while updating the employee:", e)
 
+
+def insert_ticket_transaction(cur, conn, film_transac_id, film_name, ticket_quantity, email):
+  try:
+    # this is how u do transaction id
+    film_transac_id = str(uuid4.uuid())
+
+    cur.excute("""SELECT user_id from user_account WHERE email = %s """, (email,))
+    user_id = cur.fetchone()
+
+    cur.excute("""SELECT film_ticket_price FROM films WHERE film_title = %s """, (film_name,))
+    price_per_ticket = cur.fetchone()
+
+    film_name = request.form['film_name']
+
+    cur.execute("""SELECT film_id FROM films WHERE film_title = %s""", (film_name,))
+    film_id = cur.fetchone()
+
+    cur.execute("""INSERT INTO insert_film_ticket (film_id) VALUES (%s)""", (film_id,))
+
+    num_tickets = request.form['total_adults']
+    # Lettuce: calculate this for the report insert_ticket_rep in report.py
+    #total_price = num_tickets * price_per_ticket
+    
+    cur.execute("""INSERT INTO Fticket_details VALUES
+    (%s, %s, %s, %s, %s)""",
+    (film_transac_id, user_id, film_name, film_id))
+    conn.commit()
+
+    print("Film ticket transaction inserted successfully")
+  except Exception as e:
+    print("An error occurred while inserting the transaction", e)
 
 
 
