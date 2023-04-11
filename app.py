@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
-from time import strptime
 
 # modules
 import src.helper as hp
@@ -43,11 +42,11 @@ def home():
         req = request.cookies.get('e_title')
         if req and rows:
             for row in rows:
-                this_time = strptime(row[2],"%d %b %y")
-                flash(f"Checkout our new event, {row[1]}  )")
-                # then clear notifs table
-                cur.execute("""DELETE FROM notifs""")
-        conn.commit()
+                this_time = row[2].strftime("%b. %d")
+                flash(f"Checkout our new event, {row[1]}, on {this_time}!")
+            # then clear notifs table
+            cur.execute("""DELETE FROM notifs""")
+            conn.commit()
         return render_template("home.html", user=user)
     
 @app.route('/registration', methods=['POST','GET'])
