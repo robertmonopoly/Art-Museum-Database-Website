@@ -169,14 +169,20 @@ def Eticket_details():
 def donations():
     user = session["user-role"]
     msg = ""
-    data = don.retrieve_donations_data(cur)
-    if data == []:
+    donation_data = don.retrieve_donations_data(cur)
+    donation_sum = don.retrieve_donation_sum(cur)
+    if donation_data == []:
         msg = "No Donation Data Available"
-        app.logger.info(data)
+        app.logger.info(donation_data)
         return render_template('donations.html', msg=msg)
     else:
+        data = {
+            'donation_data': donation_data,
+            'donation_sum': donation_sum[0]
+        }
         app.logger.info(data)
         return render_template('donations.html', data=data)
+
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():

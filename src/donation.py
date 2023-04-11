@@ -13,6 +13,11 @@ def retrieve_donations_data(cur):
     data = cur.fetchall()
     return data 
 
+def retrieve_donation_sum(cur):
+        cur.execute("""SELECT SUM(donation_amount)
+        FROM donation""")
+        data = cur.fetchone()
+        return data
 
 def insert_member_don(cur):
     return
