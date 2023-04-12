@@ -71,7 +71,7 @@
   <li class = "active"><a href="{{ url_for('artworks') }}">Artworks</a></li>
 
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{ url_for('add_new_artwork') }}">Add New Artwork</a></li>
+    <li><a href="{{ url_for('add_new_artwork') }}">Artwork Queries</a></li>
     {% endif %}
 
   <li class="topnav"><input type="text" placeholder="Search..."></li>

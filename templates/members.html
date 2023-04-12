@@ -71,10 +71,31 @@ border-radius: 4px;
     <li><a href="{{ url_for('home') }}">Home</a></li>
     <li class = "active"><a href="{{ url_for('members') }}">Members</a></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{ url_for('add_new_member') }}">Add New Member</a></li>
+    <li><a href="{{ url_for('add_new_member') }}">Delete Membership Status</a></li>
     {% endif %}
   </ul>
 
+
+
+{% if session['user-role'] == 'USER' %}
+
+<form action="/update_member" method="post" style="padding:20px;">
+  <label for="email">Email Address:</label>
+  <input type="email" name="email" required><br><br>
+  <label for="membership">Membership Type:</label>
+  <select id="membership" name="membership" required>
+      <option value="">Select Membership Type</option>
+      <option value="BASIC">Basic</option>
+      <option value="SILVER">Silver</option>
+      <option value="GOLD">Gold</option>
+  </select><br><br>
+  <input type="submit" value="Add New Member">
+</form>
+
+{% endif %}
+
+
+{% if session['user-role'] == 'ADMIN' %}
   <table class="my-table">
     <thead>
       {% if data %}
@@ -110,6 +131,7 @@ border-radius: 4px;
     </tbody>
 </table>
 
+{% endif %}
 
 </body>
 </html>

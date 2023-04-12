@@ -332,47 +332,16 @@ def delete_employee():
         emp.delete_employee(cur, conn, id_num)
     return render_template('add_new_employee.html')
    
-
-@app.get('/add_new_member')
-def add_new_member():
-    if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
-        email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
-        membership_type = request.form['membership']
-        mem.insert_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
     
 
-@app.route('/update_member', methods = ['POST'])
+@app.route('/update_member', methods = ['GET', 'POST'])
 def update_member():
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
         email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
         membership_type = request.form['membership']
-        mem.update_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
+        mem.update_member(cur, conn,
+        email, membership_type)
+    return render_template('members.html')
     
 
 @app.route('/delete_member', methods = ['POST'])
@@ -432,7 +401,7 @@ def films():
     user = session["user-role"]
     return render_template('films.html',user=user)
 
-@app.get('/members')
+@app.route('/members', methods=['GET', 'POST'])
 def members():
     user = session["user-role"]
     msg = ""

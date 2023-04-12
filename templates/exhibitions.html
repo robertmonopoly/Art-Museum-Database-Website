@@ -95,7 +95,7 @@
     <li class = "active"><a href="{{ url_for('exhibitions') }}">Exhibitions</a></li>
     <li class="topnav"><input type="text" placeholder="Search..."></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{ url_for('add_new_exhibition') }}">Add New Exhibition</a></li>
+    <li><a href="{{ url_for('add_new_exhibition') }}">Exhibition Queries</a></li>
     {% endif %}
   </ul>
   </ul>
