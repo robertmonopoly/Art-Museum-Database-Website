@@ -9,20 +9,21 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     )
     data = cur.fetchall() #TODO: test if need to insert data?
     return data
-
-def insert_ticket_rep(cur, s_date,e_date):
+'''
+def insert_ticket_rep(cur, s_date,e_date, num_tickets):
     cur.execute("""
-        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at)
-        FROM exhibitions as e
+        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(exhib_transac_at), SUM (num_tickets) as et_total
+        FROM exhibitions as e, 
             INNER JOIN exhib_ticket_sales as et ON e.exhib_id = et.exhib_id
-        WHERE DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
+        WHERE e.exhib_title = %s AND DATE(exhib_transac_at) >= %s AND DATE(exhib_transac_at) <= %s
         UNION
-        SELECT film_title, film_ticket_price, DATE(film_transac_at)
+        SELECT film_title, film_ticket_price, DATE(film_transac_at), SUM(num_tickets) as ft_total
         FROM films as f
             INNER JOIN film_ticket_sales as ft ON f.film_id = ft.film_id
-        WHERE DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
-        """, [s_date, e_date, s_date,e_date])
+        WHERE f.film_title = %s AND DATE(film_transac_at) >= %s AND DATE(film_transac_at) <= %s
+        """, [s_date, e_date, s_date,e_date, num_tickets]
+        )
     data = cur.fetchall()
     return data
 
-
+'''

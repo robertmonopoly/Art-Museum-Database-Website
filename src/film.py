@@ -1,6 +1,8 @@
 # import
 import uuid
 
+from flask import request
+
 def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
     try:
         film_id = str(uuid.uuid4())
@@ -11,12 +13,6 @@ def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_d
         print("Film inserted successfully")
     except Exception as e:
         print("An error occurred while inserting the film", e)
-
-def insert_film_sales(cur, film_transac_id, user_id, film_id, film_transac_at):
-    try:
-        cur.execute("""INSERT INTO film_ticket_sales VALUES (%s, %s, %s, %s, %s)""", (film_transac_id, user_id, film_id, film_transac_at))
-    except Exception as e:
-        print("An error occurred while inserting the film sales record:", e)
 
 def delete_film(cur, conn, film_id):
     try:
@@ -33,3 +29,65 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
         print("Film updated successfully!")
     except Exception as e:
         print("An error occurred while updating the film:", e)
+
+'''def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
+  try:
+    # this is how u do transaction id
+    event_transac_id = str(uuid.uuid4())
+
+    cur.execute("""SELECT user_id from user_account WHERE email = %s """, (email,))
+    user_id = cur.fetchone()
+
+    cur.execute("""SELECT film_ticket_price FROM films WHERE film_title = %s """, (event_name,))
+    price_per_ticket = cur.fetchone()
+
+
+    cur.execute("""SELECT film_id FROM films WHERE film_title = %s""", (event_name,))
+    event_id = cur.fetchone()
+
+    cur.execute("""INSERT INTO ticket_sales VALUES
+    (%s, %s, %s, %s, %s)""",
+    (event_transac_id, user_id, event_id, event_name, num_tickets))
+    conn.commit()
+
+    print("Film ticket transaction inserted successfully")
+  except Exception as e:
+    print("An error occurred while inserting the transaction", e)'''
+
+
+def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
+    try:
+        # Generate a unique transaction ID
+        event_transac_id = uuid.uuid4()
+
+        # Get the user ID for the given email address
+        cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
+        user_id = cur.fetchone()[0]
+
+        # Get the price per ticket for the given event name
+        cur.execute("""SELECT film_ticket_price FROM films WHERE film_title = %s""", (event_name,))
+        price_per_ticket = cur.fetchone()[0]
+
+        # Get the event ID for the given event name
+        cur.execute("""SELECT film_id FROM films WHERE film_title = %s""", (event_name,))
+        event_id = cur.fetchone()[0]
+
+        # Insert the ticket transaction into the database
+        cur.execute("""INSERT INTO ticket_sales
+                        VALUES (%s, %s, %s, %s, %s)""",
+                    (event_transac_id, user_id, event_id, event_name, num_tickets))
+        conn.commit()
+
+        # Print a success message to the command line
+        print("Ticket transaction inserted successfully")
+    except Exception as e:
+        print("An error occurred while inserting the transaction:", e)
+
+
+
+'''def retrieve_ticket_data(cur):
+    cur.execute("""SELECT * FROM ticket_sales""")
+    data = cur.fetchall()
+    return data    '''
+
+

@@ -501,6 +501,46 @@ def report_tickets():
         return render_template('report_tickets.html', data=data) # fill it in
     else:
         return render_template('report_tickets.html')
+    
+'''@app.route('/add_film_ticket_transaction', methods = ['GET', 'POST'])
+def add_film_ticket_transaction():
+  user = session["user-role"] 
+  selection = request.form['film_name'] 
+  num_tickets = request.form['total_adults']
+  user_email = request.form['email']
+  try:      
+    data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
+    print("Film tickets booked successfully!")
+  except Exception as e:
+        print (f"Error booking film tickets: {e}")
+  return render_template('Fticket_details.html')'''
+
+
+@app.route('/add_film_ticket_transaction', methods=['POST'])
+def add_film_ticket_transaction():
+    user_role = session.get('user-role')
+    if not user_role:
+        flash('Please log in first', 'error')
+        return redirect(url_for('login'))
+    
+    selection = request.form.get('film_name')
+    num_tickets = request.form.get('total_adults')
+    user_email = request.form.get('email')
+    
+    if not selection or not num_tickets or not user_email:
+        flash('Please fill in all fields', 'error')
+        return redirect(url_for('Fticket_details'))
+
+    try:
+        data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
+        print('Film tickets booked successfully!', 'success')
+    except Exception as e:
+        print(f"Error booking film tickets: {e}")
+        print('Failed to book film tickets. Please try again later', 'error')
+        return redirect(url_for('Fticket_details'))
+
+    return redirect(url_for('Fticket_details'))
+
 
 # TODO: need to make third report
 

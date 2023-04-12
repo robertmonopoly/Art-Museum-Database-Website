@@ -75,12 +75,14 @@ CREATE TABLE exhibitions (
     exhib_artists TEXT NOT NULL
 );
 
-CREATE TABLE exhib_ticket_sales (
-    exhib_transac_id UUID PRIMARY KEY, 
+CREATE TABLE ticket_sales(
+    event_transac_id UUID PRIMARY KEY, 
     user_id UUID NOT NULL REFERENCES user_account(user_id), 
-    exhib_id UUID NOT NULL REFERENCES exhibitions(exhib_id),
-    exhib_transac_at TIMESTAMP NOT NULL
+    event_id UUID REFERENCES exhibitions(exhib_id),
+    event_name TEXT NOT NULL,
+    num_tickets INTEGER NOT NULL
 );
+
 
 CREATE TABLE films (
     film_id UUID PRIMARY KEY,
@@ -92,12 +94,7 @@ CREATE TABLE films (
     film_rating TEXT NOT NULL
 );
 
-CREATE TABLE film_ticket_sales (
-    film_transac_id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES user_account(user_id),
-    film_id UUID NOT NULL REFERENCES films(film_id),
-    film_transac_at TIMESTAMP NOT NULL
-);
+
 
 CREATE TABLE donation (
     donation_transaction_id UUID PRIMARY KEY,
