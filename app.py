@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
+from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app, jsonify
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
@@ -50,12 +50,19 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        user.insert_user(cur, conn, fname, lname,
-        email, birthdate)
-        password = request.form['user_password']
-        user.insert_user_login(cur, conn, email, password)
-        flash("Registration successful!")
+        
+        # Check if email is already in use
+        if user.check_email_exists(cur, conn, email):
+            flash("That email is already in use.")
+        else:
+            # Insert new user and login details
+            user.insert_user(cur, conn, fname, lname, email, birthdate)
+            password = request.form['user_password']
+            user.insert_user_login(cur, conn, email, password)
+            flash("Registration successful!")
+            
     return render_template('registration.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -162,12 +169,18 @@ def Eticket_details():
 def donations():
     user = session["user-role"]
     msg = ""
-    data = don.retrieve_donations_data(cur)
-    if data == []:
+    data = []
+    donation_data = don.retrieve_donations_data(cur)
+    donation_sum = don.retrieve_donation_sum(cur)
+    if donation_data == []:
         msg = "No Donation Data Available"
         app.logger.info(data)
         return render_template('donations.html', msg=msg)
     else:
+        data = {
+            'donation_data': donation_data,
+            'donation_sum': donation_sum[0]
+        }
         app.logger.info(data)
         return render_template('donations.html', data=data)
 
@@ -544,7 +557,7 @@ def add_film_ticket_transaction():
     user_email = request.form.get('email')
     
     if not selection or not num_tickets or not user_email:
-        print('Please fill in all fields', 'error')
+        flash('Please fill in all fields', 'error')
         return redirect(url_for('Fticket_details'))
 
     try:
@@ -552,7 +565,7 @@ def add_film_ticket_transaction():
         print('Film tickets booked successfully!', 'success')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        print('Failed to book film tickets. Please try again later', 'error')
+        flash('Failed to book film tickets. Please try again later', 'error')
         return redirect(url_for('Fticket_details'))
 
     return redirect(url_for('Fticket_details'))'''

@@ -40,3 +40,8 @@ def insert_user_login(cur, conn, user_name, pw):
         conn.rollback()
         print("Error occurred while inserting user login:", e)
         raise
+
+def check_email_exists(cur, conn, email):
+    cur.execute("SELECT COUNT(*) FROM user_account WHERE email = %s", (email,))
+    count = cur.fetchone()[0]
+    return count > 0

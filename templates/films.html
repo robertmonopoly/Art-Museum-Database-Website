@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -90,21 +90,19 @@
 <h1>Films</h1>
 
 
-<ul class = "navbarone">
-    <li><a href="{{url_for('home')}}">Home</a></li>
-    <li class = "active"><a href="{{url_for('films')}}">Films</a></li>
-    <li class="topnav"><input type="text" placeholder="Search..."></li>
-    {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{url_for('add_new_film')}}">Film Queries</a></li>
-    {% endif %}
+  <ul class = "navbarone">
+      <li><a href="{{url_for('home')}}">Home</a></li>
+      <li class = "active"><a href="{{url_for('films')}}">Films</a></li>
+      <li class="topnav"><input type="text" placeholder="Search..."></li>
+      {% if session['user-role'] == 'ADMIN' %}
+      <li><a href="{{url_for('add_new_film')}}">Film Queries</a></li>
+      {% endif %}
   </ul>
-  </ul>
-  <p></p>
-
+ 
   <div class = "column" style="padding-top:0px;">
     <h2 class = "blink" style="color:blue; font-size: 25px; " >Now Showing</h2>
-    </div>
   </div>
+  
 
 <hr width="100%" color= "grey" size="0.5px" padding="0"/>
 <div class ="column">
@@ -119,11 +117,9 @@
     <p style="margin-top: 0;margin-bottom:2px"><b>Friday, July 9, 2023</b>
     <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Showtime - 5 p.m.</a></button></p></p>
   </p>
-  <br>
-  <br>
-  <br>
-  <br>
+
 </div>
+#macro film_format(endpoint,viewing_at,director, title, image_id)
 
 <div class = "row" style="padding-left: 20px;">
   <p> 
@@ -167,10 +163,7 @@
       <p style="margin-top: 0; margin-bottom:2px"><b>Saturday, May 14, 2023</b>
       <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Showtime - 1:30 p.m.</a></button> </p>
     </p>
-    <br>
-    <br>
-    <br>
-    <br>
+  
   </div>
 
   <div class = "row" style="padding-left: 20px;">

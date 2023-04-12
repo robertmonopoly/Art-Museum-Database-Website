@@ -36,7 +36,7 @@
         {{ elements.navbar('films', 'Films')}}
         {{ elements.navbar('gift_shop', 'Gift Shop')}}
         {% if session['user-role'] == 'ADMIN' %}
-        {{ elements.navbar('members', 'Membership Management')}}
+        {{ elements.navbar('members', 'User Account Management')}}
         {% endif %}
         {% if session['user-role'] == 'USER' %}
         {{ elements.navbar('members', 'Memberships')}}
@@ -63,7 +63,7 @@
     {{ elements.image_contain('artworks', '/img/art3.jpeg', 'Artworks' )}}
     {{ elements.image_contain('exhibitions', '/img/exhibit.png', 'Exhibitions' )}}
     {% if session['user-role'] == 'ADMIN' %}
-    {{ elements.image_contain('members', '/img/mems.jpeg', 'Membership Management' )}}
+    {{ elements.image_contain('members', '/img/mems.jpeg', 'User Account Management' )}}
     {% endif %}
     {% if session['user-role'] == 'USER' %}
     {{ elements.image_contain('members', '/img/mems.jpeg', 'Memberships' )}}

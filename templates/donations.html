@@ -95,9 +95,9 @@ border-radius: 4px;
 {% if session['user-role'] == 'ADMIN' %}
 <table class="my-table">
   <tbody>
-      {% if data['donation_data'] %}
+      {% if data %}
       <tr>
-          <th>Donation ID</th>
+         
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
@@ -105,33 +105,33 @@ border-radius: 4px;
           <th>Membership</th>
           <th>Donation Date</th>
       </tr>
-      {% for item in data['donation_data'] %}
-      <tr>
-          <td>{{item[0]}}</td>
-          <td>{{item[1]}}</td>
-          <td>{{item[2]}}</td>
-          <td>{{item[3]}}</td>
-          <td>{{item[4]}}</td>
-          <td>{{item[5]}}</td>
-          <td>{{item[6]}}</td>
-      </tr>
-      {% endfor %}
+        {% for item in data[0] %}
+        <tr>
+            <td>{{item[0]}}</td>
+            <td>{{item[1]}}</td>
+            <td>{{item[2]}}</td>
+            <td>{{item[3]}}</td>
+            <td>{{item[4]}}</td>
+            <td>{{item[5]}}</td>
+           
+        </tr>
+        {% endfor %}
       {% else %}
-      <div>{{msg}}</div>
+        <div>{{msg}}</div>
       {% endif %}
   </tbody>
 </table>
 
-{% if data['donation_data'] %}
-<table class="my-table" style="padding-top: 20px;">
-  <tbody>
-    <tr>
-      <td>Total Donation Amount:</td>
-      <td>{{ data['donation_sum'] }}</td>
-    </tr>
-  </tbody>
-</table>
-{% endif %}
+  {% if data %}
+  <table class="my-table" style="padding-top: 20px;">
+    <tbody>
+      <tr>
+        <td>Total Donation Amount:</td>
+        <td>{{ data[1] }}</td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
 
 {% endif %}
 

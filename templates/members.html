@@ -66,7 +66,7 @@ border-radius: 4px;
 <body>
 
 {% if session['user-role'] == 'ADMIN' %}
-<h1>Members</h1>
+<h1>Users</h1>
 {% endif %}
 
 {% if session['user-role'] == 'USER' %}
@@ -76,9 +76,9 @@ border-radius: 4px;
 
 <ul class = "navbarone">
     <li><a href="{{ url_for('home') }}">Home</a></li>
-    <li class = "active"><a href="{{ url_for('members') }}">Members</a></li>
+    <li class = "active"><a href="{{ url_for('members') }}">Users</a></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{ url_for('add_new_member') }}">Delete Membership Status</a></li>
+    <li><a href="{{ url_for('add_new_member') }}">Delete User Account</a></li>
     {% endif %}
   </ul>
 
@@ -89,8 +89,8 @@ border-radius: 4px;
 
 <p>The museum offers three different membership levels: Basic, Silver, and Gold. Basic membership costs $20 a month and provides a 10% discount on all museum items, 
   including gift shop purchases. Silver membership costs $30 a month and provides a 20% discount, while Gold membership 
-  costs $40 a month and provides a 30% discount. These memberships are a wonderful way for frequent museum visitors to save money while supporting the museum's programs and exhibits
-  Memberships can also be gifted by typing the email address of a friend within the email field.</p>
+  costs $40 a month and provides a 30% discount. These memberships are a wonderful way for frequent museum visitors to save money while supporting the museum's programs and exhibits.
+  Memberships can also be gifted by typing the email address of a friend's Archive Arts Museum Account within the email field.</p>
 
 
 <form action="/update_member" method="post" style="padding:20px;">
@@ -103,14 +103,13 @@ border-radius: 4px;
       <option value="SILVER">Silver</option>
       <option value="GOLD">Gold</option>
   </select><br><br>
-  <input type="submit" value="Add New Member">
+  <input type="submit" value="Purchase Membership">
 </form>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
             <div class="alert alert-{{ category }}">
-                <button type="button" class="close" data-dismiss="alert">×</button>
                 {{ message }}
             </div>
         {% endfor %}
