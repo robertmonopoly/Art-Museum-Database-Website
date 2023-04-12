@@ -56,12 +56,19 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        user.insert_user(cur, conn, fname, lname,
-        email, birthdate)
-        password = request.form['user_password']
-        user.insert_user_login(cur, conn, email, password)
-        flash("Registration successful!")
+        
+        # Check if email is already in use
+        if user.check_email_exists(cur, conn, email):
+            flash("That email is already in use.")
+        else:
+            # Insert new user and login details
+            user.insert_user(cur, conn, fname, lname, email, birthdate)
+            password = request.form['user_password']
+            user.insert_user_login(cur, conn, email, password)
+            flash("Registration successful!")
+            
     return render_template('registration.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():

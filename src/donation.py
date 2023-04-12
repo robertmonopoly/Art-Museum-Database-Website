@@ -3,6 +3,7 @@ import uuid
 from datetime import date
 # 3rd report
 def retrieve_donations_data(cur):
+
     # dont need uuid in report
     cur.execute("""SELECT u.first_name, u.last_name, 
     d.donator_email, d.donation_amount, u.membership, d.donation_on
