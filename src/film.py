@@ -58,20 +58,21 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
 def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
-        event_transac_id = uuid.uuid4()
+        event_transac_id = str(uuid.uuid4())
 
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
+        print(user_id)
 
         # Get the price per ticket for the given event name
-        cur.execute("""SELECT film_ticket_price FROM films WHERE film_title = %s""", (event_name,))
-        price_per_ticket = cur.fetchone()[0]
-
+        #cur.execute("""SELECT film_ticket_price FROM films WHERE film_title = %s""", (event_name,))
+        #price_per_ticket = cur.fetchone()[0]
+        
         # Get the event ID for the given event name
         cur.execute("""SELECT film_id FROM films WHERE film_title = %s""", (event_name,))
         event_id = cur.fetchone()[0]
-
+        print(event_id)
         # Insert the ticket transaction into the database
         cur.execute("""INSERT INTO ticket_sales
                         VALUES (%s, %s, %s, %s, %s)""",
@@ -85,9 +86,9 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
 
 
 
-'''def retrieve_ticket_data(cur):
+def retrieve_ticket_data(cur):
     cur.execute("""SELECT * FROM ticket_sales""")
     data = cur.fetchall()
-    return data    '''
+    return data    
 
 

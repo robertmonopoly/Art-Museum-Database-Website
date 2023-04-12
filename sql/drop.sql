@@ -8,11 +8,9 @@ DROP TABLE IF EXISTS notifs;
 
 DROP TABLE IF EXISTS donation;
 
-DROP TABLE IF EXISTS film_ticket_sales;
-
 DROP TABLE IF EXISTS films;
 
-DROP TABLE IF EXISTS exhib_ticket_sales;
+DROP TABLE IF EXISTS ticket_sales;
 
 DROP TABLE IF EXISTS exhibitions;
 
@@ -35,4 +33,3 @@ DROP TYPE MembershipType;
 DROP TYPE Sex;
 
 DROP TYPE User_Role;
-

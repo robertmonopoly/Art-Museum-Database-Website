@@ -20,7 +20,7 @@ CREATE TABLE user_account (
     user_id UUID PRIMARY KEY,
     first_name VARCHAR (60) NOT NULL, 
     last_name VARCHAR (60) NOT NULL,
-    email VARCHAR (100) NOT NULL,
+    email VARCHAR (100) NOT NULL UNIQUE,
     date_of_birth DATE NOT NULL,
     membership MembershipType NOT NULL,
     account_status VARCHAR(2) NOT NULL
@@ -78,7 +78,7 @@ CREATE TABLE exhibitions (
 CREATE TABLE ticket_sales(
     event_transac_id UUID PRIMARY KEY, 
     user_id UUID NOT NULL REFERENCES user_account(user_id), 
-    event_id UUID REFERENCES exhibitions(exhib_id),
+    event_id UUID NOT NULL,
     event_name TEXT NOT NULL,
     num_tickets INTEGER NOT NULL
 );
