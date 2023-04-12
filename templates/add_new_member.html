@@ -62,7 +62,7 @@
 {% if session['user-role'] == 'ADMIN' %}
 <form action="/delete_member" method="post" style="padding:20px;">
   <label for="account_id">Account ID:</label>
-  <input type="text" name="account_id" ><br><br>
+  <input type="text" name="account_id" required><br><br>
   <input type="submit" value="Delete Member Account">
 </form>    
 
