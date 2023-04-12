@@ -56,12 +56,19 @@ def registration():
         lname = request.form['user_lname']
         email = request.form['user_email']
         birthdate = request.form['bdate']
-        user.insert_user(cur, conn, fname, lname,
-        email, birthdate)
-        password = request.form['user_password']
-        user.insert_user_login(cur, conn, email, password)
-        flash("Registration successful!")
+        
+        # Check if email is already in use
+        if user.check_email_exists(cur, conn, email):
+            flash("That email is already in use.")
+        else:
+            # Insert new user and login details
+            user.insert_user(cur, conn, fname, lname, email, birthdate)
+            password = request.form['user_password']
+            user.insert_user_login(cur, conn, email, password)
+            flash("Registration successful!")
+            
     return render_template('registration.html')
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -167,20 +174,25 @@ def Eticket_details():
 @app.get('/donations')
 def donations():
     user = session["user-role"]
-    msg = ""
     donation_data = don.retrieve_donations_data(cur)
     donation_sum = don.retrieve_donation_sum(cur)
-    if donation_data == []:
-        msg = "No Donation Data Available"
-        app.logger.info(donation_data)
-        return render_template('donations.html', msg=msg)
-    else:
-        data = {
-            'donation_data': donation_data,
-            'donation_sum': donation_sum[0]
-        }
-        app.logger.info(data)
-        return render_template('donations.html', data=data)
+    data = {}
+    try:
+        if not donation_data:
+            msg = "No Donation Data Available"
+            app.logger.info(donation_data)
+            return render_template('donations.html', msg=msg)
+        else:
+            data = {
+                'donation_data': donation_data,
+                'donation_sum': donation_sum[0]
+            }
+            app.logger.info(data)
+            return render_template('donations.html', data=data)
+    except Exception as e:
+        app.logger.error(e)
+        return "Error occurred: " + str(e)
+
 
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
