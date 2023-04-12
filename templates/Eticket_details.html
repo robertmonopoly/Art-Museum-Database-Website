@@ -181,68 +181,32 @@ button:hover {
  <hr width="100%" color= "grey" size="0.5px" padding="0"/>
 
 
+ <div class="elem-group">
+  <label for="Eselection">Select Exhibition Name</label>
+  <select id="selection" name="Exh_preference" required>
+      <option value="">Choose an Exhibition from the List</option>
+      <option value="Pipilotti">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
+      <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
+      <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
+      <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
+      <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
+      <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
+  </select>
+</div>
+
  <div class="row">
   <div class="column">
   <form action="/pythonweb.py" method="post" style="width:80%; margin-left:20px;">
     <div class="elem-group">
-      <label for="fname">First Name</label>
-      <input type="text" id="lname" name="visitor_fname" pattern=[A-Z\sa-z]{3,20} required>
-    </div>
-    <div class="elem-group">
-      <label for="lname">Last Name</label>
-      <input type="text" id="lname" name="visitor_lname" pattern=[A-Z\sa-z]{3,20} required>
-    </div>
-    <div class="elem-group">
       <label for="email">E-mail Address</label>
       <input type="email" id="email" name="visitor_email" placeholder="john.doe@email.com" required>
     </div>
-    <div class="elem-group">
-      <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" name="visitor_phone" placeholder="498-348-3872" pattern=(\d{3})-?\s?(\d{3})-?\s?(\d{4}) required>
-    </div>
     <hr>
     <div class="elem-group inlined">
-      <label for="adult">Adults</label>
+      <label for="adult">Number of Tickets</label>
       <input type="number" id="adult" name="total_adults"  min="1" required>
     </div>
-    <div class="elem-group inlined">
-      <label for="child">Children</label>
-      <input type="number" id="child" name="total_children"  min="0" required>
-    </div>
-    <div class="elem-group">
-      <label for="checkin-date">Select Date</label>
-      <input type="date" id="checkin-date" name="checkin" required>
-    </div>
-  
-     
     
-    <div class="elem-group">
-      <label for="Mselection">Select Membership type</label>
-      <select id="selection" name="Mem_preference" required>
-        <option value="">Choose Membership Type</option>
-        <option value="general">General Member</option>
-        <option value="silver">Silver Member</option>
-        <option value="bronze">Bronze Member</option>
-        <option value="gold">Gold Member</option>
-        <option value="platinum">Platinum Member</option>
-      
-    </select>
-    
-    </div>
-
-  
-  <div class="elem-group">
-    <label for="Eselection">Select Exhibition Name</label>
-    <select id="selection" name="Exh_preference" required>
-        <option value="">Choose an Exhibition from the List</option>
-        <option value="Pipilotti">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
-        <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
-        <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
-        <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
-        <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
-        <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
-    </select>
-  </div>
 
 <div>
   <button type="submit" style="background-color: #5898ed;">Book Tickets</button>
