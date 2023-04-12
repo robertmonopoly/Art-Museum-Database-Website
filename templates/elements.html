@@ -21,7 +21,7 @@
 <div class="responsive" >
     <div class="gallery">
       <a>
-        <img src="/image/{{image_id}}" alt=alt width="600" height="400">
+        <img src="/image/{{image_id}}" alt="{{name}}" width="600" height="400">
       </a>
       <div class="desc">
         {{name}}<br>
@@ -30,5 +30,21 @@
         {{type}}<br>
         {{obj_num}}</div>
     </div>
+  </div>
+{% endmacro %}
+
+{% macro film_format(endpoint,viewing_at,director, title, image_id) %}
+<div class ="column">
+  <div class = "row" style="padding-left: 20px;">
+    <p> 
+      <img src="/image/{{image_id}}"  alt="{{title}}" style="width:200px; height:250px; float: left; padding-right: 10px;" />
+      <h3 style="margin-bottom:3px">{{title}}</h3>
+        <p style="text-align: left; padding-bottom: 10px;">
+        by {{director}}.
+        </p>
+      <p style="margin-top: 0;margin-bottom:2px">
+        <b>{{viewing_at.strftime("%B %d, %Y")}}</b>
+        <button class = "button button1"><a href="{{url_for(endpoint)}}">Showtime - 5 p.m.</a></button></p></p>
+    </p>
   </div>
 {% endmacro %}
