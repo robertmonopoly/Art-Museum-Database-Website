@@ -7,6 +7,12 @@ def retrieve_member_data(cur):
 
 def update_member(cur, conn, email, membership_type):
     try:
+        cur.execute("SELECT * FROM user_account WHERE email = %s", (email,))
+        user = cur.fetchone()
+        if user is None:
+            message = "Account with that email does not exist"
+            flash(message, 'danger')
+            return redirect(url_for('members'))
         cur.execute("UPDATE user_account SET membership = %s WHERE email = %s", 
             (membership_type, email))
         conn.commit()
@@ -24,13 +30,10 @@ def update_member(cur, conn, email, membership_type):
         
     except Exception as e:
         print("An error occurred while updating the user account: ", e)
+        message = "An error occurred while updating the user account"
+        flash(message, 'danger')
+        return redirect(url_for('members'))
 
-
-        
-        print("User membership status updated successfully")
-        return render_template('members.html', message=message)
-    except Exception as e:
-        print("An error occurred while updating the user account: ", e)
 
 
 def delete_member(cur, conn, user_account_id):

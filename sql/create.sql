@@ -20,7 +20,7 @@ CREATE TABLE user_account (
     user_id UUID PRIMARY KEY,
     first_name VARCHAR (60) NOT NULL, 
     last_name VARCHAR (60) NOT NULL,
-    email VARCHAR (100) NOT NULL,
+    email VARCHAR (100) NOT NULL UNIQUE,
     date_of_birth DATE NOT NULL,
     membership MembershipType NOT NULL,
     account_status VARCHAR(2) NOT NULL

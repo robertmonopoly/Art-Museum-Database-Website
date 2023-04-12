@@ -77,19 +77,19 @@
 
 <form action="/update_film" method="POST" style="padding:20px;">
   <label for="film_id">Film ID:</label>
-  <input type="text" name="film_id"><br><br>
+  <input type="text" name="film_id" required><br><br>
   <label for="viewing_at">Viewing At:</label>
-  <input type="datetime-local" name="viewing_at"><br><br>
+  <input type="datetime-local" name="viewing_at" required><br><br>
   <label for="film_title">Film Title:</label>
-  <input type="text" name="film_title"><br><br>
-  <label for="film_ticket_price">Ticket Price:</label>
-  <input type="text" name="film_ticket_price"><br><br>
-  <label for="duration_min">Duration (min):</label>
-  <input type="number" name="duration_min"><br><br>
-  <label for="film_director">Director:</label>
-  <input type="text" name="film_director"><br><br>
-  <label for="film_rating">Rating:</label>
-  <input type="text" name="film_rating"><br><br>
+  <input type="text" name="film_title" required><br><br>
+  <label for="film_ticket_price" required>Ticket Price:</label>
+  <input type="text" name="film_ticket_price" required><br><br>
+  <label for="duration_min" required>Duration (min):</label>
+  <input type="number" name="duration_min" required><br><br>
+  <label for="film_director" required>Director:</label>
+  <input type="text" name="film_director" required><br><br>
+  <label for="film_rating" required>Rating:</label>
+  <input type="text" name="film_rating" required><br><br>
   <input type="submit" value="Update Film">
 </form>
 
