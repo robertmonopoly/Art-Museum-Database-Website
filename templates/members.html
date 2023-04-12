@@ -66,7 +66,7 @@ border-radius: 4px;
 <body>
 
 {% if session['user-role'] == 'ADMIN' %}
-<h1>Members</h1>
+<h1>Users</h1>
 {% endif %}
 
 {% if session['user-role'] == 'USER' %}
@@ -76,9 +76,9 @@ border-radius: 4px;
 
 <ul class = "navbarone">
     <li><a href="{{ url_for('home') }}">Home</a></li>
-    <li class = "active"><a href="{{ url_for('members') }}">Members</a></li>
+    <li class = "active"><a href="{{ url_for('members') }}">Users</a></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{ url_for('add_new_member') }}">Delete Membership Status</a></li>
+    <li><a href="{{ url_for('add_new_member') }}">Delete User Account</a></li>
     {% endif %}
   </ul>
 
