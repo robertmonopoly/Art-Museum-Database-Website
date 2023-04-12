@@ -19,9 +19,6 @@ def retrieve_donation_sum(cur):
         data = cur.fetchone()
         return data
 
-def insert_member_don(cur):
-    return
-
 def insert_donation(cur, conn, email_address, money_amount):
     try:
         transac_id = str(uuid.uuid4())
