@@ -1,12 +1,9 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
+from flask import Flask, flash
 
 def retrieve_member_data(cur):
     cur.execute("""SELECT * FROM user_account""")
     data = cur.fetchall()
     return data    
-
-
-from flask import flash
 
 def update_member(cur, conn, email, membership_type):
     try:

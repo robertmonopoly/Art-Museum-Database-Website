@@ -344,6 +344,11 @@ def update_member():
     return render_template('members.html')
     
 
+@app.route('/add_new_member', methods = ['GET', 'POST'])
+def add_new_member():
+    user = session["user-role"]
+    return render_template('add_new_member.html',user=user)
+
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
     if request.method == 'POST':
