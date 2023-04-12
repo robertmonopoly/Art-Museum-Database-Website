@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
-import time
 
 # modules
 import src.helper as hp
@@ -38,9 +37,16 @@ def index():
 def home():
     if request.method == 'GET':
         user = session["user-role"]
+        cur.execute("""SELECT * FROM notifs""")
+        rows = cur.fetchall()
         req = request.cookies.get('e_title')
-        if req:
-            flash(req)
+        if req and rows:
+            for row in rows:
+                this_time = row[2].strftime("%b. %d")
+                flash(f"Checkout our new event, {row[1]}, on {this_time}!")
+            # then clear notifs table
+            cur.execute("""DELETE FROM notifs""")
+            conn.commit()
         return render_template("home.html", user=user)
     
 @app.route('/registration', methods=['POST','GET'])
@@ -162,14 +168,20 @@ def Eticket_details():
 def donations():
     user = session["user-role"]
     msg = ""
-    data = don.retrieve_donations_data(cur)
-    if data == []:
+    donation_data = don.retrieve_donations_data(cur)
+    donation_sum = don.retrieve_donation_sum(cur)
+    if donation_data == []:
         msg = "No Donation Data Available"
-        app.logger.info(data)
+        app.logger.info(donation_data)
         return render_template('donations.html', msg=msg)
     else:
+        data = {
+            'donation_data': donation_data,
+            'donation_sum': donation_sum[0]
+        }
         app.logger.info(data)
         return render_template('donations.html', data=data)
+
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
@@ -320,48 +332,22 @@ def delete_employee():
         emp.delete_employee(cur, conn, id_num)
     return render_template('add_new_employee.html')
    
-
-@app.get('/add_new_member')
-def add_new_member():
-    if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
-        email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
-        membership_type = request.form['membership']
-        mem.insert_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
     
 
-@app.route('/update_member', methods = ['POST'])
+@app.route('/update_member', methods = ['GET', 'POST'])
 def update_member():
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
         email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
         membership_type = request.form['membership']
-        mem.update_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
+        mem.update_member(cur, conn,
+        email, membership_type)
+    return render_template('members.html')
     
+
+@app.route('/add_new_member', methods = ['GET', 'POST'])
+def add_new_member():
+    user = session["user-role"]
+    return render_template('add_new_member.html',user=user)
 
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
@@ -420,7 +406,7 @@ def films():
     user = session["user-role"]
     return render_template('films.html',user=user)
 
-@app.get('/members')
+@app.route('/members', methods=['GET', 'POST'])
 def members():
     user = session["user-role"]
     msg = ""

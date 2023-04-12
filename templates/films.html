@@ -95,7 +95,7 @@
     <li class = "active"><a href="{{url_for('films')}}">Films</a></li>
     <li class="topnav"><input type="text" placeholder="Search..."></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{url_for('add_new_film')}}">Add New Film</a></li>
+    <li><a href="{{url_for('add_new_film')}}">Film Queries</a></li>
     {% endif %}
   </ul>
   </ul>

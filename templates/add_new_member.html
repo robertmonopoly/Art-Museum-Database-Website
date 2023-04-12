@@ -47,31 +47,17 @@
 </head>
 <body>
 
-<h1>Add Member</h1>
+<h1>Delete Membership Status</h1>
 
 
 <ul class = "navbarone">
   <li><a href="{{ url_for('home') }}">Home</a></li>
   <li><a href="{{ url_for('members') }}">Members</a></li>
-  <li class = "active"><a href="{{ url_for('add_new_gift_shop_item') }}">Add New Member</a></li>
+  <li><a href="{{ url_for('add_new_member') }}">Delete Membership Status</a></li>
 </ul>
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-{% if session['user-role'] == 'USER' %}
-
-<form action="/add_new_member" method="post" style="padding:20px;">
-    <label for="membership">Membership Type:</label>
-    <select id="membership" name="membership" required>
-        <option value="">Select Membership Type</option>
-        <option value="BASIC">Basic</option>
-        <option value="SILVER">Silver</option>
-        <option value="GOLD">Gold</option>
-    </select><br><br>
-    <input type="submit" value="Add New Member">
-</form>    
-
-{% endif %}
 
 {% if session['user-role'] == 'ADMIN' %}
 <form action="/delete_member" method="post" style="padding:20px;">

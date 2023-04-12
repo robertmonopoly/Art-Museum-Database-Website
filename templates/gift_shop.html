@@ -6,82 +6,79 @@
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Gift Shop</title>
 <style>
-  div.gift {
-    border: 1px solid #ccc;
-    margin-left: 5%;
-    margin-right: 5%;
-    max-width: 90%;
-    margin-bottom:  10px;
-    width:70%;
-    display: inline-table;
-
+  html {
+      background-image: url({{ url_for('static', filename='img/silver.jpg') }});
+      background-size: cover;
+      font-family: Arial, sans-serif;
+  }
+  h1 {
+      text-align: center;
+      margin-top: 0;
   }
   
-  div.gift:hover {
-    border: 1px solid #777;
+  .homepageDescription {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 18px;
   }
-  
-  div.gift img {
-    width: 100%;
-    height: auto;
+  .gift {
+      border: 1px solid #ccc;
+      max-width: 90%;
+      margin: 10px auto;
+      display: inline-block;
+      width: 50%;
   }
-  
-  div.desc {
-    padding: 15px;
-    text-align: center;
-    width:100%;
-  
-   
+  .gift:hover {
+      border: 1px solid #777;
   }
-  
-  * {
-    box-sizing: border-box;
-    
+  .gift img {
+      width: 100%;
+      height: auto;
   }
-  
-  .responsive {
-    padding: 0 16px;
-    float: left;
-    width: 20%;
-
+  .desc {
+      padding: 15px;
+      text-align: center;
   }
-
-  /* Create three equal columns that floats next to each other */
-.column {
-  float: left;
-  width: 50%;
-  padding-top: 10px;
-  padding-bottom: 0px;
-  padding-left: 0px;
-  padding-right: 10px;
-  margin-bottom:0px;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media screen and (max-width: 600px) {
+  .row::after {
+      content: "";
+      clear: both;
+      display: table;
+  }
   .column {
-    width: 100%;
+      width: 25%;
+      float: left;
+      padding: 10px;
+      box-sizing: border-box;
   }
-}
-
-.info
-  {
-    width: 100%;
-    max-width: 90%;
-    margin-bottom: 2rem;
-    text-align:center;
-    margin-left: 6.5%;
+  .column:nth-child(odd) {
+      clear: left;
   }
-  
-
+  .info {
+      text-align: center;
+      margin: 20px 0;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+  }
+  .discount {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+  }
+  .discount button {
+      background-color: rgb(203, 41, 73);
+      color: white;
+      border: none;
+      padding: 5px;
+      font-size: 17px;
+      cursor: pointer;
+  }
+  .discount button:hover {
+      background-color: #d6304d;
+  }
 </style>
+
+
 
 </head>
 <body>
@@ -95,7 +92,7 @@
     <li><a href="{{url_for('home')}}">Home</a></li>
     <li class = "active"><a href="{{url_for('gift_shop')}}">Gift Shop</a></li>
     {% if session['user-role'] == 'ADMIN' %}
-    <li><a href="{{url_for('add_new_gift_shop_item')}}">Add New Gift Shop Item</a></li>
+    <li><a href="{{url_for('add_new_gift_shop_item')}}">Gift Shop Item Queries</a></li>
     {% endif %}
 </ul>
 
@@ -103,111 +100,41 @@
   prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
   always free to visit the MFA Shop.</p><br>
 
-<div class = "info" style="margin-left:8%">
-<p style="text-align: center; padding-left: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
-    <div class="responsive" >
-      <div class="gift">
-          <img src="{{url_for('static', filename = '/img/geisha_mug.jpg')}}" alt="Geisha Mug" width="600" height="400">
-        </a>
-        <div class="desc">Geisha Mug<br>
-          $14.99<br>
-          </div>
-      </div>
-    </div>
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/starrynight_mug.png')}}" alt="Starry Night Mug" width="600" height="400">
-        </a>
-        <div class="desc">Starry Night Mug<br>
-          $14.99<br>
-          </div>
-      </div>
-    </div>
-  
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/picasso_mug.jpg')}}" alt="Picasso Mug" width="600" height="400">
-        </a>
-        <div class="desc">Picasso Mug<br>
-          $14.99<br>
-          </div>
-      </div>
-    </div>
-  
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/wave_mug.jpg')}}" alt="Wave Mug" width="600" height="400">
-        </a>
-        <div class="desc">Wave Mug<br>
-          $14.99<br>
-          </div>
-      </div>
-    </div>
-
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/gift6.png')}}" alt="Wave Mug" width="600" height="400">
-        </a>
-        <div class="desc">Bluetooth Speaker<br>
-          $30<br>
-          </div>
-      </div>
-    </div>
-
-
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/gift3.png')}}" alt="Wave Mug" width="600" height="400">
-        </a>
-        <div class="desc">Love, Icebox<br>
-          $24.95<br>
-          </div>
-      </div>
-    </div>
-
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/gift2.png')}}" alt="Wave Mug" width="600" height="400">
-        </a>
-        <div class="desc">Square Minimal<br>
-          $850.00<br>
-          </div>
-      </div>
-    </div>
-
-
-    <div class="responsive">
-      <div class="gift">
-          <img src="{{url_for('static', filename ='/img/gift1.png')}}" alt="Wave Mug" width="600" height="400">
-        </a>
-        <div class="desc">Henri Matisse<br>
-          From $29<br>
-          </div>
-      </div>
-    </div>
- 
-  <div class="responsive">
-    <div class="gift">
-        <img src="{{url_for('static', filename ='/img/gift4.png')}}" alt="Wave Mug" width="600" height="400">
-      </a>
-      <div class="desc">Book of Poems<br>
-        $28.99<br>
+  <div class="info">
+    <div class="row">
+      <div class="column">
+        <div class="gift">
+          <img src="{{url_for('static', filename = '/img/geisha_mug.jpg')}}" alt="Geisha Mug">
+          <div class="desc">Geisha Mug<br>$14.99</div>
         </div>
+      </div>
+      <div class="column">
+        <div class="gift">
+          <img src="{{url_for('static', filename ='/img/starrynight_mug.png')}}" alt="Starry Night Mug">
+          <div class="desc">Starry Night Mug<br>$14.99</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <div class="gift">
+          <img src="{{url_for('static', filename ='/img/picasso_mug.jpg')}}" alt="Picasso Mug">
+          <div class="desc">Picasso Mug<br>$14.99</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="gift">
+          <img src="{{url_for('static', filename ='/img/wave_mug.jpg')}}" alt="Wave Mug">
+          <div class="desc">Wave Mug<br>$14.99</div>
+        </div>
+      </div>
     </div>
   </div>
+  
+  
 
-<div class="responsive">
-  <div class="gift">
-      <img src="{{url_for('static', filename ='/img/gift5.png')}}" alt="Wave Mug" width="600" height="400">
-    </a>
-    <div class="desc">Dinner Candles<br>
-      From $34<br>
-      </div>
-  </div>
-</div>
-</div>
 
-<div class = "info" style="margin-top: 40%;">
+<div class = "info">
 <h2 style="vertical-align: bottom; text-align: center; font-size: 17px;"> MFAH members receive a discount. Not a member? <a href = "/html/registration.html"><button style="background-color: rgb(203, 41, 73); color: whitesmoke; border: whitesmoke; padding: 5px; font-size: 17px;">Join today!</button></a></h2>
 </div>
 

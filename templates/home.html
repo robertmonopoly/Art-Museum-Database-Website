@@ -35,13 +35,19 @@
         {{ elements.navbar('exhibitions', 'Exhibitions')}}
         {{ elements.navbar('films', 'Films')}}
         {{ elements.navbar('gift_shop', 'Gift Shop')}}
-        {{ elements.navbar('members', 'Members')}}
+        {% if session['user-role'] == 'ADMIN' %}
+        {{ elements.navbar('members', 'Membership Management')}}
+        {% endif %}
+        {% if session['user-role'] == 'USER' %}
+        {{ elements.navbar('members', 'Memberships')}}
+        {% endif %}
+        {{ elements.navbar('donations', 'Donations')}}
         
         {% if session['user-role'] == 'ADMIN' %}
           {{ elements.navbar('report_gifts', 'Gift Report')}}
           {{ elements.navbar('report_tickets', 'Ticket Report')}}
           {{ elements.navbar('employees', 'Employees')}}
-          {{ elements.navbar('donations', 'Donations')}}
+          
         {% endif %}
         
           <li style="float:right"><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -56,7 +62,12 @@
 
     {{ elements.image_contain('artworks', '/img/art3.jpeg', 'Artworks' )}}
     {{ elements.image_contain('exhibitions', '/img/exhibit.png', 'Exhibitions' )}}
-    {{ elements.image_contain('members', '/img/mems.jpeg', 'Members' )}}
+    {% if session['user-role'] == 'ADMIN' %}
+    {{ elements.image_contain('members', '/img/mems.jpeg', 'Membership Management' )}}
+    {% endif %}
+    {% if session['user-role'] == 'USER' %}
+    {{ elements.image_contain('members', '/img/mems.jpeg', 'Memberships' )}}
+    {% endif %}
     {{ elements.image_contain('films', '/img/films.webp', 'Films' )}}
     {{ elements.image_contain('gift_shop', '/img/mfah_shop.png', 'Gift Shop' )}}
     {% if session['user-role'] == 'ADMIN' %}
