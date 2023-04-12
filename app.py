@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
+from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app, jsonify
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
@@ -168,6 +168,7 @@ def Eticket_details():
 def donations():
     user = session["user-role"]
     msg = ""
+    data = []
     donation_data = don.retrieve_donations_data(cur)
     donation_sum = don.retrieve_donation_sum(cur)
     if donation_data == []:
@@ -175,11 +176,11 @@ def donations():
         app.logger.info(donation_data)
         return render_template('donations.html', msg=msg)
     else:
-        data = {
-            'donation_data': donation_data,
-            'donation_sum': donation_sum[0]
-        }
-        app.logger.info(data)
+        data.append(donation_data)
+        data.append(donation_sum[0])
+
+        print(data[0])
+        #app.logger.info(data)
         return render_template('donations.html', data=data)
 
 
@@ -513,16 +514,12 @@ def add_film_ticket_transaction():
     num_tickets = request.form.get('total_adults')
     user_email = request.form.get('email')
     
-    if not selection or not num_tickets or not user_email:
-        flash('Please fill in all fields', 'error')
-        return redirect(url_for('Fticket_details'))
-
     try:
         data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
         print('Film tickets booked successfully!', 'success')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        print('Failed to book film tickets. Please try again later', 'error')
+        flash('Failed to book film tickets. Please try again later', 'error')
         return redirect(url_for('Fticket_details'))
 
     return redirect(url_for('Fticket_details'))
