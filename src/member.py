@@ -1,3 +1,4 @@
+from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
 
 def retrieve_member_data(cur):
     cur.execute("""SELECT * FROM user_account""")
@@ -5,14 +6,35 @@ def retrieve_member_data(cur):
     return data    
 
 
+from flask import flash
+
 def update_member(cur, conn, email, membership_type):
     try:
         cur.execute("UPDATE user_account SET membership = %s WHERE email = %s", 
             (membership_type, email))
         conn.commit()
-        print("User nembership status updated successfully")
+        
+        if membership_type == 'BASIC':
+            amount_charged = 20
+        elif membership_type == 'SILVER':
+            amount_charged = 30
+        elif membership_type == 'GOLD':
+            amount_charged = 40
+        message = f"The following amount has been charged to your account: ${amount_charged}"
+        
+        flash(message, 'success')
+        return redirect(url_for('members'))
+        
     except Exception as e:
         print("An error occurred while updating the user account: ", e)
+
+
+        
+        print("User membership status updated successfully")
+        return render_template('members.html', message=message)
+    except Exception as e:
+        print("An error occurred while updating the user account: ", e)
+
 
 def delete_member(cur, conn, user_account_id):
     try:

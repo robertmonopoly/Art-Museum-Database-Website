@@ -65,7 +65,14 @@ border-radius: 4px;
 </style>
 <body>
 
+{% if session['user-role'] == 'ADMIN' %}
 <h1>Members</h1>
+{% endif %}
+
+{% if session['user-role'] == 'USER' %}
+<h1>Membership Store</h1>
+{% endif %}
+
 
 <ul class = "navbarone">
     <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -79,6 +86,12 @@ border-radius: 4px;
 
 {% if session['user-role'] == 'USER' %}
 
+
+<p>The museum offers three different membership levels: Basic, Silver, and Gold. Basic membership costs $20 a month and provides a 10% discount on all museum items, 
+  including gift shop purchases. Silver membership costs $30 a month and provides a 20% discount, while Gold membership 
+  costs $40 a month and provides a 30% discount. These memberships are a wonderful way for frequent museum visitors to save money while supporting the museum's programs and exhibits.</p>
+
+
 <form action="/update_member" method="post" style="padding:20px;">
   <label for="email">Email Address:</label>
   <input type="email" name="email" required><br><br>
@@ -91,6 +104,18 @@ border-radius: 4px;
   </select><br><br>
   <input type="submit" value="Add New Member">
 </form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
 
 {% endif %}
 
