@@ -91,7 +91,18 @@ border-radius: 4px;
 
 </div>
 {% endif %}
-
+<body>
+  <div class="item-name">
+      <form action=/donations method='GET'>
+          <p><h3>Please enter the start date and end date.</h3></p>
+          <label for="start">Start:</label>
+          <input type="date" name="start-date">
+          <label for="end">End:</label>
+          <input type="date" id="end" name="end-date">
+          <p><input type="submit" value="Grab Report"/></p>
+      </form>
+  </div>
+</body>
 {% if session['user-role'] == 'ADMIN' %}
 <table class="my-table">
   <tbody>
@@ -134,9 +145,6 @@ border-radius: 4px;
   {% endif %}
 
 {% endif %}
-
-
-
 
 </body>
 </html>
