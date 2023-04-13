@@ -39,8 +39,14 @@ def home():
     if request.method == 'GET':
         user = session["user-role"]
         req = request.cookies.get('e_title')
-        if req:
-            flash(req)
+
+        if req and rows:
+            for row in rows:
+                this_time = row[2].strftime("%b. %d")
+                flash(f"Checkout our new event, {req}, on {this_time}!")
+            # then clear notifs table
+            cur.execute("""DELETE FROM notifs""")
+            conn.commit()
         return render_template("home.html", user=user)
     
 @app.route('/registration', methods=['POST','GET'])
@@ -170,9 +176,12 @@ def donations():
     user = session["user-role"]
     msg = ""
     data = []
-    donation_data = don.retrieve_donations_data(cur)
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    donation_data = don.retrieve_donations_data(cur, start_date, end_date)
     donation_sum = don.retrieve_donation_sum(cur)
-    if donation_data == []:
+
+    if donation_data and start_date and end_date == []:
         msg = "No Donation Data Available"
         app.logger.info(data)
         return render_template('donations.html', msg=msg)
@@ -189,7 +198,7 @@ def add_new_donation():
     if request.method == 'POST':
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
-        data = don.insert_donation(cur, conn, email_address, money_amount)
+        don.insert_donation(cur, conn, email_address, money_amount)
         return render_template('donations.html')
     else:
         return render_template('donations.html')
@@ -477,15 +486,15 @@ def Fticket_details():
 
     try:
         film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-        print('Film tickets booked successfully!', 'success')
+        print('Film tickets booked successfully!')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        print('Failed to book film tickets. Please try again later', 'error')
-        return render_template('Fticket_details.html')
+        # remember to flash message here bc not done yet
+        flash('Failed to book film tickets. Please try again later')
 
     return render_template('Fticket_details.html', user=user)
 
-# TODO: need to create page
+
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
