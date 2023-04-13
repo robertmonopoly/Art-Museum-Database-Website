@@ -46,15 +46,11 @@ def home():
 def notification():
     user = session["user-role"]
     cur.execute("""SELECT * FROM notifs""")
-    rows = cur.fetchall()
-    this_time = ""
-    if rows:
-        for row in rows:
-            this_time = row[2].strftime("%b. %d")
-    else:
+    data = cur.fetchall()
+    if data == []:
         msg = "You have no notifications at this time."
-        return render_template('notification.html.html', msg=msg)
-    return render_template("notification.html")
+        return render_template('notification.html', msg=msg)
+    return render_template("notification.html", data=data)
 
 @app.route('/registration', methods=['POST','GET'])
 def registration():
