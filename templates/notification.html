@@ -43,6 +43,17 @@
     border: 2px solid #ccc;
     border-radius: 4px;
   }
+  .my-table tr:nth-child(even) {
+    background-color: #98bfe4;
+  }
+
+  .my-table tr:nth-child(odd) {
+    background-color: #F6F6F6;
+  }
+
+  .my-table td, .my-table th {
+      padding: 20px;
+  }
 </style>
 </head>
 <body>
@@ -65,7 +76,7 @@
           {% for item in data %}
           <tr>
               <td>{{item[1]}}</td>
-              <td>{{item[2]}}</td>             
+              <td>{{item[2].strftime("%b. %d, %Y")}} at {{item[2].strftime("%I:%M:%S %p")}} </td>             
           </tr>
           {% endfor %}
         {% else %}
