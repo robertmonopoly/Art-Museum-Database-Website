@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
+import time
 
 # modules
 import src.helper as hp
@@ -37,9 +38,8 @@ def index():
 def home():
     if request.method == 'GET':
         user = session["user-role"]
-        cur.execute("""SELECT * FROM notifs""")
-        rows = cur.fetchall()
         req = request.cookies.get('e_title')
+
         if req and rows:
             for row in rows:
                 this_time = row[2].strftime("%b. %d")
@@ -183,16 +183,15 @@ def donations():
 
     if donation_data and start_date and end_date == []:
         msg = "No Donation Data Available"
-        app.logger.info(donation_data)
+        app.logger.info(data)
         return render_template('donations.html', msg=msg)
     else:
-        data.append(donation_data)
-        data.append(donation_sum[0])
-
-        print(data[0])
-        #app.logger.info(data)
+        data = {
+            'donation_data': donation_data,
+            'donation_sum': donation_sum[0]
+        }
+        app.logger.info(data)
         return render_template('donations.html', data=data)
-
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
@@ -343,22 +342,48 @@ def delete_employee():
         emp.delete_employee(cur, conn, id_num)
     return render_template('add_new_employee.html')
    
+
+@app.get('/add_new_member')
+def add_new_member():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip']
+        email = request.form['email']
+        phone_number = request.form['phone_number']
+        gender = request.form['gender']
+        dob = request.form['dob']
+        membership_type = request.form['membership']
+        mem.insert_member(cur, conn, first_name, last_name,
+        address_line1, address_line2, city, state,
+        zip_code, email, phone_number, gender, dob, membership_type)
+    return render_template('add_new_member.html')
     
 
-@app.route('/update_member', methods = ['GET', 'POST'])
+@app.route('/update_member', methods = ['POST'])
 def update_member():
     if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip']
         email = request.form['email']
+        phone_number = request.form['phone_number']
+        gender = request.form['gender']
+        dob = request.form['dob']
         membership_type = request.form['membership']
-        mem.update_member(cur, conn,
-        email, membership_type)
-    return render_template('members.html')
+        mem.update_member(cur, conn, first_name, last_name,
+        address_line1, address_line2, city, state,
+        zip_code, email, phone_number, gender, dob, membership_type)
+    return render_template('add_new_member.html')
     
-
-@app.route('/add_new_member', methods = ['GET', 'POST'])
-def add_new_member():
-    user = session["user-role"]
-    return render_template('add_new_member.html',user=user)
 
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
@@ -417,7 +442,7 @@ def films():
     user = session["user-role"]
     return render_template('films.html',user=user)
 
-@app.route('/members', methods=['GET', 'POST'])
+@app.get('/members')
 def members():
     user = session["user-role"]
     msg = ""
@@ -464,7 +489,8 @@ def Fticket_details():
         print('Film tickets booked successfully!')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        return render_template('Fticket_details.html')
+        # remember to flash message here bc not done yet
+        flash('Failed to book film tickets. Please try again later')
 
     return render_template('Fticket_details.html', user=user)
 
@@ -528,7 +554,7 @@ def add_film_ticket_transaction():
   return render_template('Fticket_details.html')'''
 
 
-@app.route('/add_film_ticket_transaction', methods=['POST'])
+'''@app.route('/add_film_ticket_transaction', methods=['POST'])
 def add_film_ticket_transaction():
     user_role = session.get('user-role')
     if not user_role:
@@ -539,6 +565,10 @@ def add_film_ticket_transaction():
     num_tickets = request.form.get('total_adults')
     user_email = request.form.get('email')
     
+    if not selection or not num_tickets or not user_email:
+        flash('Please fill in all fields', 'error')
+        return redirect(url_for('Fticket_details'))
+
     try:
         data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
         print('Film tickets booked successfully!', 'success')
@@ -547,7 +577,7 @@ def add_film_ticket_transaction():
         flash('Failed to book film tickets. Please try again later', 'error')
         return redirect(url_for('Fticket_details'))
 
-    return redirect(url_for('Fticket_details'))
+    return redirect(url_for('Fticket_details'))'''
 
 
 # TODO: need to make third report
