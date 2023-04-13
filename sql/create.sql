@@ -78,7 +78,7 @@ CREATE TABLE exhibitions (
 CREATE TABLE ticket_sales(
     event_transac_id UUID PRIMARY KEY, 
     user_id UUID NOT NULL REFERENCES user_account(user_id), 
-    event_id UUID REFERENCES exhibitions(exhib_id),
+    event_id UUID NOT NULL,
     event_name TEXT NOT NULL,
     num_tickets INTEGER NOT NULL
 );

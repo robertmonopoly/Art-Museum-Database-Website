@@ -43,7 +43,7 @@ def home():
         if req and rows:
             for row in rows:
                 this_time = row[2].strftime("%b. %d")
-                flash(f"Checkout our new event, {row[1]}, on {this_time}!")
+                flash(f"Checkout our new event, {req}, on {this_time}!")
             # then clear notifs table
             cur.execute("""DELETE FROM notifs""")
             conn.commit()
@@ -176,9 +176,12 @@ def donations():
     user = session["user-role"]
     msg = ""
     data = []
-    donation_data = don.retrieve_donations_data(cur)
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    donation_data = don.retrieve_donations_data(cur, start_date, end_date)
     donation_sum = don.retrieve_donation_sum(cur)
-    if donation_data == []:
+
+    if donation_data and start_date and end_date == []:
         msg = "No Donation Data Available"
         app.logger.info(donation_data)
         return render_template('donations.html', msg=msg)
@@ -196,7 +199,7 @@ def add_new_donation():
     if request.method == 'POST':
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
-        data = don.insert_donation(cur, conn, email_address, money_amount)
+        don.insert_donation(cur, conn, email_address, money_amount)
         return render_template('donations.html')
     else:
         return render_template('donations.html')
@@ -445,12 +448,27 @@ def employees():
         app.logger.info(data)
         return render_template('employees.html', data=data)
 
-@app.get('/Fticket_details')
+@app.route('/Fticket_details', methods = ['GET', 'POST'])
 def Fticket_details():
     user = session["user-role"]
+    if not user:
+        return render_template('login')
+    
+    selection = request.form.get('film_name')
+    num_tickets = request.form.get('total_adults')
+    user_email = request.form.get('visitor_email')
+    print(f"{selection} and {num_tickets} and {user_email}")
+
+    try:
+        film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
+        print('Film tickets booked successfully!')
+    except Exception as e:
+        print(f"Error booking film tickets: {e}")
+        return render_template('Fticket_details.html')
+
     return render_template('Fticket_details.html', user=user)
 
-# TODO: need to create page
+
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']

@@ -58,7 +58,7 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
 def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
-        event_transac_id = uuid.uuid4()
+        event_transac_id = str(uuid.uuid4())
 
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))

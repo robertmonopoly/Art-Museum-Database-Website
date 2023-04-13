@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -77,13 +77,13 @@
    
 
   <h2 style="color:blue; font-size: 25px; padding:20px;">Get Tickets Here</h2>
-  <form action="/add_film_ticket_transaction" method="post" style="width:80%; margin-left:20px; font-size: 17px;">
+  <form action="/Fticket_details" method="post" style="width:80%; margin-left:20px; font-size: 17px;">
   <div class="elem-group inlined">
     <div class="elem-group">
       <label for="film_name">Select Film Name</label>
       <select id="selection" name="film_name" style ="padding:4px"required >
         <option value="">Choose Film</option>
-        <option value="general">Tadao Ando - From Emptiness to Infinity</option>
+        <option value="film1">Tadao Ando - From Emptiness to Infinity</option>
         <option value="silver">Marina Abramovic - The Artist is Present</option>
         <option value="bronze">The Art of Silence</option>
         <option value="gold">Hilma af Klint - Beyond the Visible</option>
