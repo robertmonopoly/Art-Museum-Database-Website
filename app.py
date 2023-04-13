@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
-
+import time
 # modules
 import src.helper as hp
 import src.art as art
@@ -38,13 +38,16 @@ def home():
     if request.method == 'GET':
         user = session["user-role"]
         cur.execute("""SELECT * FROM notifs""")
-        rows = cur.fetchall()
-        req = request.cookies.get('e_title')
-        if req and rows:
-            for row in rows:
+        event = cur.fetchall()
+        this_time = ""
+        if event:
+            for row in event:
+                print(row[2])
                 this_time = row[2].strftime("%b. %d")
-                flash(f"Checkout our new event, {req}, on {this_time}!")
-            # then clear notifs table
+        req = request.cookies.get('e_title')
+        if req:               
+            flash(f"Checkout our new event, {req} on {this_time}!")
+        #     # then clear notifs table
             cur.execute("""DELETE FROM notifs""")
             conn.commit()
         return render_template("home.html", user=user)
