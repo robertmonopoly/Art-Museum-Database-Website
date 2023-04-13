@@ -94,8 +94,6 @@ CREATE TABLE films (
     film_rating TEXT NOT NULL
 );
 
-
-
 CREATE TABLE donation (
     donation_transaction_id UUID PRIMARY KEY,
     donator_email VARCHAR (100) NOT NULL,

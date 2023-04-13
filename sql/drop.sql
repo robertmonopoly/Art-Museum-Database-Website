@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS films CASCADE;
 
 DROP TABLE IF EXISTS ticket_sales CASCADE;
 
-DROP TABLE IF EXISTS exhib_ticket_sales;
+DROP TABLE IF EXISTS exhibitions;
 
 DROP TABLE IF EXISTS employees CASCADE;
 
