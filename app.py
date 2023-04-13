@@ -36,20 +36,26 @@ def index():
 def home():
     if request.method == 'GET':
         user = session["user-role"]
-        cur.execute("""SELECT * FROM notifs""")
-        rows = cur.fetchall()
-        this_time = ""
-        if rows:
-            for row in rows:
-                this_time = row[2].strftime("%b. %d")
-        req = request.cookies.get('e_title')
+        # this is just to guide users to the notification tab
+        req = request.cookies.get('e_title') 
         if req:
-            flash(f"Checkout our new event, {req} on {this_time}!")
-             # then clear notifs table
-            cur.execute("""DELETE FROM notifs""")
-            conn.commit()
+            flash(f"A new event, {req}, has been added!")
     return render_template("home.html", user=user)
-    
+
+@app.get('/notification')
+def notification():
+    user = session["user-role"]
+    cur.execute("""SELECT * FROM notifs""")
+    rows = cur.fetchall()
+    this_time = ""
+    if rows:
+        for row in rows:
+            this_time = row[2].strftime("%b. %d")
+    else:
+        msg = "You have no notifications at this time."
+        return render_template('notification.html.html', msg=msg)
+    return render_template("notification.html")
+
 @app.route('/registration', methods=['POST','GET'])
 def registration():
     if request.method == 'POST':
@@ -180,18 +186,17 @@ def donations():
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     donation_data = don.retrieve_donations_data(cur, start_date, end_date)
-    donation_sum = don.retrieve_donation_sum(cur)
+    donation_sum = don.retrieve_donation_sum(cur, start_date, end_date)
 
-    if donation_data and start_date and end_date == []:
+    if donation_data == []:
         msg = "No Donation Data Available"
         app.logger.info(data)
         return render_template('donations.html', msg=msg)
     else:
-        data = {
-            'donation_data': donation_data,
-            'donation_sum': donation_sum[0]
-        }
-        app.logger.info(data)
+        data.append(donation_data)
+        data.append(donation_sum[0])
+
+        print("this is the don. sum: ", data[0])
         return render_template('donations.html', data=data)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])

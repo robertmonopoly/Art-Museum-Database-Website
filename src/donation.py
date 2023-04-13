@@ -16,9 +16,11 @@ def retrieve_donations_data(cur, s_date, e_date):
     data = cur.fetchall()
     return data 
 
-def retrieve_donation_sum(cur):
+def retrieve_donation_sum(cur, s_date, e_date):
     cur.execute("""SELECT SUM(donation_amount)
-    FROM donation""")
+    FROM donation as d
+    WHERE d.donation_on >= %s AND d.donation_on <= %s
+    """, (s_date, e_date))
     data = cur.fetchone()
     return data
 
