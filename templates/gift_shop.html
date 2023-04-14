@@ -11,71 +11,17 @@
       background-size: cover;
       font-family: Arial, sans-serif;
   }
-  h1 {
-      text-align: center;
-      margin-top: 0;
-  }
-  
-  .homepageDescription {
-      text-align: center;
-      margin: 20px 0;
-      font-size: 18px;
-  }
-  .gift {
-      border: 1px solid #ccc;
-      max-width: 90%;
-      margin: 10px auto;
-      display: inline-block;
-      width: 50%;
-  }
-  .gift:hover {
-      border: 1px solid #777;
-  }
-  .gift img {
-      width: 100%;
-      height: auto;
-  }
-  .desc {
-      padding: 15px;
-      text-align: center;
-  }
-  .row::after {
-      content: "";
-      clear: both;
-      display: table;
-  }
-  .column {
-      width: 25%;
-      float: left;
-      padding: 10px;
-      box-sizing: border-box;
-  }
-  .column:nth-child(odd) {
-      clear: left;
-  }
-  .info {
-      text-align: center;
-      margin: 20px 0;
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-  }
-  .discount {
-      margin-top: 20px;
-      text-align: center;
-      font-size: 18px;
-  }
-  .discount button {
-      background-color: rgb(203, 41, 73);
-      color: white;
-      border: none;
-      padding: 5px;
-      font-size: 17px;
-      cursor: pointer;
-  }
-  .discount button:hover {
-      background-color: #d6304d;
-  }
+  .my-table tr:nth-child(even) {
+          background-color: #98bfe4;
+        }
+
+        .my-table tr:nth-child(odd) {
+          background-color: #F6F6F6;
+        }
+
+        .my-table td, .my-table th {
+            padding: 20px;
+        }
 </style>
 
 
@@ -88,6 +34,7 @@
 
 </div>
 
+
 <ul class = "navbarone">
     <li><a href="{{url_for('home')}}">Home</a></li>
     <li class = "active"><a href="{{url_for('gift_shop')}}">Gift Shop</a></li>
@@ -96,48 +43,64 @@
     {% endif %}
 </ul>
 
-<p class = "homepageDescription" style="text-align: center;"> The MFA Shop offers a unique selection of artful gifts, 
+<p class = "homepageDescription" style="text-align: center;"> The Gift Shop offers a unique selection of artful gifts, 
   prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
-  always free to visit the MFA Shop.</p><br>
+  always free to visit the Gift Shop.</p><br>
 
-  <div class="info">
-    <div class="row">
-      <div class="column">
-        <div class="gift">
-          <img src="{{url_for('static', filename = '/img/geisha_mug.jpg')}}" alt="Geisha Mug">
-          <div class="desc">Geisha Mug<br>$14.99</div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="gift">
-          <img src="{{url_for('static', filename ='/img/starrynight_mug.png')}}" alt="Starry Night Mug">
-          <div class="desc">Starry Night Mug<br>$14.99</div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="column">
-        <div class="gift">
-          <img src="{{url_for('static', filename ='/img/picasso_mug.jpg')}}" alt="Picasso Mug">
-          <div class="desc">Picasso Mug<br>$14.99</div>
-        </div>
-      </div>
-      <div class="column">
-        <div class="gift">
-          <img src="{{url_for('static', filename ='/img/wave_mug.jpg')}}" alt="Wave Mug">
-          <div class="desc">Wave Mug<br>$14.99</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  
+  <div>
 
 
-<div class = "info">
-<h2 style="vertical-align: bottom; text-align: center; font-size: 17px;"> MFAH members receive a discount. Not a member? <a href = "/html/registration.html"><button style="background-color: rgb(203, 41, 73); color: whitesmoke; border: whitesmoke; padding: 5px; font-size: 17px;">Join today!</button></a></h2>
+  <table class="my-table">
+    <tbody>
+        {% if data %}
+        <tr>
+          {% if session['user-role'] == 'ADMIN' %}
+            <th>SKU</th>
+            {% endif %}
+            <th>Gift Name</th>
+            <th>Gift Type</th>
+            <th>Price</th>
+        </tr>
+        {% for item in data %}
+        <tr>
+          {% if session['user-role'] == 'ADMIN' %}
+            <td>{{item[0]}}</td>
+            {% endif %}
+            <td>{{item[1]}}</td>
+            <td>{{item[2]}}</td>
+            <td>{{item[3]}}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <div>{{msg}}</div>
+        {% endif %}
+    </tbody>
+</table>  
+
+{% if session['user-role'] == 'USER' %}
+
+<form action="/gift_shop" method="post" style="padding:20px;">
+  <label for="email">Email:</label>
+  <input type="text" name="email" required><br><br>
+  <label for="item_name">Item Name:</label>
+  <input type="text" name="item_name" required><br><br>
+  <input type="submit" value="Purchase Item">
+</form>
+
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
+
 </div>
-
 
 </body>
 </html>

@@ -35,7 +35,7 @@ CREATE TABLE user_login (
 
 CREATE TABLE gift_shop_item (
     gift_SKU TEXT PRIMARY KEY,
-    gift_name TEXT NOT NULL,
+    gift_name TEXT NOT NULL UNIQUE,
     gift_type TEXT NOT NULL,
     gift_price MONEY NOT NULL
 );
