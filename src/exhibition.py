@@ -1,4 +1,5 @@
 #import 
+from datetime import date
 import uuid
 
 def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
@@ -37,7 +38,7 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
         event_transac_id = str(uuid.uuid4())
-
+        trans_date = date.today()
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
@@ -49,8 +50,8 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
         
         # Insert the ticket transaction into the database
         cur.execute("""INSERT INTO ticket_sales
-                        VALUES (%s, %s, %s, %s, %s)""",
-                    (event_transac_id, user_id, event_id, event_name, num_tickets))
+                        VALUES (%s, %s, %s, %s, %s, %s)""",
+                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets))
         conn.commit()
 
         # Print a success message to the command line

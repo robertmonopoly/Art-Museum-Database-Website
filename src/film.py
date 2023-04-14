@@ -1,6 +1,6 @@
 # import
 import uuid
-
+from datetime import date
 from flask import request
 
 def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate):
@@ -59,15 +59,10 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
         event_transac_id = str(uuid.uuid4())
-
+        trans_date = date.today()
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
-        
-
-        # Get the price per ticket for the given event name - don't need this for insertion
-        #cur.execute("""SELECT film_ticket_price FROM films WHERE film_title = %s""", (event_name,))
-        # price_per_ticket = cur.fetchone()[0]
 
         # Get the event ID for the given event name
         cur.execute("""SELECT film_id FROM films WHERE film_title = %s""", (event_name,))
@@ -75,8 +70,8 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
         
         # Insert the ticket transaction into the database
         cur.execute("""INSERT INTO ticket_sales
-                        VALUES (%s, %s, %s, %s, %s)""",
-                    (event_transac_id, user_id, event_id, event_name, num_tickets))
+                        VALUES (%s, %s, %s, %s, %s, %s)""",
+                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets))
         conn.commit()
 
         # Print a success message to the command line
