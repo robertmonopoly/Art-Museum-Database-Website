@@ -205,8 +205,8 @@ def add_new_donation():
     
 @app.get('/exhibitions')
 def exhibitions():
-    user = user = session["user-role"]
-    return render_template('exhibitions.html', user=user)
+    user = session["user-role"]
+    return render_template('exhibitions.html',user=user)
 
 @app.route('/add_new_exhibition', methods = ['GET', 'POST'])
 def add_new_exhibition():
@@ -482,6 +482,27 @@ def Fticket_details():
 
     return render_template('Fticket_details.html', user=user)
 
+@app.route('/Eticket_details', methods = ['GET', 'POST'])
+def Eticket_details():
+    user = session["user-role"]
+    if not user:
+        return render_template('login')
+    
+    selection = request.form.get('Exh_name')
+    num_tickets = request.form.get('total_adults')
+    user_email = request.form.get('visitor_email')
+    #print(f"{selection} and {num_tickets} and {user_email}")
+
+    try:
+        exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+        print('Exhibition tickets booked successfully!')
+    except Exception as e:
+        print(f"Error booking Exhibition tickets: {e}")
+        # remember to flash message here bc not done yet
+        flash('Failed to book Exhibition tickets. Please try again later')
+
+    return render_template('Eticket_details.html', user=user)
+
 # TODO: need to create page
 @app.route('/user_info')
 def user_info():
@@ -515,57 +536,22 @@ def report_gifts():
             
 @app.get('/report_tickets')
 def report_tickets():
+    user = session["user-role"]
     msg = ""
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if start_date and end_date:
         data = rep.insert_ticket_rep(cur, start_date, end_date)
+        sales_sum = rep.insert_ticket_rep(cur, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_tickets.html', msg=msg)
         app.logger.info(data)
+        app.logger.info(sales_sum)
         return render_template('report_tickets.html', data=data) # fill it in
     else:
         return render_template('report_tickets.html')
     
-'''@app.route('/add_film_ticket_transaction', methods = ['GET', 'POST'])
-def add_film_ticket_transaction():
-  user = session["user-role"] 
-  selection = request.form['film_name'] 
-  num_tickets = request.form['total_adults']
-  user_email = request.form['email']
-  try:      
-    data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-    print("Film tickets booked successfully!")
-  except Exception as e:
-        print (f"Error booking film tickets: {e}")
-  return render_template('Fticket_details.html')'''
-
-
-'''@app.route('/add_film_ticket_transaction', methods=['POST'])
-def add_film_ticket_transaction():
-    user_role = session.get('user-role')
-    if not user_role:
-        flash('Please log in first', 'error')
-        return redirect(url_for('login'))
-    
-    selection = request.form.get('film_name')
-    num_tickets = request.form.get('total_adults')
-    user_email = request.form.get('email')
-    
-    if not selection or not num_tickets or not user_email:
-        flash('Please fill in all fields', 'error')
-        return redirect(url_for('Fticket_details'))
-
-    try:
-        data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-        print('Film tickets booked successfully!', 'success')
-    except Exception as e:
-        print(f"Error booking film tickets: {e}")
-        flash('Failed to book film tickets. Please try again later', 'error')
-        return redirect(url_for('Fticket_details'))
-
-    return redirect(url_for('Fticket_details'))'''
 
 
 # TODO: need to make third report
