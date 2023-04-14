@@ -401,12 +401,11 @@ def add_new_gift_shop_item():
 
 @app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
-    gift_sku = request.form['sku']
     gift_name = request.form['name']
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        gift.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
+        gift.update_gift_item(cur, conn, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
@@ -416,9 +415,9 @@ def update_gift_shop_item():
 
 @app.route('/delete_gift_shop_item', methods=['POST'])
 def delete_gift_shop_item():
-    gift_sku = request.form['sku']
+    gift_name = request.form['name']
     try:
-        gift.delete_gift_shop_item(cur, conn, gift_sku)
+        gift.delete_gift_shop_item(cur, conn, gift_name)
         flash('Gift item deleted successfully')
     except Exception as e:
         print (f"Error deleting gift item: {e}")

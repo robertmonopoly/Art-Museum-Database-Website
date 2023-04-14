@@ -19,9 +19,9 @@ def insert_gift_item(cur, conn, gift_name, gift_type, gift_price):
     except Exception as e:
         print (f"Error inserting gift item: {e}")
    
-def update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
-    sql_query = """UPDATE gift_shop_item SET gift_name = %s, gift_type = %s, gift_price = %s WHERE gift_SKU = %s"""
-    values = (gift_name, gift_type, gift_price, gift_sku)
+def update_gift_item(cur, conn, gift_name, gift_type, gift_price):
+    sql_query = """UPDATE gift_shop_item SET gift_type = %s, gift_price = %s WHERE gift_name = %s"""
+    values = (gift_type, gift_price, gift_name)
     try:
         cur.execute(sql_query,values)
         conn.commit()
@@ -29,9 +29,9 @@ def update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price):
     except Exception as e:
         print (f"Error updating gift item: {e}")
 
-def delete_gift_shop_item(cur, conn, gift_sku):
+def delete_gift_shop_item(cur, conn, gift_name):
     try:
-        cur.execute("DELETE FROM gift_shop_item WHERE gift_sku = %s", (gift_sku,))
+        cur.execute("DELETE FROM gift_shop_item WHERE gift_name = %s", (gift_name,))
         conn.commit()
         print("Item deleted successfully")
     except Exception as e:
