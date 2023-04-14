@@ -2,7 +2,7 @@
 import uuid
 from datetime import date
 # 3rd report
-def retrieve_donations_data(cur):
+def retrieve_donations_data(cur, s_date, e_date):
 
     # dont need uuid in report
     cur.execute("""SELECT u.first_name, u.last_name, 
@@ -10,14 +10,17 @@ def retrieve_donations_data(cur):
     FROM donation as d
     INNER JOIN user_account as u
     ON d.donator_email = u.email
+    WHERE d.donation_on >= %s AND d.donation_on <= %s
     GROUP BY u.first_name, u.last_name, d.donator_email, d.donation_amount, u.membership, d.donation_on
-    """)
+    """, (s_date,e_date))
     data = cur.fetchall()
     return data 
 
-def retrieve_donation_sum(cur):
+def retrieve_donation_sum(cur, s_date, e_date):
     cur.execute("""SELECT SUM(donation_amount)
-    FROM donation""")
+    FROM donation as d
+    WHERE d.donation_on >= %s AND d.donation_on <= %s
+    """, (s_date, e_date))
     data = cur.fetchone()
     return data
 

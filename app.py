@@ -2,8 +2,6 @@ from flask import Flask, request, render_template, make_response, redirect, url_
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
-import time
-
 # modules
 import src.helper as hp
 import src.art as art
@@ -38,11 +36,22 @@ def index():
 def home():
     if request.method == 'GET':
         user = session["user-role"]
-        req = request.cookies.get('e_title')
+        # this is just to guide users to the notification tab
+        req = request.cookies.get('e_title') 
         if req:
-            flash(req)
-        return render_template("home.html", user=user)
-    
+            flash(f"A new event, {req}, has been added!")
+    return render_template("home.html", user=user)
+
+@app.get('/notification')
+def notification():
+    user = session["user-role"]
+    cur.execute("""SELECT * FROM notifs""")
+    data = cur.fetchall()
+    if data == []:
+        msg = "You have no notifications at this time."
+        return render_template('notification.html', msg=msg)
+    return render_template("notification.html", data=data)
+
 @app.route('/registration', methods=['POST','GET'])
 def registration():
     if request.method == 'POST':
@@ -168,18 +177,20 @@ def donations():
     user = session["user-role"]
     msg = ""
     data = []
-    donation_data = don.retrieve_donations_data(cur)
-    donation_sum = don.retrieve_donation_sum(cur)
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    donation_data = don.retrieve_donations_data(cur, start_date, end_date)
+    donation_sum = don.retrieve_donation_sum(cur, start_date, end_date)
+
     if donation_data == []:
         msg = "No Donation Data Available"
         app.logger.info(data)
         return render_template('donations.html', msg=msg)
     else:
-        data = {
-            'donation_data': donation_data,
-            'donation_sum': donation_sum[0]
-        }
-        app.logger.info(data)
+        data.append(donation_data)
+        data.append(donation_sum[0])
+
+        print("this is the don. sum: ", data[0])
         return render_template('donations.html', data=data)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
@@ -187,7 +198,7 @@ def add_new_donation():
     if request.method == 'POST':
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
-        data = don.insert_donation(cur, conn, email_address, money_amount)
+        don.insert_donation(cur, conn, email_address, money_amount)
         return render_template('donations.html')
     else:
         return render_template('donations.html')
@@ -356,22 +367,10 @@ def add_new_member():
 @app.route('/update_member', methods = ['POST'])
 def update_member():
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
         email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
         membership_type = request.form['membership']
-        mem.update_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
+        mem.update_member(cur, conn, email, membership_type)
+    return render_template('members.html')
     
 
 @app.route('/delete_member', methods = ['POST'])
@@ -478,32 +477,10 @@ def Fticket_details():
         print('Film tickets booked successfully!')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        return render_template('Fticket_details.html')
+        # remember to flash message here bc not done yet
+        flash('Failed to book film tickets. Please try again later')
 
     return render_template('Fticket_details.html', user=user)
-
-@app.route('/Eticket_details', methods = ['GET', 'POST'])
-def Eticket_details():
-    user_r = session["user-role"]
-
-    if not user:
-        return render_template('login')
-    
-    sel = request.form.get('Exh_name')
-    num_tick = request.form.get('total_adults')
-    email = request.form.get('visitor_email')
-    #print(f"{sel} and {num_tick} and {email}")
-
-    
-    try:
-        exhib.insert_e_ticket_trans(cur, conn, sel, num_tick, email)
-        print('Exhibit tickets booked successfully!')
-    except Exception as e:
-        print(f"Error booking exhibit tickets: {e}")
-        return render_template('Eticket_details.html')
-    
-    return render_template('Eticket_details.html', user_r=user_r)
-
 
 # TODO: need to create page
 @app.route('/user_info')

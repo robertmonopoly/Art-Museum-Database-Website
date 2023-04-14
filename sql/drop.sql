@@ -2,8 +2,6 @@ DROP TRIGGER IF EXISTS new_exhib ON exhibitions CASCADE;
 
 DROP FUNCTION IF EXISTS exhibit_insert_trigger_fnc CASCADE;
 
-DROP TABLE IF EXISTS user_login CASCADE;
-
 DROP TABLE IF EXISTS notifs CASCADE;
 
 DROP TABLE IF EXISTS donation CASCADE;
@@ -14,17 +12,17 @@ DROP TABLE IF EXISTS exhibitions CASCADE;
 
 DROP TABLE IF EXISTS ticket_sales CASCADE;
 
-DROP TABLE IF EXISTS exhib_ticket_sales;
+DROP TABLE IF EXISTS exhibitions;
 
 DROP TABLE IF EXISTS employees CASCADE;
-
-DROP TABLE IF EXISTS ticket_sales CASCADE;
 
 DROP TABLE IF EXISTS gift_shop_item_inventory CASCADE;
 
 DROP TABLE IF EXISTS gift_shop_sales CASCADE;
 
 DROP TABLE IF EXISTS gift_shop_item CASCADE;
+
+DROP TABLE IF EXISTS user_login CASCADE;
 
 DROP TABLE IF EXISTS user_account CASCADE;
 
