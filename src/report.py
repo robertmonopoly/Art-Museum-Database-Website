@@ -25,4 +25,5 @@ def insert_ticket_rep(cur, s_date,e_date, num_tickets):
         )
     data = cur.fetchall()
     return data
+
 '''
