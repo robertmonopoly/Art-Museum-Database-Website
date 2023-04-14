@@ -49,6 +49,18 @@
     border: 2px solid #ccc;
     border-radius: 4px;
   }
+
+  .my-table tr:nth-child(even) {
+          background-color: #98bfe4;
+        }
+
+        .my-table tr:nth-child(odd) {
+          background-color: #F6F6F6;
+        }
+
+        .my-table td, .my-table th {
+            padding: 20px;
+        }
         </style>
     </head>
 
@@ -72,7 +84,7 @@
             </form>
         </div>
     </body>
-        <table>
+        <table class="my-table">
             <tbody>
                 {% if data%}
                 <tr>
