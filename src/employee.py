@@ -17,10 +17,10 @@ def insert_employee(cur, conn, membership, first_name, last_name, email, ssn, ph
 def update_employee(cur, conn, membership, employee_first_name, employee_last_name, employee_email, employee_ssn, employee_phone_number, employee_date_of_birth, salary):
     try: 
         cur.execute("""UPDATE employees SET employee_membership = %s, employee_first_name = %s,
-                     employee_last_name = %s, employee_email = %s, employee_phone_number = %s, 
-                     employee_date_of_birth = %s, salary = %s WHERE employee_ssn = %s""", 
-                    (membership, employee_first_name, employee_last_name, employee_email, 
-                     employee_phone_number,employee_date_of_birth, salary, employee_ssn))
+                     employee_last_name = %s, employee_ssn = %s, employee_phone_number = %s, 
+                     employee_date_of_birth = %s, salary = %s WHERE employee_email = %s""", 
+                    (membership, employee_first_name, employee_last_name, employee_ssn, 
+                     employee_phone_number,employee_date_of_birth, salary, employee_email))
         conn.commit()
         print("Employee updated successfully!")
     except Exception as e:

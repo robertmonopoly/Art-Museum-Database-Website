@@ -36,10 +36,10 @@ def update_member(cur, conn, email, membership_type):
 
 
 
-def delete_member(cur, conn, user_account_id):
+def delete_member(cur, conn, email):
     try:
-        cur.execute("UPDATE user_account SET account_status = %s WHERE user_id = %s", 
-            (0, user_account_id))
+        cur.execute("UPDATE user_account SET account_status = %s WHERE email = %s", 
+            (0, email))
         conn.commit()
         print("User account deleted successfully")
     except Exception as e:

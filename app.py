@@ -376,7 +376,7 @@ def update_member():
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
     if request.method == 'POST':
-        member_id = request.form['account_id']
+        member_id = request.form['email']
         try:
             mem.delete_member(cur, conn, member_id)
             flash('User account deleted successfully')
@@ -401,12 +401,11 @@ def add_new_gift_shop_item():
 
 @app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
-    gift_sku = request.form['sku']
     gift_name = request.form['name']
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        gift.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
+        gift.update_gift_item(cur, conn, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
@@ -416,14 +415,16 @@ def update_gift_shop_item():
 
 @app.route('/delete_gift_shop_item', methods=['POST'])
 def delete_gift_shop_item():
-    gift_sku = request.form['sku']
+    gift_name = request.form['name']
     try:
-        gift.delete_gift_shop_item(cur, conn, gift_sku)
+        gift.delete_gift_shop_item(cur, conn, gift_name)
         flash('Gift item deleted successfully')
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
     return render_template('add_new_gift_shop_item.html')  
+
+
 
 @app.get('/films')
 def films():
@@ -443,10 +444,30 @@ def members():
         app.logger.info(data)
         return render_template('members.html', data=data)
 
-@app.get('/gift_shop')
+@app.route('/gift_shop', methods=['GET', 'POST'])
 def gift_shop():
     user = session["user-role"]
-    return render_template('gift_shop.html', user=user)
+    msg = ""
+    data = gift.retrieve_gift_shop_data(cur)
+
+    if request.method == 'POST':
+        gift_name = request.form['item_name']
+        email = request.form['email']
+        try:
+            gift.insert_gift_sales(cur, conn, gift_name, email)
+            flash('Gift item purchased successfully')
+        except Exception as e:
+            flash('Error purchasing item.')
+
+    if data == []:
+        msg = "No Gift Shop Inventory Data Available"
+        app.logger.info(data)
+        return render_template('gift_shop.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('gift_shop.html', data=data, user=user)
+
+
 
 @app.get('/employees')
 def employees():

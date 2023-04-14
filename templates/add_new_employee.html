@@ -91,6 +91,10 @@
   </form>
 
   <form action="/update_employee" method="POST" style="padding:20px;">
+
+    <label for="employee_email">Email of Employee's Data to Modify:</label>
+    <input type="email" name="employee_email" required><br><br>
+
     <label for="employee_membership">Membership Type:</label>
     <select id="membership" name="membership" required>
       <option value="">Select Membership Type</option>
@@ -104,10 +108,6 @@
     
     <label for="employee_last_name">Last Name:</label>
     <input type="text" name="employee_last_name" required><br><br>
-    
-    
-    <label for="employee_email">Email:</label>
-    <input type="email" name="employee_email" required><br><br>
     
     <label for="employee_ssn">SSN:</label>
     <input type="text" name="employee_ssn" required><br><br>
