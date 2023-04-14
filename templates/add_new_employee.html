@@ -56,6 +56,18 @@
   <li class = "active"><a href="{{ url_for('add_new_employee') }}">Employee Queries</a></li>
 </ul>
 
+<br>
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
 <div style="display: flex; align-items: center; justify-content: center;">
   <form action="/add_new_employee" method="post" style="padding:20px;">
     <label for="employee_membership">Membership Type:</label>
@@ -125,15 +137,7 @@
     </form>
 </div>
 
-{% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class=flashes>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
+
 
 </body>
 </html>

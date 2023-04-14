@@ -199,6 +199,7 @@ def add_new_donation():
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
         don.insert_donation(cur, conn, email_address, money_amount)
+        flash("Thank you for your donation!")
         return render_template('donations.html')
     else:
         return render_template('donations.html')
@@ -316,6 +317,7 @@ def add_new_employee():
         emp.insert_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
+        flash("New Employee's Records has been added.")
     return render_template('add_new_employee.html')
     
 @app.route('/update_employee', methods = ['POST'])
@@ -332,6 +334,7 @@ def update_employee():
         emp.update_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
+        flash("Employee's Records have been updated.")
     return render_template('add_new_employee.html')
    
 
