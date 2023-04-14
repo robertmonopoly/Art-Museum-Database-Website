@@ -6,22 +6,62 @@
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Gift Shop</title>
 <style>
-  html {
+html {
       background-image: url({{ url_for('static', filename='img/silver.jpg') }});
       background-size: cover;
       font-family: Arial, sans-serif;
   }
   .my-table tr:nth-child(even) {
-          background-color: #98bfe4;
-        }
+    background-color: #98bfe4;
+  }
+  .my-table tr:nth-child(odd) {
+    background-color: #F6F6F6;
+  }
+  .my-table td, .my-table th {
+    padding: 20px;
+  }
+  .my-table {
+    float: left;
+    margin-right: 20px;
+  }
+  form {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  }
 
-        .my-table tr:nth-child(odd) {
-          background-color: #F6F6F6;
-        }
+  input[type=email],
+  input[type=password],
+  input[type=text] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
 
-        .my-table td, .my-table th {
-            padding: 20px;
-        }
+  input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+
+  a {
+    color: black;
+  }
 </style>
 
 
