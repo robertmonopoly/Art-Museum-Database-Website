@@ -61,13 +61,24 @@
 
 {% if session['user-role'] == 'ADMIN' %}
 <form action="/delete_member" method="post" style="padding:20px;">
-  <label for="account_id">Account ID:</label>
-  <input type="text" name="account_id" required><br><br>
+  <label for="email">Account Email:</label>
+  <input type="text" name="email" required><br><br>
   <input type="submit" value="Delete Member Account">
 </form>    
 
 {% endif %}
 
 </div>
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
 </body>
 </html>

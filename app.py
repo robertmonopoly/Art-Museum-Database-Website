@@ -376,7 +376,7 @@ def update_member():
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
     if request.method == 'POST':
-        member_id = request.form['account_id']
+        member_id = request.form['email']
         try:
             mem.delete_member(cur, conn, member_id)
             flash('User account deleted successfully')
