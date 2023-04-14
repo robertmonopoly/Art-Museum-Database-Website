@@ -16,6 +16,7 @@ INSERT INTO user_login VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'USER', '
 
 
 INSERT INTO donation VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', 'mich@gmail.com', '2023-12-13 05:48:06', 5.05);
+
 -- these are for the report generation of how many of a certain item was sold in a day
 /*INSERT INTO exhibitions VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', '5.99','gallery name','Exhibit: Flower', 'some curator', 'an artist');
 
@@ -25,4 +26,5 @@ INSERT INTO films VALUES ('d88e557c-cb8e-11ed-afa1-0242ac120002', '2004-12-13 05
 
 INSERT INTO films VALUES ('23382a5a-cb97-11ed-afa1-0242ac120002', '2013-08-19 06:36:03', 'Film: Matrix', '3.99', '121','some director', '4');
 */
+
 COMMIT;

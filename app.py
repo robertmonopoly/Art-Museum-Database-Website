@@ -169,10 +169,8 @@ def update_artwork():
         art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
 
-@app.get('/Eticket_details')
-def Eticket_details():
-    user = session["user-role"]
-    return render_template('Eticket_details.html', user=user)
+
+    
 
 @app.get('/donations')
 def donations():
@@ -494,7 +492,7 @@ def Fticket_details():
     selection = request.form.get('film_name')
     num_tickets = request.form.get('total_adults')
     user_email = request.form.get('visitor_email')
-    print(f"{selection} and {num_tickets} and {user_email}")
+    #print(f"{selection} and {num_tickets} and {user_email}")
 
     try:
         film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
@@ -506,7 +504,7 @@ def Fticket_details():
 
     return render_template('Fticket_details.html', user=user)
 
-
+# TODO: need to create page
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
