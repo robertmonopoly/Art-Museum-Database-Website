@@ -41,9 +41,10 @@ INSERT INTO gift_shop_sales VALUES ('ceca2fa6-cc16-11ed-afa1-0242ac120002', 'pai
 INSERT INTO gift_shop_sales VALUES ('f4db3386-27a0-4dfb-814b-e2e4e12ee98b', 'pai-cir-wht', '2023-04-11 14:08:52', 'e3a9dc6e-cad1-11ed-afa1-0242ac120002');
 
 INSERT INTO donation VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', 'mich@gmail.com', '2023-12-13 05:48:06', 5.05);
+
 -- these are for the report generation of how many of a certain item was sold in a day
 /*INSERT INTO exhibitions VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', '5.99','gallery name','Exhibit: Flower', 'some curator', 'an artist');
-/*INSERT INTO exhibitions VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', '5.99','gallery name','Exhibit: Flower', 'some curator', 'an artist');
+INSERT INTO exhibitions VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', '5.99','gallery name','Exhibit: Flower', 'some curator', 'an artist');
 INSERT INTO exhib_ticket_sales VALUES ('f91e597a-cb90-11ed-afa1-0242ac120002', 'c8304586-5661-4db7-8e75-4dd44b4f7648', 'b6cbb3e0-cb79-11ed-afa1-0242ac120002', '2023-03-02 20:35:06');
 
 INSERT INTO exhibitions VALUES ('f91e5c22-cb90-11ed-afa1-0242ac120002', '2013-05-09 02:01:37', '6.99','def name','Exhibit: Painting', 'another curator', 'some artist');
@@ -55,4 +56,5 @@ INSERT INTO film_ticket_sales VALUES ('f91e5ad8-cb90-11ed-afa1-0242ac120002', '6
 INSERT INTO films VALUES ('23382a5a-cb97-11ed-afa1-0242ac120002', '2013-08-19 06:36:03', 'Film: Matrix', '3.99', '121','some director', '4');
 INSERT INTO film_ticket_sales VALUES ('233831f8-cb97-11ed-afa1-0242ac120002', '6be41a29-8fd3-407e-9b37-784a30492237', '23382a5a-cb97-11ed-afa1-0242ac120002', '2023-04-10 20:35:06');
 */
+
 COMMIT;

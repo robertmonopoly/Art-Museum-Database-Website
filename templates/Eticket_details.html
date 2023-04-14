@@ -5,9 +5,9 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Ticket Details</title>
-<meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
 
 <style>
 * {
@@ -181,35 +181,33 @@ button:hover {
  <hr width="100%" color= "grey" size="0.5px" padding="0"/>
 
 
- <div class="elem-group">
-  <label for="Eselection">Select Exhibition Name</label>
-  <select id="selection" name="Exh_preference" required>
-      <option value="">Choose an Exhibition from the List</option>
-      <option value="Pipilotti">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
-      <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
-      <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
-      <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
-      <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
-      <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
-  </select>
-</div>
+ 
 
  <div class="row">
   <div class="column">
-  <form action="/pythonweb.py" method="post" style="width:80%; margin-left:20px;">
+  <form action="/Eticket_details" method="post" style="width:80%; margin-left:20px;">
     <div class="elem-group">
-      <label for="email">E-mail Address</label>
-      <input type="email" id="email" name="visitor_email" placeholder="john.doe@email.com" required>
+      <label for="Exh_name">Select Exhibition Name</label>
+      <select id="selection" name="Exh_name" required>
+          <option value="">Choose an Exhibition from the List</option>
+          <option value="Exhibition: Potato">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
+          <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
+          <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
+          <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
+          <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
+          <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
+      </select>
     </div>
     <hr>
     <div class="elem-group inlined">
       <label for="adult">Number of Tickets</label>
       <input type="number" id="adult" name="total_adults"  min="1" required>
     </div>
-    
-
-<div>
-  <button type="submit" style="background-color: #5898ed;">Book Tickets</button>
+      <div class="elem-group">
+        <label for="email">E-mail Address</label>
+        <input type="email" id="email" name="visitor_email" placeholder="john.doe@email.com" required>
+      </div>
+      <input type="submit" value="Book Tickets">
 </form>
 </div>
 

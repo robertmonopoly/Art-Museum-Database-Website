@@ -33,26 +33,34 @@ def delete_exhibit(cur, conn, exhib_id):
     except Exception as e:
         print("An error occurred while deleting the exhibit", e)
 
-'''def insert_exhib_ticket_transaction(cur, conn, exhib_name, num_tickets, email):
+def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
-        event_transac_id = uuid.uuid4()
+        event_transac_id = str(uuid.uuid4())
 
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
+        
 
-        # Get the exhibition ID for the given exhibition name
-        cur.execute("""SELECT exhib_id FROM exhibitions WHERE exhib_name = %s""", (exhib_name,))
+        # Get the event ID for the given event name
+        cur.execute("""SELECT exhib_id FROM exhibitions WHERE exhib_title = %s""", (event_name,))
         event_id = cur.fetchone()[0]
-
+        
         # Insert the ticket transaction into the database
         cur.execute("""INSERT INTO ticket_sales
                         VALUES (%s, %s, %s, %s, %s)""",
-                    (event_transac_id, user_id, event_id, exhib_name, num_tickets))
+                    (event_transac_id, user_id, event_id, event_name, num_tickets))
         conn.commit()
 
         # Print a success message to the command line
         print("Ticket transaction inserted successfully")
     except Exception as e:
-        print("An error occurred while inserting the transaction:", e)'''
+        print("An error occurred while inserting the transaction:", e)
+
+
+def retrieve_ticket_data(cur):
+    cur.execute("""SELECT * FROM ticket_sales""")
+    data = cur.fetchall()
+    return data    
+

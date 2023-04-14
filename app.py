@@ -160,10 +160,8 @@ def update_artwork():
         art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
 
-@app.get('/Eticket_details')
-def Eticket_details():
-    user = session["user-role"]
-    return render_template('Eticket_details.html', user=user)
+
+    
 
 @app.get('/donations')
 def donations():
@@ -473,17 +471,39 @@ def Fticket_details():
     selection = request.form.get('film_name')
     num_tickets = request.form.get('total_adults')
     user_email = request.form.get('visitor_email')
-    print(f"{selection} and {num_tickets} and {user_email}")
+    #print(f"{selection} and {num_tickets} and {user_email}")
 
     try:
         film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-        print('Film tickets booked successfully!', 'success')
+        print('Film tickets booked successfully!')
     except Exception as e:
         print(f"Error booking film tickets: {e}")
-        print('Failed to book film tickets. Please try again later', 'error')
         return render_template('Fticket_details.html')
 
     return render_template('Fticket_details.html', user=user)
+
+@app.route('/Eticket_details', methods = ['GET', 'POST'])
+def Eticket_details():
+    user_r = session["user-role"]
+
+    if not user:
+        return render_template('login')
+    
+    sel = request.form.get('Exh_name')
+    num_tick = request.form.get('total_adults')
+    email = request.form.get('visitor_email')
+    #print(f"{sel} and {num_tick} and {email}")
+
+    
+    try:
+        exhib.insert_e_ticket_trans(cur, conn, sel, num_tick, email)
+        print('Exhibit tickets booked successfully!')
+    except Exception as e:
+        print(f"Error booking exhibit tickets: {e}")
+        return render_template('Eticket_details.html')
+    
+    return render_template('Eticket_details.html', user_r=user_r)
+
 
 # TODO: need to create page
 @app.route('/user_info')
