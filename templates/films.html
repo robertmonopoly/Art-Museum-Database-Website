@@ -1,3 +1,4 @@
+{% import "elements.html" as elements %}
 <!DOCTYPE html>
 <html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
@@ -110,17 +111,16 @@
   <p> 
     <img src="{{url_for('static', filename = '/img/ta.jpg')}}"  alt="Tadao Ando" style="width:200px; height:250px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">Tadao Ando - From Emptiness to Infinity</h3>
-    <p style="text-align: left; padding-bottom: 10px;">
-     From Emptiness to Infinity, by German filmmaker Mathias Frick, 
-      offers an exclusive behind-the-scenes look into the work and processes of Ando. 
-      Ando shares his sources of inspiration and motivation.</p>
+   
     <p style="margin-top: 0;margin-bottom:2px"><b>Friday, July 9, 2023</b>
-    <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Showtime - 5 p.m.</a></button></p></p>
+    <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Showtime - 5 p.m.</a></button></p>
+   
   </p>
 
 </div>
-#macro film_format(endpoint,viewing_at,director, title, image_id)
-
+{% for film in films %}
+  {{elements.film_format('Fticket_details', film.view_at, film.title, film.ticket_price, film.dur, film.direc, film.rate, film.image_id)}}
+{% endfor %}
 <div class = "row" style="padding-left: 20px;">
   <p> 
     <img src="{{url_for('static', filename = '/img/film3.png')}}" alt="Marina Abramovic" style="width:200px; height:250px; float: left; padding-right: 10px;" />

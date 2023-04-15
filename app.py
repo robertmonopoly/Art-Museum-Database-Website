@@ -260,6 +260,21 @@ def delete_exhibition():
             flash('Error deleting exhibition.')
         return render_template('add_new_exhibition.html')
 
+@app.get('/films')
+def films():
+    user = session["user-role"]
+    cur.execute("""SELECT * FROM films""")
+    rows = cur.fetchall()
+    films = []
+    for row in rows:
+        film_obj = film.Film(row[0],row[1],row[2],
+                             row[3],row[4],row[5],
+                             row[6],row[7])
+        films.append(film_obj)
+    
+
+    return render_template('films.html',user=user, films=films)
+
 @app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
@@ -269,9 +284,11 @@ def add_new_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
+        img_file = request.files['film_img']
+        img_uuid = hp.insert_image(cur,conn,img_file)
         film.insert_films(cur, conn, location,
         title, ticket_price, duration, director,
-        rating)
+        rating, img_uuid)
     return render_template('add_new_film.html')
    
 
@@ -285,6 +302,8 @@ def update_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
+        # TODO: find away to make forms more efficient
+        #img_uuid = request.form['film_img']
         film.update_film(cur, conn, num_id, location,
         title, ticket_price, duration, director,
         rating)
@@ -429,10 +448,6 @@ def delete_gift_shop_item():
 
 
 
-@app.get('/films')
-def films():
-    user = session["user-role"]
-    return render_template('films.html',user=user)
 
 @app.get('/members')
 def members():
@@ -490,21 +505,28 @@ def Fticket_details():
     user = session["user-role"]
     if not user:
         return render_template('login')
-    
-    selection = request.form.get('film_name')
-    num_tickets = request.form.get('total_adults')
-    user_email = request.form.get('visitor_email')
-    #print(f"{selection} and {num_tickets} and {user_email}")
+    cur.execute("""SELECT * FROM films""")
+    rows = cur.fetchall();
+    film_title =[]
+    for row in rows:
+        film_title.append(row[2])
+  
+    if request.method == 'POST':
+        selection = request.form['film_name']
+        num_tickets = request.form['total_adults']
+        user_email = request.form['visitor_email']
+        print(f"{selection} and {num_tickets} and {user_email}")
+        try:
+            film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
+            print('Film tickets booked successfully!')
+            print(film_title)
+           
+        except Exception as e:
+            print(f"Error booking film tickets: {e}")
+        # TODO: remember to flash message here bc not done yet
+            flash('Failed to book film tickets. Please try again later')
 
-    try:
-        film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-        print('Film tickets booked successfully!')
-    except Exception as e:
-        print(f"Error booking film tickets: {e}")
-        # remember to flash message here bc not done yet
-        flash('Failed to book film tickets. Please try again later')
-
-    return render_template('Fticket_details.html', user=user)
+    return render_template('Fticket_details.html', user=user, film_title=film_title)
 
 @app.route('/Eticket_details', methods = ['GET', 'POST'])
 def Eticket_details():
@@ -512,9 +534,9 @@ def Eticket_details():
     if not user:
         return render_template('login')
     
-    selection = request.form.get('Exh_name')
-    num_tickets = request.form.get('total_adults')
-    user_email = request.form.get('visitor_email')
+    selection = request.form['exh_name']
+    num_tickets = request.form['total_adults']
+    user_email = request.form['visitor_email']
     #print(f"{selection} and {num_tickets} and {user_email}")
 
     try:
@@ -545,9 +567,9 @@ def user_info():
 @app.get('/report_gifts')
 def report_gifts():
     mgs = ""
-    gift_name = request.args.get('gift-name')
-    start_date = request.args.get('start-date')
-    end_date = request.args.get('end-date')
+    gift_name = request.form.get('gift-name')
+    start_date = request.form.get('start-date')
+    end_date = request.form.get('end-date')
     if gift_name and start_date and end_date:
         data = rep.insert_gift_rep(cur, gift_name, start_date, end_date)
         if data == []:

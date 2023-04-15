@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -46,7 +46,7 @@ div.elem-group {
 
 div.elem-group.inlined {
   width: 49%;
-  display: inline-block;
+  /*-- TODO: this is causing error because float overrides inline-block -> display: inline-block; */
   float: left;
   margin-left: 0.5%;
 }
@@ -188,14 +188,19 @@ button:hover {
   <form action="/Eticket_details" method="post" style="width:80%; margin-left:20px;">
     <div class="elem-group">
       <label for="Exh_name">Select Exhibition Name</label>
-      <select id="selection" name="Exh_name" required>
-          <option value="">Choose an Exhibition from the List</option>
+      <select name="exh_name" required>
+        <option value="" disabled selected hidden>Choose an Exhibition from the List</option>
+        {% for tvalue in data%}
+            <option value="{{ tvalue }}" selected='selected'>{{ tvalue }}</option>
+        {% endfor %}
+          <!-- #TODO: delete these comments once done -->
+          <!-- <option value=""></option>
           <option value="Exhibition: Potato">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
           <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
           <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
           <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
           <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
-          <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option>
+          <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option> -->
       </select>
     </div>
     <hr>
