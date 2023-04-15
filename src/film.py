@@ -1,7 +1,6 @@
 # import
 import uuid
 from datetime import date
-from flask import request
 
 class Film:
     def __init__(self, uuid, view_at, film_title, ticket_price, dur, direc, rate, image_id):
