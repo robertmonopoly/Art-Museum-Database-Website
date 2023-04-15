@@ -34,20 +34,25 @@
 {% endmacro %}
 
 {% macro film_format(endpoint, view_at, title, ticket_price, dur, direc, rate, image_id) %}
-<div class ="column">
+
   <div class = "row" style="padding-left: 20px;">
     <img src="/image/{{image_id}}"  alt="{{title}}" style="width:200px; height:250px; float: left; padding-right: 10px;" />
     <p> 
       <h3 style="margin-bottom:3px">{{title}}</h3>
         <p style="text-align: left; padding-bottom: 10px;">
-        Directed by {{direc}}.
+        <b>Directed by {{direc}}.</b>
         </p>
       <p style="margin-top: 0;margin-bottom:2px">
         <b>{{view_at.strftime("%B %d, %Y")}}</b>
         <b>Duration:</b> {{dur}} <br>
         <b>Price:</b> {{ticket_price}}
         <b>Rate:</b> {{rate}}/5
-        <button class = "button button1"><a href="{{url_for(endpoint)}}">Buy Tickets</a></button></p>
+        <button class = "button button1"><a href="{{url_for(endpoint)}}">Buy Tickets</a></button>
       </p>
+    </p>
+      <br>
+      <br>
+      <br>
+      <br>
   </div>
 {% endmacro %}

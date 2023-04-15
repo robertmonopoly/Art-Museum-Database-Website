@@ -137,7 +137,7 @@ def get_image(id):
     row = cur.fetchone()
     # convert memview to bytes
     image_binary = bytes(row[0])
-    print(image_binary)
+    # print(image_binary)
     response = make_response(image_binary)
     # send custom header
     response.mimetype = "image/jpeg"
