@@ -61,7 +61,7 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-<form action="/add_new_exhibition" method="post" style="padding:20px;">
+<form action="/add_new_exhibition" method="post" style="padding:20px;" enctype="multipart/form-data">
   <label for="exhibition_at" style="padding-bottom:20px;">Exhibition Date and Time:</label>
   <input type="datetime-local" name="exhibition_at" required><br><br>
 
@@ -79,7 +79,7 @@
 
   <label for="exhibition_artists" style="padding-bottom:20px;">Artists:</label>
   <input type="text" name="exhibition_artists" required><br><br>
-
+  <input type="file" name="exhib_img" required><br><br>
   <input type="submit" value="Add New Exhibition">
 </form>
 
