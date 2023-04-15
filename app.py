@@ -169,10 +169,8 @@ def update_artwork():
         art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
 
-@app.get('/Eticket_details')
-def Eticket_details():
-    user = session["user-role"]
-    return render_template('Eticket_details.html', user=user)
+
+    
 
 @app.get('/donations')
 def donations():
@@ -201,14 +199,15 @@ def add_new_donation():
         email_address = request.form['email']
         money_amount = request.form['donation_amount']
         don.insert_donation(cur, conn, email_address, money_amount)
+        flash("Thank you for your donation!")
         return render_template('donations.html')
     else:
         return render_template('donations.html')
     
 @app.get('/exhibitions')
 def exhibitions():
-    user = user = session["user-role"]
-    return render_template('exhibitions.html', user=user)
+    user = session["user-role"]
+    return render_template('exhibitions.html',user=user)
 
 @app.route('/add_new_exhibition', methods = ['GET', 'POST'])
 def add_new_exhibition():
@@ -318,6 +317,7 @@ def add_new_employee():
         emp.insert_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
+        flash("New Employee's Records has been added.")
     return render_template('add_new_employee.html')
     
 @app.route('/update_employee', methods = ['POST'])
@@ -334,6 +334,7 @@ def update_employee():
         emp.update_employee(cur, conn, membership, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
+        flash("Employee's Records have been updated.")
     return render_template('add_new_employee.html')
    
 
@@ -369,28 +370,16 @@ def add_new_member():
 @app.route('/update_member', methods = ['POST'])
 def update_member():
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip_code = request.form['zip']
         email = request.form['email']
-        phone_number = request.form['phone_number']
-        gender = request.form['gender']
-        dob = request.form['dob']
         membership_type = request.form['membership']
-        mem.update_member(cur, conn, first_name, last_name,
-        address_line1, address_line2, city, state,
-        zip_code, email, phone_number, gender, dob, membership_type)
-    return render_template('add_new_member.html')
+        mem.update_member(cur, conn, email, membership_type)
+    return render_template('members.html')
     
 
 @app.route('/delete_member', methods = ['POST'])
 def delete_member():        
     if request.method == 'POST':
-        member_id = request.form['account_id']
+        member_id = request.form['email']
         try:
             mem.delete_member(cur, conn, member_id)
             flash('User account deleted successfully')
@@ -415,12 +404,11 @@ def add_new_gift_shop_item():
 
 @app.route('/update_gift_shop_item', methods=['POST'])
 def update_gift_shop_item():
-    gift_sku = request.form['sku']
     gift_name = request.form['name']
     gift_type = request.form['type']
     gift_price = request.form['price']
     try:
-        gift.update_gift_item(cur, conn, gift_sku, gift_name, gift_type, gift_price)
+        gift.update_gift_item(cur, conn, gift_name, gift_type, gift_price)
         flash('Gift item updated successfully.')
     except Exception as e:
         print (f"Error updating gift item: {e}")
@@ -430,14 +418,16 @@ def update_gift_shop_item():
 
 @app.route('/delete_gift_shop_item', methods=['POST'])
 def delete_gift_shop_item():
-    gift_sku = request.form['sku']
+    gift_name = request.form['name']
     try:
-        gift.delete_gift_shop_item(cur, conn, gift_sku)
+        gift.delete_gift_shop_item(cur, conn, gift_name)
         flash('Gift item deleted successfully')
     except Exception as e:
         print (f"Error deleting gift item: {e}")
         flash('Error deleting gift item.')
     return render_template('add_new_gift_shop_item.html')  
+
+
 
 @app.get('/films')
 def films():
@@ -457,10 +447,30 @@ def members():
         app.logger.info(data)
         return render_template('members.html', data=data)
 
-@app.get('/gift_shop')
+@app.route('/gift_shop', methods=['GET', 'POST'])
 def gift_shop():
     user = session["user-role"]
-    return render_template('gift_shop.html', user=user)
+    msg = ""
+    data = gift.retrieve_gift_shop_data(cur)
+
+    if request.method == 'POST':
+        gift_name = request.form['item_name']
+        email = request.form['email']
+        try:
+            gift.insert_gift_sales(cur, conn, gift_name, email)
+            flash('Gift item purchased successfully')
+        except Exception as e:
+            flash('Error purchasing item.')
+
+    if data == []:
+        msg = "No Gift Shop Inventory Data Available"
+        app.logger.info(data)
+        return render_template('gift_shop.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('gift_shop.html', data=data, user=user)
+
+
 
 @app.get('/employees')
 def employees():
@@ -484,7 +494,7 @@ def Fticket_details():
     selection = request.form.get('film_name')
     num_tickets = request.form.get('total_adults')
     user_email = request.form.get('visitor_email')
-    print(f"{selection} and {num_tickets} and {user_email}")
+    #print(f"{selection} and {num_tickets} and {user_email}")
 
     try:
         film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
@@ -496,7 +506,28 @@ def Fticket_details():
 
     return render_template('Fticket_details.html', user=user)
 
+@app.route('/Eticket_details', methods = ['GET', 'POST'])
+def Eticket_details():
+    user = session["user-role"]
+    if not user:
+        return render_template('login')
+    
+    selection = request.form.get('Exh_name')
+    num_tickets = request.form.get('total_adults')
+    user_email = request.form.get('visitor_email')
+    #print(f"{selection} and {num_tickets} and {user_email}")
 
+    try:
+        exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+        print('Exhibition tickets booked successfully!')
+    except Exception as e:
+        print(f"Error booking Exhibition tickets: {e}")
+        # remember to flash message here bc not done yet
+        flash('Failed to book Exhibition tickets. Please try again later')
+
+    return render_template('Eticket_details.html', user=user)
+
+# TODO: need to create page
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
@@ -529,57 +560,22 @@ def report_gifts():
             
 @app.get('/report_tickets')
 def report_tickets():
+    user = session["user-role"]
     msg = ""
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
     if start_date and end_date:
         data = rep.insert_ticket_rep(cur, start_date, end_date)
+        sales_sum = rep.insert_ticket_rep(cur, start_date, end_date)
         if data == []:
             msg = "There was no report for the selected interval. Please try another set of dates!"
             return render_template('report_tickets.html', msg=msg)
         app.logger.info(data)
+        app.logger.info(sales_sum)
         return render_template('report_tickets.html', data=data) # fill it in
     else:
         return render_template('report_tickets.html')
     
-'''@app.route('/add_film_ticket_transaction', methods = ['GET', 'POST'])
-def add_film_ticket_transaction():
-  user = session["user-role"] 
-  selection = request.form['film_name'] 
-  num_tickets = request.form['total_adults']
-  user_email = request.form['email']
-  try:      
-    data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-    print("Film tickets booked successfully!")
-  except Exception as e:
-        print (f"Error booking film tickets: {e}")
-  return render_template('Fticket_details.html')'''
-
-
-'''@app.route('/add_film_ticket_transaction', methods=['POST'])
-def add_film_ticket_transaction():
-    user_role = session.get('user-role')
-    if not user_role:
-        flash('Please log in first', 'error')
-        return redirect(url_for('login'))
-    
-    selection = request.form.get('film_name')
-    num_tickets = request.form.get('total_adults')
-    user_email = request.form.get('email')
-    
-    if not selection or not num_tickets or not user_email:
-        flash('Please fill in all fields', 'error')
-        return redirect(url_for('Fticket_details'))
-
-    try:
-        data = film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
-        print('Film tickets booked successfully!', 'success')
-    except Exception as e:
-        print(f"Error booking film tickets: {e}")
-        flash('Failed to book film tickets. Please try again later', 'error')
-        return redirect(url_for('Fticket_details'))
-
-    return redirect(url_for('Fticket_details'))'''
 
 
 # TODO: need to make third report

@@ -35,7 +35,7 @@ CREATE TABLE user_login (
 
 CREATE TABLE gift_shop_item (
     gift_SKU TEXT PRIMARY KEY,
-    gift_name TEXT NOT NULL,
+    gift_name TEXT NOT NULL UNIQUE,
     gift_type TEXT NOT NULL,
     gift_price MONEY NOT NULL
 );
@@ -58,7 +58,7 @@ CREATE TABLE employees (
     employee_membership MembershipType NOT NULL,
     employee_first_name VARCHAR (60) NOT NULL,  
     employee_last_name VARCHAR (60) NOT NULL,
-    employee_email VARCHAR (100) NOT NULL,
+    employee_email VARCHAR (100) NOT NULL UNIQUE,
     employee_ssn TEXT NOT NULL,
     employee_phone_number TEXT NOT NULL,
     employee_date_of_birth DATE NOT NULL,
@@ -78,6 +78,7 @@ CREATE TABLE exhibitions (
 CREATE TABLE ticket_sales(
     event_transac_id UUID PRIMARY KEY, 
     user_id UUID NOT NULL REFERENCES user_account(user_id), 
+    transact_at DATE NOT NULL,
     event_id UUID NOT NULL,
     event_name TEXT NOT NULL,
     num_tickets INTEGER NOT NULL,
