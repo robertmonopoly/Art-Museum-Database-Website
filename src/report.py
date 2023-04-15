@@ -21,7 +21,7 @@ def insert_ticket_rep(cur, s_date,e_date):
         ON ets.event_id = e.exhib_id 
         WHERE DATE(ets.transact_at) >= %s AND DATE(ets.transact_at) <= %s
         UNION
-        SELECT film_title, film_ticket_price, DATE(transact_at)
+        SELECT film_title, film_ticket_price, DATE(fts.transact_at)
         FROM films as f
         INNER JOIN ticket_sales as fts
         ON fts.event_id = f.film_id 
@@ -36,6 +36,12 @@ def get_ticket_sales_sum(cur, s_date, e_date):
     FROM ticket_sales as ts
     WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s
     """, (s_date, e_date))
-    data = cur.fetchone()
-    return data
+    # TODO: need to test
+    sum_tickets = cur.fetchone()
+    cur.execute("""SELECT SUM(user_price)
+    FROM ticket_sales as ts
+    WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s""")
+    sum_price = cur.fetchone()
+    # returns tuple of both data
+    return (sum_tickets, sum_price)
 

@@ -58,7 +58,7 @@
 
 <div style="display: flex; align-items: center; justify-content: center; padding-left: 20px;">
 
-<form action="/add_new_film" method="POST" style="padding:20px;">
+<form action="/add_new_film" method="POST" style="padding:20px;" enctype="multipart/form-data">
 
   <label for="viewing_at">Viewing At:</label>
   <input type="datetime-local" name="viewing_at" required><br><br>
@@ -72,6 +72,7 @@
   <input type="text" name="film_director" required><br><br>
   <label for="film_rating">Rating:</label>
   <input type="text" name="film_rating" required><br><br>
+  <input type="file" name="film_img"><br><br>
   <input type="submit" value="Add New Film">
 </form>
 

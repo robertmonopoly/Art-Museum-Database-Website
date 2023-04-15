@@ -85,7 +85,6 @@ CREATE TABLE ticket_sales(
     user_price MONEY NOT NULL
 );
 
-
 CREATE TABLE films (
     film_id UUID PRIMARY KEY,
     viewing_at TIMESTAMP NOT NULL,
@@ -93,7 +92,8 @@ CREATE TABLE films (
     film_ticket_price MONEY NOT NULL,
     duration_min INTEGER NOT NULL,
     film_director TEXT NOT NULL,
-    film_rating TEXT NOT NULL
+    film_rating TEXT NOT NULL,
+    image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
 );
 
 CREATE TABLE donation (
