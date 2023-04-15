@@ -207,7 +207,15 @@ def add_new_donation():
 @app.get('/exhibitions')
 def exhibitions():
     user = session["user-role"]
-    return render_template('exhibitions.html',user=user)
+    cur.execute("""SELECT * FROM exhibitions""")
+    rows = cur.fetchall()
+    exhibs = []
+    for row in rows:
+            exhib_obj = exhib.Exhibition(row[0],row[1],row[2],
+                                         row[3],row[4],row[5],
+                                         row[6],row[7])
+            exhibs.append(exhib_obj)
+    return render_template('exhibitions.html',user=user, exhibs=exhibs)
 
 @app.route('/add_new_exhibition', methods = ['GET', 'POST'])
 def add_new_exhibition():
@@ -271,8 +279,6 @@ def films():
                              row[3],row[4],row[5],
                              row[6],row[7])
         films.append(film_obj)
-    
-
     return render_template('films.html',user=user, films=films)
 
 @app.route('/add_new_film', methods=['GET', 'POST'])

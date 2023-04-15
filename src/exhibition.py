@@ -2,6 +2,17 @@
 from datetime import date
 import uuid
 
+class Exhibition:
+    def __init__(self, uuid, exhib_at, exhib_ticket_price, exhib_gallery, exhib_title, curator, exhib_artists, image_id):
+        self.uuid = uuid
+        self.exhib_at = exhib_at
+        self.exhib_ticket_price = exhib_ticket_price 
+        self.exhib_gallery = exhib_gallery
+        self.exhib_title = exhib_title
+        self.curator = curator
+        self.exhib_artists = exhib_artists
+        self.image_id = image_id
+
 def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
     try:
         exhib_id = str(uuid.uuid4())
