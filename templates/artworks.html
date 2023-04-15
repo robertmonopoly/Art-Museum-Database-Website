@@ -88,9 +88,6 @@ Then visit the Museum to experience your favorites in person.</p>
   {% for art in artworks %}  
     {{elements.art_format(art.obj_num, art.artist, art.title, art.year, art.type, art.image_id )}}
   {% endfor %}
-    {{ elements.art_format('AL.15', 'Cinque Terre', 'George Inness', '1866', 'Oil on canvas',  '/img/artwork1.png') }}
-    {{ elements.art_format('2023.104',  'Forest', 'Jules Dupre', '1900', 'Oil on canvas', '/img/artwork2.png') }}
-    {{ elements.art_format('AL.21', 'Lion', 'Jean-Leon Gerome', '1888', 'Oil on canvas', '/img/artwork3.png') }}
 
   <div class="responsive">
     <div class="gallery">
@@ -138,28 +135,7 @@ Then visit the Museum to experience your favorites in person.</p>
         </a>
         <div class="desc"> Nick Cave<br>Big Floral<br>2022<br>Olefin and osnaburg<br>2023.101<br></div>      </div>
       </div>
-
-      <div class="responsive">
-        <div class="gallery">
-          <a target="_blank" href="{{ url_for('static', filename='img_forest.jpg')}}">
-            <img src="{{ url_for('static', filename='/img/a12.png')}}" alt="Forest" width="600" height="400">
-          </a>
-          <div class="desc">Kurt Kemp<br> Portrait of a Friend<br>2001<br> Gouache on newsprint<br>2023.93<br></div>      </div>
-        </div>
-
-        <div class="responsive">
-          <div class="gallery">
-            <a target="_blank" href="{{ url_for('static', filename='img_forest.jpg')}}">
-              <img src="{{ url_for('static', filename='/img/a7.png')}}" alt="Forest" width="600" height="400">
-            </a>
-            <div class="desc"> Tadanori Yokoo<br>Metallic Nature<br>2001<br>Collage<br>2023.94<br></div>      </div>
-          </div>
-       
-  
-
-
- 
-
+      
 </p>
 </body>
 </html>
