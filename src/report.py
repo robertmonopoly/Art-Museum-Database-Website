@@ -7,7 +7,7 @@ def insert_gift_rep(cur, g_name, s_date, e_date):
     ON s.gift_sku = i.gift_sku 
     WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
     )
-    data = cur.fetchall() #TODO: test if need to insert data?
+    data = cur.fetchall()
     return data
 
 
