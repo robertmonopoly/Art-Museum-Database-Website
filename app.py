@@ -1,4 +1,6 @@
 from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app, jsonify
+app = Flask(__name__)
+app.secret_key = 'my_secret'
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from datetime import datetime
@@ -14,8 +16,6 @@ import src.member as mem
 import src.report as rep
 import src.user as user
 
-app = Flask(__name__)
-app.secret_key = 'my_secret'
 
 # Local Connection
 try:

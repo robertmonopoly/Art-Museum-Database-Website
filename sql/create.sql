@@ -81,7 +81,8 @@ CREATE TABLE ticket_sales(
     transact_at DATE NOT NULL,
     event_id UUID NOT NULL,
     event_name TEXT NOT NULL,
-    num_tickets INTEGER NOT NULL
+    num_tickets INTEGER NOT NULL,
+    user_price MONEY NOT NULL
 );
 
 
@@ -108,12 +109,12 @@ CREATE TABLE notifs (
     event_at TIMESTAMP NOT NULL
 );
 
-CREATE FUNCTION exhibit_insert_trigger_fnc()
+CREATE OR REPLACE FUNCTION exhibit_insert_trigger_fnc()
   RETURNS trigger AS
 $$
 BEGIN
-    INSERT INTO "notifs" ("event_id", "event_title" ,"event_at")
-        VALUES (NEW."exhib_id", NEW."exhib_title", NEW."exhib_at");
+    INSERT INTO notifs (event_id, event_title ,event_at)
+        VALUES (NEW.exhib_id, NEW.exhib_title, NEW.exhib_at);
 RETURN NEW;
 END;
 $$
@@ -126,6 +127,34 @@ CREATE TRIGGER new_exhib
     EXECUTE PROCEDURE exhibit_insert_trigger_fnc();
 
 -- CREATE TRIGGER new_film
---         AFTER INSERT ON films
+--         AFTER INSERT
+        -- ON "films"
 --         FOR EACH ROW
 --         EXECUTE FUNCTION film_insert_trigger_fnc();
+
+CREATE OR REPLACE FUNCTION update_member_ticket_price()
+  RETURNS trigger AS
+$$
+BEGIN
+    IF (user_account.membership = 'BASIC') 
+    WHERE user_account.user_id = ticket_sales.user_id THEN
+        -- apply 10% discount 
+        UPDATE "ticket_sales" SET NEW.user_price = user_price * 0.9;
+        SELECT CONCAT('Your discount is 10%. Your new price is $', NEW.user_price) AS message;
+    END IF;
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+CREATE TRIGGER exhib_discount_mem
+    AFTER INSERT
+    ON "ticket_sales"
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_member_ticket_price();
+
+CREATE TRIGGER film_discount_mem
+    AFTER INSERT
+    ON "ticket_sales"
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_member_ticket_price();

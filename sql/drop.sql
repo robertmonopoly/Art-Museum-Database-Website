@@ -1,3 +1,11 @@
+DROP TRIGGER IF EXIST film_discount_mem CASCADE;
+
+DROP TRIGGER IF EXISTS exhib_discount_mem CASCADE;
+
+DROP FUNCTION IF EXISTS update_member_ticket_price CASCADE;
+
+-- DROP TRIGGER IF EXISTS new_film ON films CASCADE;
+
 DROP TRIGGER IF EXISTS new_exhib ON exhibitions CASCADE;
 
 DROP FUNCTION IF EXISTS exhibit_insert_trigger_fnc CASCADE;
@@ -12,7 +20,7 @@ DROP TABLE IF EXISTS exhibitions CASCADE;
 
 DROP TABLE IF EXISTS ticket_sales CASCADE;
 
-DROP TABLE IF EXISTS exhibitions;
+DROP TABLE IF EXISTS exhibitions CASCADE;
 
 DROP TABLE IF EXISTS employees CASCADE;
 
