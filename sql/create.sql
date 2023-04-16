@@ -148,13 +148,16 @@ CREATE OR REPLACE FUNCTION update_member_ticket_price()
   RETURNS trigger AS
 $$
 BEGIN
-    IF (user_account.membership = 'BASIC') 
-    WHERE user_account.user_id = ticket_sales.user_id THEN
+    IF u.membership = 'BASIC'
+        FROM user_account AS u, ticket_sales AS t
+    WHERE u.user_id = t.user_id 
+    THEN
         -- apply 10% discount 
-        UPDATE "ticket_sales" SET NEW.user_price = user_price * 0.9;
-        SELECT CONCAT('Your discount is 10%. Your new price is $', NEW.user_price) AS message;
+    UPDATE ticket_sales AS t
+    SET t.user_price = t.user_price * 0.9;
+    SELECT CONCAT('Your discount is 10%. Your new price is $', t.user_price) AS message;
     END IF;
-RETURN NEW;
+
 END;
 $$
 LANGUAGE 'plpgsql';
