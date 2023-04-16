@@ -576,6 +576,7 @@ def Eticket_details():
     return render_template('Eticket_details.html', user=user, exhib_title=exhib_title)
 
 
+
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']
