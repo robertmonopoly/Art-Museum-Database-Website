@@ -28,18 +28,18 @@ def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_tit
             print("An exhibition or film has been inserted into the database.")
             print("Trigger function called successfully")
 
-def update_exhibition(cur, conn, exhibition_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
+def update_exhibition(cur, conn, exhib_title, exhib_at, exhib_price, exhib_gallery, exhib_curator, exhibition_artists):
     try:
-        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_ticket_price = %s, exhib_gallery = %s, exhib_title = %s, curator = %s, exhib_artists = %s WHERE exhib_id = %s""",
-         (exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, exhibition_id))
+        cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_ticket_price = %s, exhib_gallery = %s, curator = %s, exhib_artists = %s WHERE exhib_title = %s""",
+         (exhib_at, exhib_price, exhib_gallery, exhib_curator, exhibition_artists, exhib_title,))
         conn.commit()
         print("Exhibition updated successfully!")
     except Exception as e:
         print("An error occurred while updating the exhibition:", e)
    
-def delete_exhibit(cur, conn, exhib_id):
+def delete_exhibit(cur, conn, exhib_title):
     try:
-        cur.execute("DELETE FROM exhibitions WHERE exhib_id = %s", (exhib_id,))
+        cur.execute("DELETE FROM exhibitions WHERE exhib_title = %s", (exhib_title,))
         conn.commit()
         print("Exhibit deleted successfully")
     except Exception as e:

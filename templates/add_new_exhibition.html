@@ -86,8 +86,8 @@
 
 
 <form action="/update_exhibition" method="post" style="padding:20px;">
-  <label for="exhibition_id" style="padding-bottom:20px;">Exhibition ID:</label>
-  <input type="text" name="exhibition_id" required><br><br>
+  <label for="exhibition_title" style="padding-bottom:20px;">Exhibition Title:</label>
+  <input type="text" name="exhibition_title" required><br><br>
 
   <label for="exhibition_at"  style="padding-bottom:20px;">Exhibition Date and Time:</label>
   <input type="datetime-local" name="exhibition_at" required><br><br>
@@ -97,9 +97,6 @@
 
   <label for="exhibition_gallery" style="padding-bottom:20px;">Gallery:</label>
   <input type="text" name="exhibition_gallery" required><br><br>
-
-  <label for="exhibition_title" style="padding-bottom:20px;">Exhibition Title:</label>
-  <input type="text" name="exhibition_title" required><br><br>
 
   <label for="curator" style="padding-bottom:20px;">Curator:</label>
   <input type="text" name="curator" required><br><br>
@@ -111,8 +108,8 @@
 </form>
 
 <form action="/delete_exhibition" method="post" style="padding:20px;">
-  <label for="exhibition_id" style="padding-bottom:20px;">Exhibition ID:</label>
-  <input type="text" name="exhibition_id" required><br><br>
+  <label for="exhibition_title" style="padding-bottom:20px;">Exhibition Title:</label>
+  <input type="text" name="exhibition_title" required><br><br>
   <input type="submit" value="Delete Exhibition">
   </form>
 
