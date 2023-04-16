@@ -31,7 +31,6 @@
     <ul class = "navbarone">
 
         {{ elements.navbar('home', 'Home')}}
-        {{ elements.navbar('notification', 'Notifications')}}
         {{ elements.navbar('artworks', 'Artworks')}}
         {{ elements.navbar('exhibitions', 'Exhibitions')}}
         {{ elements.navbar('films', 'Films')}}
@@ -40,6 +39,7 @@
         {{ elements.navbar('members', 'User Account Management')}}
         {% endif %}
         {% if session['user-role'] == 'USER' %}
+        {{ elements.navbar('notification', 'Notifications')}}
         {{ elements.navbar('members', 'Memberships')}}
         {% endif %}
         {{ elements.navbar('donations', 'Donations')}}
