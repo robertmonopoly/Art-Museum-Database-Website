@@ -24,7 +24,6 @@ INSERT INTO exhibitions VALUES ('f91e5c22-cb90-11ed-afa1-0242ac120002', '2013-05
 
 INSERT INTO films VALUES ('d88e557c-cb8e-11ed-afa1-0242ac120002', '2004-12-13 05:48:06', 'Film: Interstellar', '4.99', '124','some director', '5');
 
-INSERT INTO films VALUES ('23382a5a-cb97-11ed-afa1-0242ac120002', '2013-08-19 06:36:03', 'Film: Matrix', '3.99', '121','some director', '4');
 */
 
 COMMIT;
