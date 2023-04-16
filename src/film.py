@@ -64,7 +64,6 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
   except Exception as e:
     print("An error occurred while inserting the transaction", e)'''
 
-
 def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
@@ -92,12 +91,3 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
         print("Ticket transaction inserted successfully")
     except Exception as e:
         print("An error occurred while inserting the transaction:", e)
-
-
-
-def retrieve_ticket_data(cur):
-    cur.execute("""SELECT * FROM ticket_sales""")
-    data = cur.fetchall()
-    return data    
-
-
