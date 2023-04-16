@@ -13,12 +13,12 @@ class Film:
         self.rate = rate
         self.image_id = image_id
 
-def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate, image_id):
+def insert_films(cur, conn, film_at, film_title, film_price, film_dur, film_dir, film_rate, image_id):
     try:
         film_id = str(uuid.uuid4())
         cur.execute("""INSERT INTO films (film_id, film_at, film_title, film_ticket_price, duration_min, film_director, film_rating, image_id)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-                (film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate, image_id))
+                (film_id, film_at, film_title, film_price, film_dur, film_dir, film_rate, image_id))
         conn.commit()
         print("Film inserted successfully")
     except Exception as e:
@@ -64,7 +64,6 @@ def update_film(cur, conn, film_id, viewing_at, film_title, film_price, film_dur
   except Exception as e:
     print("An error occurred while inserting the transaction", e)'''
 
-
 def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
     try:
         # Generate a unique transaction ID
@@ -92,12 +91,3 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
         print("Ticket transaction inserted successfully")
     except Exception as e:
         print("An error occurred while inserting the transaction:", e)
-
-
-
-def retrieve_ticket_data(cur):
-    cur.execute("""SELECT * FROM ticket_sales""")
-    data = cur.fetchall()
-    return data    
-
-

@@ -57,11 +57,15 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
         # Get the event ID for the given event name
         cur.execute("""SELECT exhib_id FROM exhibitions WHERE exhib_title = %s""", (event_name,))
         event_id = cur.fetchone()[0]
+
+        # Get the user's ticket price
+        cur.execute("""SELECT exhib_ticket_price FROM exhibitions WHERE exhib_title = %s""", (event_name,))
+        user_price = cur.fetchone()[0]
         
         # Insert the ticket transaction into the database
         cur.execute("""INSERT INTO ticket_sales
-                        VALUES (%s, %s, %s, %s, %s, %s)""",
-                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets))
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets, user_price))
         conn.commit()
 
         # Print a success message to the command line
