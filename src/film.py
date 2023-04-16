@@ -1,6 +1,7 @@
 # import
 import uuid
 from datetime import date
+from flask import flash
 
 class Film:
     def __init__(self, uuid, view_at, film_title, ticket_price, dur, direc, rate, image_id):
@@ -20,9 +21,9 @@ def insert_films(cur, conn, film_at, film_title, film_price, film_dur, film_dir,
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
                 (film_id, film_at, film_title, film_price, film_dur, film_dir, film_rate, image_id))
         conn.commit()
-        print("Film inserted successfully")
+        flash("Film inserted successfully")
     except Exception as e:
-        print("An error occurred while inserting the film", e)
+        flash("An error occurred while inserting the film", e)
 
 def delete_film(cur, conn, film_id):
     try:

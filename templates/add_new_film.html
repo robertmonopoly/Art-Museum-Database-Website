@@ -56,6 +56,18 @@
   <li class = "active"><a href="{{ url_for('add_new_film') }}">Film Queries</a></li>
 </ul>
 
+<br>
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
 <div style="display: flex; align-items: center; justify-content: center; padding-left: 20px;">
 
 <form action="/add_new_film" method="POST" style="padding:20px;" enctype="multipart/form-data">
@@ -101,5 +113,8 @@
 </form>
 
 </div>
+
+
+
 </body>
 </html>
