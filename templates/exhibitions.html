@@ -1,5 +1,7 @@
+{% import "elements.html" as elements %}
+
 <!DOCTYPE html>
-<html style="background-image: url({{ url_for('static', filename='img/silver.jpg') }}); background-size: cover;">
+<html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
 <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <link rel="stylesheet"
@@ -180,20 +182,10 @@
     <br>
     <br>
   </div>
-
-  <div class = "row" style="padding-left: 20px;">
-    <p> 
-      <img src="{{ url_for('static', filename='/img/e2.png')}}" alt="painting" style="width:200px; height:200px; float: left; padding-right: 10px;" />
-      <h3 style="margin-bottom:3px">Woven Wonders: Indian Textiles from the Parpia Collection</h3>
-      <p style="margin-top: 0; margin-bottom:5px">June 10 to September 4, 2023</p>
-      <button class = "button button1"><a href="{{ url_for('Eticket_details')}}">Buy Tickets</a></button> 
-    </p>
-    <br>
-    <br>
-    <br>
-    <br>
-  </div>
 </div>
+{% for e in exhibs %}
+  {{elements.exhib_format('Eticket_details', e.exhib_title, e.exhib_ticket_price,e.exhib_gallery, e.curator,e.exhib_artists, e.exhib_at,e.image_id )}}
+{% endfor %}
 
 </div>
 

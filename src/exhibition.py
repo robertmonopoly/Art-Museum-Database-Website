@@ -2,11 +2,22 @@
 from datetime import date
 import uuid
 
-def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists):
+class Exhibition:
+    def __init__(self, uuid, exhib_at, exhib_ticket_price, exhib_gallery, exhib_title, curator, exhib_artists, image_id):
+        self.uuid = uuid
+        self.exhib_at = exhib_at
+        self.exhib_ticket_price = exhib_ticket_price 
+        self.exhib_gallery = exhib_gallery
+        self.exhib_title = exhib_title
+        self.curator = curator
+        self.exhib_artists = exhib_artists
+        self.image_id = image_id
+
+def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, image_id):
     try:
         exhib_id = str(uuid.uuid4())
-        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING *""", 
-                    (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists))
+        cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *""", 
+                    (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, image_id))
         conn.commit()
         print("Exhibition inserted successfully")
     except Exception as e:
@@ -43,7 +54,6 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
         
-
         # Get the event ID for the given event name
         cur.execute("""SELECT exhib_id FROM exhibitions WHERE exhib_title = %s""", (event_name,))
         event_id = cur.fetchone()[0]

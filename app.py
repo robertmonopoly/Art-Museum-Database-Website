@@ -37,9 +37,12 @@ def home():
     if request.method == 'GET':
         user = session["user-role"]
         # this is just to guide users to the notification tab
-        req = request.cookies.get('e_title') 
-        if req:
-            flash(f"A new event, {req}, has been added!")
+        e_req = request.cookies.get('e_title') 
+        f_req = request.cookies.get('f_title')
+        if e_req:
+            flash(f"A new event, {e_req}, has been added!")
+        if f_req:
+            flash(f"A new event, {f_req}, has been added!")
     return render_template("home.html", user=user)
 
 @app.get('/notification')
@@ -152,6 +155,7 @@ def add_new_artwork():
         made_on = request.form['made_on']
         obj_type = request.form['object_type']
         img_file = request.files['art_img']
+
         img_uuid = hp.insert_image(cur, conn, img_file)
         art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
@@ -207,7 +211,15 @@ def add_new_donation():
 @app.get('/exhibitions')
 def exhibitions():
     user = session["user-role"]
-    return render_template('exhibitions.html',user=user)
+    cur.execute("""SELECT * FROM exhibitions""")
+    rows = cur.fetchall()
+    exhibs = []
+    for row in rows:
+            exhib_obj = exhib.Exhibition(row[0],row[1],row[2],
+                                         row[3],row[4],row[5],
+                                         row[6],row[7])
+            exhibs.append(exhib_obj)
+    return render_template('exhibitions.html',user=user, exhibs=exhibs)
 
 @app.route('/add_new_exhibition', methods = ['GET', 'POST'])
 def add_new_exhibition():
@@ -219,8 +231,12 @@ def add_new_exhibition():
         title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
-        exhib.insert_exhibition(cur, conn, date_and_time, ticket_price,
-        gallery, title, curator, artists)
+        img_file = request.files['exhib_img']
+
+        img_uuid = hp.insert_image(cur,conn, img_file)
+        exhib.insert_exhibition(cur, conn, date_and_time,
+                                 ticket_price,gallery, title, 
+                                 curator, artists, img_uuid)
         
         resp = make_response(render_template('add_new_exhibition.html'))
         resp.set_cookie('e_title', title, max_age=80)
@@ -271,13 +287,12 @@ def films():
                              row[3],row[4],row[5],
                              row[6],row[7])
         films.append(film_obj)
-    
-
     return render_template('films.html',user=user, films=films)
 
 @app.route('/add_new_film', methods=['GET', 'POST'])
 def add_new_film():
     if request.method == 'POST':
+
         location = request.form['viewing_at']
         title = request.form['film_title']
         ticket_price = request.form['film_ticket_price']
@@ -285,11 +300,17 @@ def add_new_film():
         director = request.form['film_director']
         rating = request.form['film_rating']
         img_file = request.files['film_img']
+
         img_uuid = hp.insert_image(cur,conn,img_file)
         film.insert_films(cur, conn, location,
         title, ticket_price, duration, director,
         rating, img_uuid)
-    return render_template('add_new_film.html')
+
+        resp = make_response(render_template('add_new_film.html'))
+        resp.set_cookie('f_title', title, max_age=80)
+        return resp
+    else:
+        return render_template('add_new_film.html')
    
 
 @app.route('/update_film', methods = ['POST'])
@@ -506,8 +527,8 @@ def Fticket_details():
     if not user:
         return render_template('login')
     cur.execute("""SELECT * FROM films""")
-    rows = cur.fetchall();
-    film_title =[]
+    rows = cur.fetchall()
+    film_title = []
     for row in rows:
         film_title.append(row[2])
   
@@ -533,23 +554,28 @@ def Eticket_details():
     user = session["user-role"]
     if not user:
         return render_template('login')
-    
-    selection = request.form['exh_name']
-    num_tickets = request.form['total_adults']
-    user_email = request.form['visitor_email']
-    #print(f"{selection} and {num_tickets} and {user_email}")
-
+    cur.execute("""SELECT * FROM exhibitions""")
+    rows = cur.fetchall()
+    exhib_title = []
+    for row in rows:
+        exhib_title.append(row[2])
+    if request.method == 'POST':
+        selection = request.form['exh_name']
+        num_tickets = request.form['total_adults']
+        user_email = request.form['visitor_email']
+        print(f"{selection} and {num_tickets} and {user_email}")
     try:
         exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
         print('Exhibition tickets booked successfully!')
+        print(exhib_title)
     except Exception as e:
         print(f"Error booking Exhibition tickets: {e}")
-        # remember to flash message here bc not done yet
+        # TODO: remember to flash message here bc not done yet
         flash('Failed to book Exhibition tickets. Please try again later')
 
-    return render_template('Eticket_details.html', user=user)
+    return render_template('Eticket_details.html', user=user, exhib_title=exhib_title)
 
-# TODO: need to create page
+
 @app.route('/user_info')
 def user_info():
     f_name = request.form['user_fname']

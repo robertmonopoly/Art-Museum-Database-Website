@@ -56,3 +56,25 @@
       <br>
   </div>
 {% endmacro %}
+
+{% macro exhib_format(endpoint,title, ticket_price, gallery, curator, exhib_artists, view_at,image_id) %}
+
+<div class = "row" style="padding-left: 20px;">
+  <p> 
+    <img src="/image/{{image_id}}" alt="{{title}}" style="width:200px; height:200px; float: left; padding-right: 10px;" />
+    <h3 style="margin-bottom:3px">{{title}}</h3>
+    <p style="margin-top: 0; margin-bottom:5px"></p>
+    <b>{{view_at.strftime("%B %d, %Y")}}</b>
+    <b>Gallery:</b> {{gallery}} <br>
+    <b>Price:</b> {{ticket_price}}<br>
+    <b>Curator:</b> {{curator}}<br>
+    <b>Artist:</b> {{exhib_artists}}<br>
+    <button class = "button button1"><a href="{{ url_for(endpoint)}}">Buy Tickets</a></button> 
+  </p>
+  <br>
+  <br>
+  <br>
+  <br>
+</div>
+
+{% endmacro %}

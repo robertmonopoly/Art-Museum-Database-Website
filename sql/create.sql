@@ -72,7 +72,8 @@ CREATE TABLE exhibitions (
     exhib_gallery TEXT NOT NULL,
     exhib_title TEXT NOT NULL,
     curator TEXT NOT NULL,
-    exhib_artists TEXT NOT NULL
+    exhib_artists TEXT NOT NULL,
+    image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
 );
 
 CREATE TABLE ticket_sales(
@@ -87,7 +88,7 @@ CREATE TABLE ticket_sales(
 
 CREATE TABLE films (
     film_id UUID PRIMARY KEY,
-    viewing_at TIMESTAMP NOT NULL,
+    film_at TIMESTAMP NOT NULL,
     film_title TEXT NOT NULL,
     film_ticket_price MONEY NOT NULL,
     duration_min INTEGER NOT NULL,
@@ -120,17 +121,28 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
+CREATE OR REPLACE FUNCTION film_insert_trigger_fnc()
+  RETURNS trigger AS
+$$
+BEGIN
+    INSERT INTO notifs (event_id, event_title,event_at)
+        VALUES (NEW.film_id, NEW.film_title, NEW.film_at);
+RETURN NEW;
+END;
+$$
+LANGUAGE 'plpgsql';
+
 CREATE TRIGGER new_exhib
     AFTER INSERT 
     ON "exhibitions"
     FOR EACH ROW
     EXECUTE PROCEDURE exhibit_insert_trigger_fnc();
 
--- CREATE TRIGGER new_film
---         AFTER INSERT
-        -- ON "films"
---         FOR EACH ROW
---         EXECUTE FUNCTION film_insert_trigger_fnc();
+CREATE TRIGGER new_film
+        AFTER INSERT
+        ON "films"
+        FOR EACH ROW
+        EXECUTE FUNCTION film_insert_trigger_fnc();
 
 CREATE OR REPLACE FUNCTION update_member_ticket_price()
   RETURNS trigger AS
