@@ -1,30 +1,29 @@
+# imports
+from datetime import date
+import uuid
 # report functions
-def insert_gift_rep(cur, g_name, s_date, e_date):
+def insert_gift_rep(cur, g_type, s_date, e_date):
     cur.execute("""
-    SELECT i.gift_sku, i.gift_name, i.gift_price, DATE(s.gift_transaction_at)
+    SELECT i.gift_sku, i.gift_type, i.gift_price, DATE(s.gift_transaction_at)
     FROM gift_shop_item as i
     INNER JOIN gift_shop_sales as s 
     ON s.gift_sku = i.gift_sku 
-    WHERE i.gift_name = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_name, s_date, e_date]
+    WHERE i.gift_type = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_type, s_date, e_date]
     )
     data = cur.fetchall()
     return data
 
-
-
-#2rd report 
+# 2nd report 
 def insert_ticket_rep(cur, s_date,e_date):
     cur.execute("""
-        SELECT exhib_title as event, exhib_ticket_price as ticket_price, DATE(ets.transact_at)
+        SELECT exhib_title, exhib_ticket_price as ticket_price, DATE(ets.transact_at), ets.num_tickets
         FROM exhibitions as e
         INNER JOIN ticket_sales as ets
-        ON ets.event_id = e.exhib_id 
+        ON ets.event_name = e.exhib_title
         WHERE DATE(ets.transact_at) >= %s AND DATE(ets.transact_at) <= %s
         UNION
-        SELECT film_title, film_ticket_price, DATE(fts.transact_at)
-        FROM films as f
-        INNER JOIN ticket_sales as fts
-        ON fts.event_id = f.film_id 
+        SELECT film_title, film_ticket_price, DATE(fts.transact_at), fts.num_tickets
+        FROM films as f, ticket_sales as fts
         WHERE DATE(fts.transact_at) >= %s AND DATE(fts.transact_at) <= %s
         """, [s_date, e_date, s_date,e_date]
         )
@@ -36,12 +35,21 @@ def get_ticket_sales_sum(cur, s_date, e_date):
     FROM ticket_sales as ts
     WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s
     """, (s_date, e_date))
-    # TODO: need to test
-    sum_tickets = cur.fetchone()
+    sum_tickets = cur.fetchone()[0]
     cur.execute("""SELECT SUM(user_price)
     FROM ticket_sales as ts
-    WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s""")
-    sum_price = cur.fetchone()
+    WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s""", (s_date, e_date))
+    sum_price = cur.fetchone()[0]
+    
     # returns tuple of both data
     return (sum_tickets, sum_price)
+
+
+
+
+def retrieve_ticket_data(cur):
+    cur.execute("""SELECT * FROM ticket_sales""")
+    data = cur.fetchall()
+    return data    
+
 

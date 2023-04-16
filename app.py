@@ -558,20 +558,20 @@ def Eticket_details():
     rows = cur.fetchall()
     exhib_title = []
     for row in rows:
-        exhib_title.append(row[2])
+        exhib_title.append(row[4])
     if request.method == 'POST':
         selection = request.form['exh_name']
         num_tickets = request.form['total_adults']
         user_email = request.form['visitor_email']
         print(f"{selection} and {num_tickets} and {user_email}")
-    try:
-        exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
-        print('Exhibition tickets booked successfully!')
-        print(exhib_title)
-    except Exception as e:
-        print(f"Error booking Exhibition tickets: {e}")
-        # TODO: remember to flash message here bc not done yet
-        flash('Failed to book Exhibition tickets. Please try again later')
+        try:
+            exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+            print('Exhibition tickets booked successfully!')
+            print(exhib_title)
+        except Exception as e:
+            print(f"Error booking Exhibition tickets: {e}")
+            msg = 'Failed to book Exhibition tickets. Please try again later'
+            return render_template('Eticket_details.html', msg=msg)
 
     return render_template('Eticket_details.html', user=user, exhib_title=exhib_title)
 
@@ -593,36 +593,47 @@ def user_info():
 @app.get('/report_gifts')
 def report_gifts():
     mgs = ""
-    gift_name = request.form.get('gift-name')
+    data = []
+    gift_type = request.form.get('gift-type')
     start_date = request.form.get('start-date')
     end_date = request.form.get('end-date')
-    if gift_name and start_date and end_date:
-        data = rep.insert_gift_rep(cur, gift_name, start_date, end_date)
-        if data == []:
-            msg = "There was no report for the selected interval. Please try another set of dates!"
-            return render_template('report_gifts.html', msg=msg)
-        app.logger.info(data)
-        return render_template('report_gifts.html', data=data)
+    
+    ticket_data = rep.insert_gift_rep(cur, gift_type, start_date, end_date)
+    ticket_sum = rep.get_ticket_sales_sum(cur, start_date,end_date)
+    print(ticket_sum)
+    print(ticket_data)
+    if ticket_data == []:
+        msg = "There was no report for the selected interval. Please try another set of dates!"
+        return render_template('report_gifts.html', msg=msg)
+       
     else:
-        return render_template('report_gifts.html')
+        data.append(ticket_data)
+        data.append(ticket_sum)
+        return render_template('report_gifts.html',data=data)
             
 @app.get('/report_tickets')
 def report_tickets():
     user = session["user-role"]
+    data = []
     msg = ""
     start_date = request.args.get('start-date')
     end_date = request.args.get('end-date')
-    if start_date and end_date:
-        data = rep.insert_ticket_rep(cur, start_date, end_date)
-        sales_sum = rep.insert_ticket_rep(cur, start_date, end_date)
-        if data == []:
-            msg = "There was no report for the selected interval. Please try another set of dates!"
-            return render_template('report_tickets.html', msg=msg)
-        app.logger.info(data)
-        app.logger.info(sales_sum)
-        return render_template('report_tickets.html', data=data) # fill it in
+  
+    ticket_rep = rep.insert_ticket_rep(cur, start_date, end_date)
+    sales_sum = rep.get_ticket_sales_sum(cur, start_date, end_date)
+    if ticket_rep == []:
+        msg = "There was no report for the selected interval. Please try another set of dates!"
+        app.logger.info(ticket_rep)
+        app.logger.info(sales_sum[0])
+        
+        return render_template('report_tickets.html', msg=msg)
+        
     else:
-        return render_template('report_tickets.html')
+        data.append(ticket_rep)
+        data.append(sales_sum[0])
+        data.append(sales_sum[1])
+
+        return render_template('report_tickets.html', user=user, data=data)
     
 
 
