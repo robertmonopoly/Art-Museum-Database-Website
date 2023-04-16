@@ -59,6 +59,17 @@
   <li class = "active"><a href="{{ url_for('add_new_exhibition') }}">Exhibition Queries</a></li>
 </ul>
 
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
 <div style="display: flex; align-items: center; justify-content: center;">
 
 <form action="/add_new_exhibition" method="post" style="padding:20px;" enctype="multipart/form-data">

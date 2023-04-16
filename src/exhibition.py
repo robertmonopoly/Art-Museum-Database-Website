@@ -1,6 +1,7 @@
 #import 
 from datetime import date
 import uuid
+from flask import flash
 
 class Exhibition:
     def __init__(self, uuid, exhib_at, exhib_ticket_price, exhib_gallery, exhib_title, curator, exhib_artists, image_id):
@@ -19,31 +20,31 @@ def insert_exhibition(cur, conn, exhib_at, exhib_price, exhib_gallery, exhib_tit
         cur.execute("""INSERT INTO exhibitions VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING *""", 
                     (exhib_id, exhib_at, exhib_price, exhib_gallery, exhib_title, exhib_curator, exhibition_artists, image_id))
         conn.commit()
-        print("Exhibition inserted successfully")
+        flash("Exhibition inserted successfully")
     except Exception as e:
-        print("An error occurred while inserting the exhibition:", e)
+        flash("An error occurred while inserting the exhibition:", e)
         
         # Catch the exception raised by the trigger and print the message to the command line
         if "Trigger function failed" in str(e):
-            print("An exhibition or film has been inserted into the database.")
-            print("Trigger function called successfully")
+            flash("An exhibition or film has been inserted into the database.")
+            flash("Trigger function called successfully")
 
 def update_exhibition(cur, conn, exhib_title, exhib_at, exhib_price, exhib_gallery, exhib_curator, exhibition_artists):
     try:
         cur.execute("""UPDATE exhibitions SET exhib_at = %s, exhib_ticket_price = %s, exhib_gallery = %s, curator = %s, exhib_artists = %s WHERE exhib_title = %s""",
          (exhib_at, exhib_price, exhib_gallery, exhib_curator, exhibition_artists, exhib_title,))
         conn.commit()
-        print("Exhibition updated successfully!")
+        flash("Exhibition updated successfully!")
     except Exception as e:
-        print("An error occurred while updating the exhibition:", e)
+        flash("An error occurred while updating the exhibition:", e)
    
 def delete_exhibit(cur, conn, exhib_title):
     try:
         cur.execute("DELETE FROM exhibitions WHERE exhib_title = %s", (exhib_title,))
         conn.commit()
-        print("Exhibit deleted successfully")
+        flash("Exhibit deleted successfully")
     except Exception as e:
-        print("An error occurred while deleting the exhibit", e)
+        flash("An error occurred while deleting the exhibit", e)
 
 def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
     try:
@@ -69,9 +70,9 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
         conn.commit()
 
         # Print a success message to the command line
-        print("Ticket transaction inserted successfully")
+        flash("Ticket transaction inserted successfully")
     except Exception as e:
-        print("An error occurred while inserting the transaction:", e)
+        flash("An error occurred while inserting the transaction:", e)
 
 
 def retrieve_ticket_data(cur):

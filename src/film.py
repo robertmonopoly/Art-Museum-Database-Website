@@ -29,17 +29,17 @@ def delete_film(cur, conn, film_title):
     try:
         cur.execute("DELETE FROM films WHERE film_title = %s", (film_title,))
         conn.commit()
-        print("Film deleted successfully")
+        flash("Film deleted successfully")
     except Exception as e:
-        print("An error occurred while deleting the film", e)
+        flash("An error occurred while deleting the film", e)
 
 def update_film(cur, conn, film_title,  film_at, film_price, film_dur, film_dir, film_rate,):
     try:
         cur.execute("""UPDATE films SET film_at = %s, film_ticket_price = %s, duration_min = %s, film_director = %s, film_rating = %s WHERE film_title = %s""", (film_at, film_price, film_dur, film_dir, film_rate, film_title,))
         conn.commit()
-        print("Film updated successfully!")
+        flash("Film updated successfully!")
     except Exception as e:
-        print("An error occurred while updating the film:", e)
+        flash("An error occurred while updating the film:", e)
 
 
 def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
@@ -66,6 +66,6 @@ def insert_ticket_transaction(cur, conn, event_name, num_tickets, email):
         conn.commit()
         
         # Print a success message to the command line
-        print("Ticket transaction inserted successfully")
+        flash("Ticket transaction inserted successfully")
     except Exception as e:
-        print("An error occurred while inserting the transaction:", e)
+        flash("An error occurred while inserting the transaction:", e)
