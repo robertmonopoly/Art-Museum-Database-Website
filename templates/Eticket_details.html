@@ -190,18 +190,10 @@ button:hover {
       <label for="Exh_name">Select Exhibition Name</label>
       <select name="exh_name" required>
         <option value="" disabled selected hidden>Choose an Exhibition from the List</option>
-        {% for tvalue in data%}
-            <option value="{{ tvalue }}" selected='selected'>{{ tvalue }}</option>
+        {% for title in exhib_title %}
+          <option value="{{title}}">{{title}}</option>
         {% endfor %}
-          <!-- #TODO: delete these comments once done -->
-          <!-- <option value=""></option>
-          <option value="Exhibition: Potato">Pipilotti Rist: Pixel Forest and Worry Will Vanish</option>
-          <option value="Gitter-Yelen">None Whatsoever: Zen Paintings from the Gitter-Yelen Collection</option>
-          <option value="Judith">Portrait of Courage: Gentileschi, Wiley, and the Story of Judith</option>
-          <option value="Golden">Golden Worlds: The Portable Universe of Indigenous Colombia</option>
-          <option value="Pearlman">Impressionist and Post-Impressionist Masterpieces from the Pearlman Foundation</option>
-          <option value="Wonders">Woven Wonders: Indian Textiles from the Parpia Collection</option> -->
-      </select>
+      </select><br><br>
     </div>
     <hr>
     <div class="elem-group inlined">

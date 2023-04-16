@@ -72,7 +72,8 @@ CREATE TABLE exhibitions (
     exhib_gallery TEXT NOT NULL,
     exhib_title TEXT NOT NULL,
     curator TEXT NOT NULL,
-    exhib_artists TEXT NOT NULL
+    exhib_artists TEXT NOT NULL,
+    image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
 );
 
 CREATE TABLE ticket_sales(
