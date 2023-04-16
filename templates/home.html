@@ -42,7 +42,7 @@
         {{ elements.navbar('notification', 'Notifications')}}
         {{ elements.navbar('members', 'Memberships')}}
         {% endif %}
-        {{ elements.navbar('donations', 'Donations')}}
+        {{ elements.navbar('donations', 'Donation Report')}}
         
         {% if session['user-role'] == 'ADMIN' %}
           {{ elements.navbar('report_gifts', 'Gift Report')}}
