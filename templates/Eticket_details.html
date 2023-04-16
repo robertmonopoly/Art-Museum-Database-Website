@@ -7,13 +7,10 @@
 <title>Ticket Details</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
 <style>
-* {
-  box-sizing: border-box;
+  input[type=number]::-webkit-inner-spin-button {
+    opacity: 1
 }
-
 /* Create three equal columns that floats next to each other */
 .column {
   float: left;
@@ -38,98 +35,6 @@
     width: 100%;
   }
 }
-
-
-div.elem-group {
-  margin: 15px 0;
-}
-
-div.elem-group.inlined {
-  width: 49%;
-  /*-- TODO: this is causing error because float overrides inline-block -> display: inline-block; */
-  float: left;
-  margin-left: 0.5%;
-}
-
-label {
-  display: block;
-  font-family: 'Nanum Gothic';
-  padding-bottom: 5px;
-  font-size: 1.25em;
-}
-
-input, select, textarea {
-  border-radius: 0.5px;
-  border: 2px solid #777;
-  box-sizing: border-box;
-  font-size: 17px;
-  font-family: sans-serif;
-  width: 100%;
-  padding: 5px;
-}
-
-div.elem-group.inlined input {
-  width: 95%;
-  display: inline-block;
-}
-
-textarea {
-  height: 200px;
-}
-
-hr {
-  border: 1px dotted #ccc;
-}
-
-button {
-  height: 50px;
-  background: #5898ed;
-  border: none;
-  color: white;
-  font-size: 1.25em;
-  font-family: 'Nanum Gothic';
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  border: 2px solid black;
-}
-
-
-.split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
-}
-
-.left {
-  left: 0;
-
-}
-
-.right {
-  right: 0;
- 
-}
-
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.centered img {
-  width: 150px;
-  border-radius: 50%;
-}
-</style>
 </style>
 </head>
 <body>
@@ -143,22 +48,23 @@ button:hover {
       </ul>
       <p></p>
 
+
     <h2 class = "blink" style="color:blue; font-size: 25px;">Find tickets to our Exhibitions here.</h2>
     <hr width="100%" color= "grey" size="0.5px" padding="0"/>
-  
-    <h3 style="padding-left:20px"> General Admission</h3>
+  <div class = "column">
+    <div class = "row">
+ 
+    <h3 style="padding-left:20px; margin-top:10px"> General Admission</h3>
     <p style="padding-left:20px; margin-bottom: 10px;">Visitors in the galleries / law building / arts of india galleries. General admission provides access to the MFAH art collections. Purchase online or drop by any admissions desk.</p>
 
   <div class = "boxed">
-    <p style=" margin-top: 0%;">MFAH Member (Join now!)<b> Free</b><br>
-      Adult General Admission (19+) 	<b>   $19</b><br>
-      Senior General Admission (65+ with ID) 	<b>   $16</b><br>
-      College Student General Admission (19+ with ID)	<b>   $12</b><br>
-      Youth General Admission (13 to 18)	<b>   $12</b><br>
-      Child General Admission (12 & younger)	<b>   Free</b><br>
-      Military General Admission (with ID)	<b>   Free</b><br>
-      </p>   
-      </div>
+    <p style=" margin-top: 0%; padding-bottom: 0px; padding-left:20px; font-size: 15px"><u><b>Memebrship Discounts</u></b>
+    </p>  
+    <p style="padding-left:20px; margin-top: 2px; font-size: 15px"> General Member 	<b>   Regular Price</b><br>
+      Silver Memeber	<b>   10% off</b><br>
+      Gold Memebr	<b>   20% off</b><br>
+      Platinum Member	<b>   30% off</b><br></p> 
+    </div>
     
  
      
@@ -176,16 +82,13 @@ button:hover {
     Friday | 11 a.m. to 6 p.m.<br>
     Saturday | 11 a.m. to 6 p.m.<br>
     </p>
+  </div>
+</div>
 
- <h2 style="color:blue; font-size: 25px;">Get Tickets Here</h2>
- <hr width="100%" color= "grey" size="0.5px" padding="0"/>
-
-
- 
-
- <div class="row">
-  <div class="column">
-  <form action="/Eticket_details" method="post" style="width:80%; margin-left:20px;">
+<div class = "row">
+  <h3 style="padding:15px; margin-top:15px"> Get Tickets here </h3>
+  <form action="/Eticket_details" method="POST" style="width:80%; margin-left:20px; font-size: 17px;">
+  <div class="elem-group inlined">
     <div class="elem-group">
       <label for="Exh_name">Select Exhibition Name</label>
       <select name="exh_name" required>
@@ -194,23 +97,20 @@ button:hover {
           <option value="{{title}}">{{title}}</option>
         {% endfor %}
       </select><br><br>
-    </div>
-    <hr>
-    <div class="elem-group inlined">
-      <label for="adult">Number of Tickets</label>
-      <input type="number" id="adult" name="total_adults"  min="1" required>
-    </div>
-      <div class="elem-group">
-        <label for="email">E-mail Address</label>
+      <label for="adult" >Number of Tickets</label>
+      <input type="number" id="adult" name="total_adults" placeholder="1  " min="1"   style="text-align: right;" required>
+      <br><br>
+        <div class="elem-group">
+        <label for="email_id">E-mail </label>
         <input type="email" id="email" name="visitor_email" placeholder="john.doe@email.com" required>
+        <input type="submit" value="Book Tickets">
       </div>
-      <input type="submit" value="Book Tickets">
-</form>
+    </div><br>
+    </div>
+    </form>
 </div>
-
-
 </div>
-
+</div>
 
 
 
