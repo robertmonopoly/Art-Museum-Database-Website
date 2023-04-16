@@ -16,7 +16,7 @@ class Film:
 def insert_films(cur, conn, viewing_at, film_title, film_price, film_dur, film_dir, film_rate, image_id):
     try:
         film_id = str(uuid.uuid4())
-        cur.execute("""INSERT INTO films (film_id, viewing_at, film_title, film_ticket_price, duration_min, film_director, film_rating, image_id)
+        cur.execute("""INSERT INTO films (film_id, film_at, film_title, film_ticket_price, duration_min, film_director, film_rating, image_id)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
                 (film_id, viewing_at, film_title, film_price, film_dur, film_dir, film_rate, image_id))
         conn.commit()
