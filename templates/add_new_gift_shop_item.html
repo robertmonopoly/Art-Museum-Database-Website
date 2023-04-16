@@ -62,8 +62,11 @@
 <form action="/add_new_gift_shop_item" method="post" style="padding:20px;">
     <label for="name">Name:</label>
     <input type="text" name="name" required><br><br>
-    <label for="type">Type:</label>
-    <input type="text" name="type" required><br><br>
+    <select name="type" required>
+      <option value="Mug">Mug</option>
+      <option value="Totebag">Totebag</option>
+      <option value="Stationary">Stationary</option>
+    </select><br><br>
     <label for="price">Price:</label>
     <input type="text" name="price" required><br><br>
     <input type="submit" value="Add Item">
@@ -73,11 +76,16 @@
   <label for="name">Name of Item to Modify:</label>
   <input type="text" name="name" required><br><br>
   <label for="type">Type:</label>
-  <input type="text" name="type" required><br><br>
+  <select name="type" required>
+    <option value="Mug">Mug</option>
+    <option value="Totebag">Totebag</option>
+    <option value="Stationary">Stationary</option>
+  </select><br><br>
   <label for="price">Price:</label>
   <input type="text" name="price" required><br><br>
   <input type="submit" value="Update Item">
 </form>
+
 
 <form action="/delete_gift_shop_item" method="post" style="padding:20px;">
   <label for="name">Name:</label>

@@ -564,16 +564,17 @@ def Eticket_details():
         num_tickets = request.form['total_adults']
         user_email = request.form['visitor_email']
         print(f"{selection} and {num_tickets} and {user_email}")
-    try:
-        exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
-        print('Exhibition tickets booked successfully!')
-        print(exhib_title)
-    except Exception as e:
-        print(f"Error booking Exhibition tickets: {e}")
-        # TODO: remember to flash message here bc not done yet
-        flash('Failed to book Exhibition tickets. Please try again later')
+        try:
+            exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+            print('Exhibition tickets booked successfully!')
+            print(exhib_title)
+        except Exception as e:
+            print(f"Error booking Exhibition tickets: {e}")
+            # TODO: remember to flash message here bc not done yet
+            flash('Failed to book Exhibition tickets. Please try again later')
 
     return render_template('Eticket_details.html', user=user, exhib_title=exhib_title)
+
 
 
 @app.route('/user_info')
