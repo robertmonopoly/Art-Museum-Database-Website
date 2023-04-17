@@ -23,7 +23,8 @@ CREATE TABLE user_account (
     email VARCHAR (100) NOT NULL UNIQUE,
     date_of_birth DATE NOT NULL,
     membership MembershipType NOT NULL,
-    account_status VARCHAR(2) NOT NULL
+    account_status VARCHAR(2) NOT NULL,
+    user_discount NUMERIC NOT NULL DEFAULT 1.0
 );
 
 CREATE TABLE user_login (
@@ -82,8 +83,8 @@ CREATE TABLE ticket_sales(
     transact_at DATE NOT NULL,
     event_id UUID NOT NULL,
     event_name TEXT NOT NULL,
-    num_tickets INTEGER NOT NULL,
-    user_price MONEY NOT NULL
+    num_tickets NUMERIC NOT NULL,
+    total_sale NUMERIC NOT NULL
 );
 
 CREATE TABLE films (
@@ -153,23 +154,20 @@ BEGIN
     WHERE u.user_id = t.user_id 
     THEN
         -- apply 10% discount 
-    UPDATE ticket_sales AS t
-    SET t.user_price = t.user_price * 0.9;
-    SELECT CONCAT('Your discount is 10%. Your new price is $', t.user_price) AS message;
+    UPDATE user_account 
+    SET user_discount = 0.9;
     END IF;
-
+RETURN NULL;
 END;
 $$
 LANGUAGE 'plpgsql';
 
 CREATE TRIGGER exhib_discount_mem
-    AFTER INSERT
-    ON "ticket_sales"
+    BEFORE INSERT ON ticket_sales
     FOR EACH ROW
-    EXECUTE PROCEDURE update_member_ticket_price();
+    EXECUTE FUNCTION update_member_ticket_price();
 
 CREATE TRIGGER film_discount_mem
-    AFTER INSERT
-    ON "ticket_sales"
+    BEFORE INSERT ON ticket_sales
     FOR EACH ROW
-    EXECUTE PROCEDURE update_member_ticket_price();
+    EXECUTE FUNCTION update_member_ticket_price();
