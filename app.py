@@ -534,7 +534,7 @@ def Fticket_details():
         user_email = request.form['visitor_email']
         print(f"{selection} and {num_tickets} and {user_email}")
         try:
-            film.insert_ticket_transaction(cur, conn, selection, num_tickets, user_email)
+            film.purchase_film_tickets(cur, conn, selection, num_tickets, user_email)
             print('Film tickets booked successfully!')
             print(film_title)
            

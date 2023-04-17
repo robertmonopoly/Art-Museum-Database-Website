@@ -32,21 +32,20 @@ def insert_ticket_rep(cur, s_date,e_date):
     data = cur.fetchall()
     return data
 
-def get_ticket_sales_sum(cur, s_date, e_date):
-    cur.execute("""SELECT SUM(num_tickets)
-    FROM ticket_sales as ts
-    WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s
-    """, (s_date, e_date))
-    sum_tickets = cur.fetchone()[0]
-    cur.execute("""SELECT SUM(user_price * num_tickets)
-    FROM ticket_sales as ts
-    WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s""", (s_date, e_date))
-    sum_price = cur.fetchone()[0]
+# def get_ticket_sales_sum(cur, s_date, e_date):
+#     cur.execute("""SELECT SUM(num_tickets)
+#     FROM ticket_sales as ts
+#     WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s
+#     """, (s_date, e_date))
+#     # sum_tickets = cur.fetchone()[0]
+#     # # cur.execute("""SELECT SUM(total_price)
+#     # # FROM ticket_sales as ts
+#     # # WHERE DATE(ts.transact_at) >= %s AND DATE(ts.transact_at) <= %s""", (s_date, e_date))
+#     # # sum_price = cur.fetchone()[0]
     
-    # returns tuple of both data
-    return (sum_tickets, sum_price)
+#     # # returns tuple of both data
+#     return (sum_tickets, sum_price)
 
-    
 
 def retrieve_ticket_data(cur):
     cur.execute("""SELECT * FROM ticket_sales""")

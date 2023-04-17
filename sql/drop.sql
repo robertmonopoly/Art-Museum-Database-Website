@@ -1,10 +1,10 @@
-DROP TRIGGER IF EXISTS film_discount_mem ON CASCADE;
+DROP TRIGGER IF EXISTS film_discount_mem ON ticket_sales CASCADE;
 
-DROP TRIGGER IF EXISTS exhib_discount_mem ON CASCADE;
+DROP TRIGGER IF EXISTS exhib_discount_mem ON ticket_sales CASCADE;
 
 DROP FUNCTION IF EXISTS update_member_ticket_price CASCADE;
 
--- DROP TRIGGER IF EXISTS new_film ON films CASCADE;
+DROP TRIGGER IF EXISTS new_film ON films CASCADE;
 
 DROP TRIGGER IF EXISTS new_exhib ON exhibitions CASCADE;
 
