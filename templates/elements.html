@@ -47,6 +47,7 @@
         <b>Duration:</b> {{dur}} <br>
         <b>Price:</b> {{ticket_price}}
         <b>Rate:</b> {{rate}}/5
+          
         <button class = "button button1"><a href="{{url_for(endpoint)}}">Buy Tickets</a></button>
       </p>
     </p>
@@ -64,7 +65,7 @@
     <img src="/image/{{image_id}}" alt="{{title}}" style="width:200px; height:200px; float: left; padding-right: 10px;" />
     <h3 style="margin-bottom:3px">{{title}}</h3>
     <p style="margin-top: 0; margin-bottom:5px"></p>
-    <b>{{view_at.strftime("%B %d, %Y")}}</b>
+    <b>{{view_at.strftime("%B %d, %Y")}}</b> <br>
     <b>Gallery:</b> {{gallery}} <br>
     <b>Price:</b> {{ticket_price}}<br>
     <b>Curator:</b> {{curator}}<br>
