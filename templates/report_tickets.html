@@ -93,6 +93,7 @@
                     <th>Ticket Price</th>
                     <th>Date of Transaction</th>
                     <th>Number of Tickets Bought</th>
+                    <th>Total Sale</th>
 
                 </tr>
                     {% for item in data[0] %} 
@@ -101,6 +102,8 @@
                           <td>{{item[1]}}</td>
                           <td>{{item[2]}}</td>
                           <td>{{item[3]}}</td>
+                          <td>{{item[4]}}</td>
+
                       </tr>
                     {% endfor %} 
                 {% else %}

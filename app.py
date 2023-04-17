@@ -601,8 +601,8 @@ def report_gifts():
     
     ticket_data = rep.insert_gift_rep(cur, gift_type, start_date, end_date)
     ticket_sum = rep.get_ticket_sales_sum(cur, start_date,end_date)
-    print(ticket_sum)
     print(ticket_data)
+    print(ticket_sum)
     if ticket_data == []:
         msg = "There was no report for the selected interval. Please try another set of dates!"
         return render_template('report_gifts.html', msg=msg)
