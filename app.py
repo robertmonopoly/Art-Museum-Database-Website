@@ -248,16 +248,15 @@ def add_new_exhibition():
 @app.route('/update_exhibition', methods = ['POST'])
 def update_exhibition():
     if request.method == 'POST':
-        exhibit_id = request.form['exhibition_id']
+        title = request.form['exhibition_title']
         date_and_time = request.form['exhibition_at']
         ticket_price = request.form['exhibition_ticket_price']
         gallery = request.form['exhibition_gallery']
-        title = request.form['exhibition_title']
         curator = request.form['curator']
         artists = request.form['exhibition_artists']
         try:
-            exhib.update_exhibition(cur, conn, exhibit_id, date_and_time, ticket_price,
-        gallery, title, curator, artists)
+            exhib.update_exhibition(cur, conn, title, date_and_time, ticket_price,
+        gallery, curator, artists)
             flash('Exhibition updated successfully.')
         except Exception as e:
             print(f"Error updating exhibition: {e}")
@@ -268,9 +267,9 @@ def update_exhibition():
 @app.route('/delete_exhibition', methods = ['POST'])
 def delete_exhibition():
     if request.method == 'POST':
-        exhibit_id = request.form['exhibition_id']
+        title = request.form['exhibition_title']
         try:
-            exhib.delete_exhibit(cur, conn, exhibit_id)
+            exhib.delete_exhibit(cur, conn, title)
         except Exception as e:
             print(f"Error deleting exhibition: {e}")
             flash('Error deleting exhibition.')
@@ -316,17 +315,16 @@ def add_new_film():
 @app.route('/update_film', methods = ['POST'])
 def update_film():
     if request.method == 'POST':
-        num_id = request.form['film_id']
-        location = request.form['viewing_at']
         title = request.form['film_title']
+        location = request.form['viewing_at']
         ticket_price = request.form['film_ticket_price']
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
         # TODO: find away to make forms more efficient
         #img_uuid = request.form['film_img']
-        film.update_film(cur, conn, num_id, location,
-        title, ticket_price, duration, director,
+        film.update_film(cur, conn, title, location,
+        ticket_price, duration, director,
         rating)
     return render_template('add_new_film.html')
    
@@ -334,9 +332,9 @@ def update_film():
 
 @app.route('/delete_film', methods = ['POST'])
 def delete_film():
-    num_id = request.form['film_id']
+    title = request.form['film_title']
     try:
-        film.delete_film(cur, conn, num_id)
+        film.delete_film(cur, conn, title)
         flash('Film deleted successfully')
     except Exception as e:
         print (f"Error deleting film: {e}")
@@ -346,7 +344,6 @@ def delete_film():
 @app.route('/add_new_employee', methods=['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
-        membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']       
         email = request.form['employee_email']
@@ -354,7 +351,7 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        emp.insert_employee(cur, conn, membership, first_name,
+        emp.insert_employee(cur, conn, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
         flash("New Employee's Records has been added.")
@@ -363,7 +360,6 @@ def add_new_employee():
 @app.route('/update_employee', methods = ['POST'])
 def update_employee():
     if request.method == 'POST':
-        membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
         email = request.form['employee_email']
@@ -371,7 +367,7 @@ def update_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        emp.update_employee(cur, conn, membership, first_name,
+        emp.update_employee(cur, conn, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
         flash("Employee's Records have been updated.")
