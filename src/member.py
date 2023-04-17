@@ -16,14 +16,20 @@ def update_member(cur, conn, email, membership_type):
         cur.execute("UPDATE user_account SET membership = %s WHERE email = %s", 
             (membership_type, email))
         conn.commit()
-        
+        discount = ""
         if membership_type == 'BASIC':
             amount_charged = 20
+            discount = 10
+
         elif membership_type == 'SILVER':
             amount_charged = 30
+            discount = 20
+
         elif membership_type == 'GOLD':
             amount_charged = 40
-        message = f"The following amount has been charged to your account: ${amount_charged}"
+            discount = 30
+
+        message = f"The following amount has been charged to your account: ${amount_charged}. You now have a {discount}% discount on event/film purchases."
         
         flash(message, 'success')
         return redirect(url_for('members'))
