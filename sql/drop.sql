@@ -1,6 +1,4 @@
-DROP TRIGGER IF EXISTS film_discount_mem ON ticket_sales CASCADE;
-
-DROP TRIGGER IF EXISTS exhib_discount_mem ON ticket_sales CASCADE;
+DROP TRIGGER IF EXISTS update_membership_disc ON user_account CASCADE;
 
 DROP FUNCTION IF EXISTS update_member_ticket_price CASCADE;
 
@@ -21,8 +19,6 @@ DROP TABLE IF EXISTS ticket_sales CASCADE;
 DROP TABLE IF EXISTS exhibitions CASCADE;
 
 DROP TABLE IF EXISTS employees CASCADE;
-
-DROP TABLE IF EXISTS gift_shop_item_inventory CASCADE;
 
 DROP TABLE IF EXISTS gift_shop_sales CASCADE;
 
