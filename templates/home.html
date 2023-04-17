@@ -39,12 +39,13 @@
         {{ elements.navbar('members', 'User Account Management')}}
         {% endif %}
         {% if session['user-role'] == 'USER' %}
+        {{ elements.navbar('donations', 'Donations')}}
         {{ elements.navbar('notification', 'Notifications')}}
         {{ elements.navbar('members', 'Memberships')}}
         {% endif %}
-        {{ elements.navbar('donations', 'Donation Report')}}
         
         {% if session['user-role'] == 'ADMIN' %}
+        {{ elements.navbar('donations', 'Donation Report')}}
           {{ elements.navbar('report_gifts', 'Gift Report')}}
           {{ elements.navbar('report_tickets', 'Ticket Report')}}
           {{ elements.navbar('employees', 'Employees')}}
