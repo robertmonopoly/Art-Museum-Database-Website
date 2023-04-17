@@ -60,7 +60,7 @@
 
 <div style="display: flex; align-items: center; justify-content: center;">
 
-<form action="/add_new_gift_shop_item" method="post" style="padding:20px;">
+<form action="/add_new_gift_shop_item" method="post" style="padding:20px;" enctype="multipart/form-data">
     <label for="name">Name:</label>
     <input type="text" name="name" required><br><br>
     <select name="type" required>
@@ -70,6 +70,8 @@
     </select><br><br>
     <label for="price">Price:</label>
     <input type="text" name="price" required><br><br>
+    <input type="file" name="gift_img">
+
     <input type="submit" value="Add Item">
 </form>
 

@@ -2,17 +2,25 @@
 import uuid 
 from datetime import date
 
+class Giftshop:
+    def __init__(self, gift_SKU, gift_name, gift_type, gift_price, image_id):
+        self.gift_SKU = gift_SKU
+        self.gift_name = gift_name
+        self.gift_type = gift_type
+        self.gift_price = gift_price
+        self.image_id = image_id
+        
 def retrieve_gift_shop_data(cur):
     cur.execute("""SELECT * FROM gift_shop_item""")
     data = cur.fetchall()
     return data
 
-def insert_gift_item(cur, conn, gift_name, gift_type, gift_price):
+def insert_gift_item(cur, conn, gift_name, gift_type, gift_price, img_uuid):
     try:
         # Generate a unique transaction ID using the uuid4() function
         gift_sku = str(uuid.uuid4())
-        sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s)"""
-        values = (gift_sku, gift_name, gift_type, gift_price)
+        sql_query = """INSERT INTO gift_shop_item VALUES (%s, %s, %s, %s, %s)"""
+        values = (gift_sku, gift_name, gift_type, gift_price, img_uuid)
         cur.execute(sql_query,values)
         conn.commit()
         print("Gift item inserted successfully.") 

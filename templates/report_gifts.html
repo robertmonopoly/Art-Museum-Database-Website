@@ -74,7 +74,7 @@
     <div class="item-name">
         <form action=/report_gifts method='GET'>
             <p><h3>Please enter the gift's item type.</h3></p>
-            <p><input type="text" name="gift-name" placeholder="Item Name" id="gift-type" required/></p>
+            <p><input type="text" name="gift-type" placeholder="Item Type" required/></p>
             <label for="start">Start:</label>
             <input type="date" id="start" name="start-date">
             <label for="end">End:</label>
@@ -90,11 +90,11 @@
         <tr>
             <h3>This table shows how many of an item were sold in a given interval.</h3>
             <th>SKU</th>
-            <th>Gift Name</th>
+            <th>Gift Type</th>
             <th>Price</th>
             <th>Date</th>
         </tr>
-        {% for item in data %}
+        {% for item in data[0] %}
         <tr>
             <td>{{item[0]}}</td>
             <td>{{item[1]}}</td>
@@ -102,6 +102,17 @@
             <td>{{item[3]}}</td>
         </tr>
         {% endfor %}
+       
+        <table class="my-table" style="padding-top: 20px;">
+          <tbody>
+            <tr>
+              <td>Gift Revenue:</td>
+              <td>{{ data[1] }}</td>
+            </tr>
+          </tbody>
+        </table>
+     
+      
         {% else %}
         <div>{{msg}}</div>
         {% endif %}

@@ -195,7 +195,7 @@ def donations():
         data.append(donation_sum[0])
 
         print("this is the don. sum: ", data[0])
-        return render_template('donations.html', data=data)
+        return render_template('donations.html', data=data,user=user)
 
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
@@ -424,14 +424,43 @@ def delete_member():
             flash('Error deleting user account.')
     return render_template('add_new_member.html')
 
+@app.route('/gift_shop', methods=['GET', 'POST'])
+def gift_shop():
+    user = session["user-role"]
+    msg = ""
+    data = gift.retrieve_gift_shop_data(cur)
+    giftshop = []
+    for row in data:
+        gift_obj = gift.Giftshop(row[0],row[1],row[2],
+                                 row[3],row[4])
+        giftshop.append(gift_obj)
+    if request.method == 'POST':
+        gift_name = request.form['item_name']
+        email = request.form['email']
+        try:
+            gift.insert_gift_sales(cur, conn, gift_name, email)
+            flash('Gift item purchased successfully')
+        except Exception as e:
+            flash('Error purchasing item.')
+    if data == []:
+        msg = "No Gift Shop Inventory Data Available"
+        return render_template('gift_shop.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('gift_shop.html', giftshop=giftshop, user=user)
+
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
         name = request.form['name']
         item_type = request.form['type']
         price = request.form['price']
+        img_file = request.files['gift_img']
+
+        img_uuid = hp.insert_image(cur, conn, img_file)
+
         try:
-            gift.insert_gift_item(cur, conn, name, item_type, price)
+            gift.insert_gift_item(cur, conn, name, item_type, price, img_uuid)
             flash('Gift item added successfully.')
         except Exception as e:
             print(f"Error adding gift item: {e}")
@@ -479,31 +508,6 @@ def members():
         app.logger.info(data)
         return render_template('members.html', data=data)
 
-@app.route('/gift_shop', methods=['GET', 'POST'])
-def gift_shop():
-    user = session["user-role"]
-    msg = ""
-    data = gift.retrieve_gift_shop_data(cur)
-
-    if request.method == 'POST':
-        gift_name = request.form['item_name']
-        email = request.form['email']
-        try:
-            gift.insert_gift_sales(cur, conn, gift_name, email)
-            flash('Gift item purchased successfully')
-        except Exception as e:
-            flash('Error purchasing item.')
-
-    if data == []:
-        msg = "No Gift Shop Inventory Data Available"
-        app.logger.info(data)
-        return render_template('gift_shop.html', msg=msg)
-    else:
-        app.logger.info(data)
-        return render_template('gift_shop.html', data=data, user=user)
-
-
-
 @app.get('/employees')
 def employees():
     user = session["user-role"]
@@ -540,7 +544,6 @@ def Fticket_details():
            
         except Exception as e:
             print(f"Error booking film tickets: {e}")
-        # TODO: remember to flash message here bc not done yet
             flash('Failed to book film tickets. Please try again later')
 
     return render_template('Fticket_details.html', user=user, film_title=film_title)
@@ -561,7 +564,7 @@ def Eticket_details():
         user_email = request.form['visitor_email']
         print(f"{selection} and {num_tickets} and {user_email}")
         try:
-            exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+            exhib.purchase_film_tickets(cur, conn, selection, num_tickets, user_email)
             print('Exhibition tickets booked successfully!')
             print(exhib_title)
         except Exception as e:
@@ -586,19 +589,20 @@ def user_info():
     dob = request.form['dob']
     user.insert_user(cur,f_name,l_name,(line_1,city,state), phone_number,sex, dob, 'NONE')
 
+
 # the reports
 @app.get('/report_gifts')
 def report_gifts():
     mgs = ""
     data = []
-    gift_type = request.form.get('gift-type')
-    start_date = request.form.get('start-date')
-    end_date = request.form.get('end-date')
-    
+    gift_type = request.args.get('gift-type')
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+
     ticket_data = rep.insert_gift_rep(cur, gift_type, start_date, end_date)
-    ticket_sum = rep.get_ticket_sales_sum(cur, start_date,end_date)
-    print(ticket_sum)
+    ticket_sum = rep.gift_get_sum(cur, start_date,end_date)
     print(ticket_data)
+    print(ticket_sum)
     if ticket_data == []:
         msg = "There was no report for the selected interval. Please try another set of dates!"
         return render_template('report_gifts.html', msg=msg)
@@ -606,7 +610,7 @@ def report_gifts():
     else:
         data.append(ticket_data)
         data.append(ticket_sum)
-        return render_template('report_gifts.html',data=data)
+        return render_template('report_gifts.html',data=data, user=user)
             
 @app.get('/report_tickets')
 def report_tickets():
