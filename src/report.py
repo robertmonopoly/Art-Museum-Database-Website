@@ -3,6 +3,7 @@ from datetime import date
 import uuid
 # report functions
 def insert_gift_rep(cur, g_type, s_date, e_date):
+   
     cur.execute("""
     SELECT i.gift_sku, i.gift_type, i.gift_price, DATE(s.gift_transaction_at)
     FROM gift_shop_item as i
@@ -11,7 +12,16 @@ def insert_gift_rep(cur, g_type, s_date, e_date):
     WHERE i.gift_type = %s AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s """, [g_type, s_date, e_date]
     )
     data = cur.fetchall()
+    print(data)
     return data
+
+def gift_get_sum(cur, s_date, e_date ):
+    cur.execute("""
+    SELECT SUM(gift_price) 
+    FROM gift_shop_item as i, gift_shop_sales as s
+    WHERE i.gift_sku = s.gift_sku AND DATE(s.gift_transaction_at) >= %s AND DATE(s.gift_transaction_at) <= %s""", (s_date,e_date))
+    sum_gift_price = cur.fetchone()[0]
+    return sum_gift_price
 
 # 2nd report 
 def insert_ticket_rep(cur, s_date,e_date):
