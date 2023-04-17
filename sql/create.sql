@@ -55,7 +55,6 @@ CREATE TABLE gift_shop_item_inventory (
 
 CREATE TABLE employees (
     employee_id UUID PRIMARY KEY,
-    employee_membership MembershipType NOT NULL,
     employee_first_name VARCHAR (60) NOT NULL,  
     employee_last_name VARCHAR (60) NOT NULL,
     employee_email VARCHAR (100) NOT NULL UNIQUE,

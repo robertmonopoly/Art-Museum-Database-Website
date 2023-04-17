@@ -344,7 +344,6 @@ def delete_film():
 @app.route('/add_new_employee', methods=['GET', 'POST'])
 def add_new_employee():
     if request.method == 'POST':
-        membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']       
         email = request.form['employee_email']
@@ -352,7 +351,7 @@ def add_new_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        emp.insert_employee(cur, conn, membership, first_name,
+        emp.insert_employee(cur, conn, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
         flash("New Employee's Records has been added.")
@@ -361,7 +360,6 @@ def add_new_employee():
 @app.route('/update_employee', methods = ['POST'])
 def update_employee():
     if request.method == 'POST':
-        membership = request.form['membership']
         first_name = request.form['employee_first_name']
         last_name = request.form['employee_last_name']
         email = request.form['employee_email']
@@ -369,7 +367,7 @@ def update_employee():
         phone_number = request.form['employee_phone_number']
         dob = request.form['employee_date_of_birth']
         salary = request.form['salary']
-        emp.update_employee(cur, conn, membership, first_name,
+        emp.update_employee(cur, conn, first_name,
         last_name, email, ssn, phone_number,
         dob, salary)
         flash("Employee's Records have been updated.")
