@@ -79,3 +79,18 @@
 </div>
 
 {% endmacro %}
+
+
+{% macro gift_format( gift_name, gift_type, gift_price, image_id) %}
+<div class="responsive" >
+    <div class="gallery">
+      <a>
+        <img src="/image/{{image_id}}" alt="{{gift_name}}" width="600" height="400">
+      </a>
+      <div class="desc">
+        {{gift_name}}<br>
+        {{gift_type}}<br>
+        {{gift_price}}<br>
+    </div>
+  </div>
+{% endmacro %}

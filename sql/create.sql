@@ -38,7 +38,8 @@ CREATE TABLE gift_shop_item (
     gift_SKU TEXT PRIMARY KEY,
     gift_name TEXT NOT NULL UNIQUE,
     gift_type TEXT NOT NULL,
-    gift_price MONEY NOT NULL
+    gift_price MONEY NOT NULL,
+    image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
 );
 
 CREATE TABLE gift_shop_sales (
@@ -48,11 +49,11 @@ CREATE TABLE gift_shop_sales (
     user_id UUID NOT NULL REFERENCES user_account(user_id)
 );
 
-CREATE TABLE gift_shop_item_inventory (
-    gift_serial_number UUID PRIMARY KEY,
-    gift_SKU TEXT NOT NULL REFERENCES gift_shop_item(gift_SKU),
-    gift_transaction_id UUID REFERENCES gift_shop_sales(gift_transaction_id)
-);
+-- CREATE TABLE gift_shop_item_inventory (
+--     gift_serial_number UUID PRIMARY KEY,
+--     gift_SKU TEXT NOT NULL REFERENCES gift_shop_item(gift_SKU),
+--     gift_transaction_id UUID REFERENCES gift_shop_sales(gift_transaction_id)
+-- );
 
 CREATE TABLE employees (
     employee_id UUID PRIMARY KEY,
@@ -110,7 +111,7 @@ CREATE TABLE notifs (
     event_at TIMESTAMP NOT NULL
 );
 
-/*CREATE OR REPLACE FUNCTION exhibit_insert_trigger_fnc()
+CREATE OR REPLACE FUNCTION exhibit_insert_trigger_fnc()
   RETURNS trigger AS
 $$
 BEGIN

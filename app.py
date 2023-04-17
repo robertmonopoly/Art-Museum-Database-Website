@@ -424,14 +424,43 @@ def delete_member():
             flash('Error deleting user account.')
     return render_template('add_new_member.html')
 
+@app.route('/gift_shop', methods=['GET', 'POST'])
+def gift_shop():
+    user = session["user-role"]
+    msg = ""
+    data = gift.retrieve_gift_shop_data(cur)
+    giftshop = []
+    for row in data:
+        gift_obj = gift.Giftshop(row[0],row[1],row[2],
+                                 row[3],row[4])
+        giftshop.append(gift_obj)
+    if request.method == 'POST':
+        gift_name = request.form['item_name']
+        email = request.form['email']
+        try:
+            gift.insert_gift_sales(cur, conn, gift_name, email)
+            flash('Gift item purchased successfully')
+        except Exception as e:
+            flash('Error purchasing item.')
+    if data == []:
+        msg = "No Gift Shop Inventory Data Available"
+        return render_template('gift_shop.html', msg=msg)
+    else:
+        app.logger.info(data)
+        return render_template('gift_shop.html', giftshop=giftshop, user=user)
+
 @app.route('/add_new_gift_shop_item', methods=['GET', 'POST'])
 def add_new_gift_shop_item():
     if request.method == 'POST':
         name = request.form['name']
         item_type = request.form['type']
         price = request.form['price']
+        img_file = request.files['gift_img']
+
+        img_uuid = hp.insert_image(cur, conn, img_file)
+
         try:
-            gift.insert_gift_item(cur, conn, name, item_type, price)
+            gift.insert_gift_item(cur, conn, name, item_type, price, img_uuid)
             flash('Gift item added successfully.')
         except Exception as e:
             print(f"Error adding gift item: {e}")
@@ -478,31 +507,6 @@ def members():
     else:
         app.logger.info(data)
         return render_template('members.html', data=data)
-
-@app.route('/gift_shop', methods=['GET', 'POST'])
-def gift_shop():
-    user = session["user-role"]
-    msg = ""
-    data = gift.retrieve_gift_shop_data(cur)
-
-    if request.method == 'POST':
-        gift_name = request.form['item_name']
-        email = request.form['email']
-        try:
-            gift.insert_gift_sales(cur, conn, gift_name, email)
-            flash('Gift item purchased successfully')
-        except Exception as e:
-            flash('Error purchasing item.')
-
-    if data == []:
-        msg = "No Gift Shop Inventory Data Available"
-        app.logger.info(data)
-        return render_template('gift_shop.html', msg=msg)
-    else:
-        app.logger.info(data)
-        return render_template('gift_shop.html', data=data, user=user)
-
-
 
 @app.get('/employees')
 def employees():

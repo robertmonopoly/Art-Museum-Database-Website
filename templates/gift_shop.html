@@ -1,3 +1,5 @@
+{% import "elements.html" as elements %}
+
 <!DOCTYPE html>
 <html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
@@ -58,17 +60,64 @@
   a {
     color: black;
   }
+  div.gallery {
+    border: 1px solid #ccc;
+    margin-left: 5%;
+    margin-right: 5%;
+    max-width: 90%;
+    margin-bottom:  10px;
+    width:70%;
+
+  }
+  
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+  
+  div.gallery img {
+    width: 100%;
+    height: auto;
+  }
+  
+  
+  * {
+    box-sizing: border-box;
+  }
+  
+  .responsive {
+    padding: 0 16px;
+    float: right;
+    width: 20%;
+  }
+  @media only screen and (max-width: 700px) {
+    .responsive {
+      width: 49.99999%;
+      margin: 6px 0;
+    }
+  }
+  div.desc {
+    padding: 15px;
+    text-align: center;
+    width:100%;
+  }
+  @media only screen and (max-width: 500px) {
+    .responsive {
+      width: 70%;
+    }
+  }
+  
+  .clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+ 
 </style>
-
-
-
 </head>
 <body>
 
-    <h1>Gift Shop</h1>
-
-
-</div>
+<h1>Gift Shop</h1>
 
 
 <ul class = "navbarone">
@@ -77,22 +126,26 @@
     {% if session['user-role'] == 'ADMIN' %}
     <li><a href="{{url_for('add_new_gift_shop_item')}}">Gift Shop Item Queries</a></li>
     {% endif %}
-</ul>
+  </ul>
+  
 
-<p class = "homepageDescription" style="text-align: center;"> The Gift Shop offers a unique selection of artful gifts, 
-  prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
-  always free to visit the Gift Shop.</p><br>
-
-  <div>
-
-
-  <table class="my-table">
-    <tbody>
-        {% if data %}
+  <p class = "homepageDescription" style="text-align: center;"> The Gift Shop offers a unique selection of artful gifts, 
+    prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
+    always free to visit the Gift Shop.</p><br>
+    
+    <p style="text-align: center; padding-right: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
+    {% for item in giftshop %}  
+      {{elements.gift_format(item.gift_name, item.gift_type, item.gift_price, item.image_id )}}
+    {% endfor %}
+    </p>
+      
+        <table class="my-table">
+          <tbody>
+            {% if data %}
         <tr>
           {% if session['user-role'] == 'ADMIN' %}
-            <th>SKU</th>
-            {% endif %}
+          <th>SKU</th>
+          {% endif %}
             <th>Gift Name</th>
             <th>Gift Type</th>
             <th>Price</th>
@@ -105,14 +158,14 @@
             <td>{{item[1]}}</td>
             <td>{{item[2]}}</td>
             <td>{{item[3]}}</td>
-        </tr>
-        {% endfor %}
-        {% else %}
-        <div>{{msg}}</div>
-        {% endif %}
-    </tbody>
-</table>  
-
+          </tr>
+          {% endfor %}
+          {% else %}
+          <div>{{msg}}</div>
+          {% endif %}
+      </tbody>
+    </table>  
+    
 {% if session['user-role'] == 'USER' %}
 
 <form action="/gift_shop" method="post" style="padding:20px;">
@@ -126,17 +179,16 @@
 {% endif %}
 
 {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class=flashes>
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
+{% if messages %}
+<ul class=flashes>
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 
 
-</div>
 
 </body>
 </html>
