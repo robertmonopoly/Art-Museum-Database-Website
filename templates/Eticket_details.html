@@ -71,9 +71,10 @@
     <p style=" margin-top: 0%; padding-bottom: 0px; padding-left:20px; font-size: 15px"><u><b>Memebrship Discounts</u></b>
     </p>  
     <p style="padding-left:20px; margin-top: 2px; font-size: 15px"> General Member 	<b>   Regular Price</b><br>
-      Silver Memeber	<b>   10% off</b><br>
-      Gold Memebr	<b>   20% off</b><br>
-      Platinum Member	<b>   30% off</b><br></p> 
+      Basic Member	<b>   10% off</b><br>
+      Silver Member	<b>   20% off</b><br>
+      Gold Memebr	<b>   30% off</b><br>
+     
     </div>
     
 
@@ -119,6 +120,16 @@
     </div><br>
     </div>
     </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+            <li style = "text-align: left;">{{ message }}</li>
+            <br>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
 </div>
 </div>
 </div>

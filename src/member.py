@@ -5,6 +5,11 @@ def retrieve_member_data(cur):
     data = cur.fetchall()
     return data    
 
+def retrieve_member(cur, email):
+    cur.execute("""SELECT user_discount FROM user_account WHERE email =%s""", (email,))
+    data = cur.fetchone()[0]
+    return data   
+
 def update_member(cur, conn, email, membership_type):
     try:
         cur.execute("SELECT * FROM user_account WHERE email = %s", (email,))
