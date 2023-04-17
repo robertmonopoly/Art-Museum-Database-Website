@@ -82,7 +82,7 @@ def purchase_film_tickets(cur,conn, event_name,num_tickets, email):
         conn.commit()
 
         # Print a success message to the command line
-        flash("Ticket transaction inserted successfully")
+        flash("Ticket transaction successful")
     except Exception as e:
         print("An error occurred while inserting the tickets:", e)
 

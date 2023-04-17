@@ -540,6 +540,11 @@ def Fticket_details():
         try:
             film.purchase_film_tickets(cur, conn, selection, num_tickets, user_email)
             print('Film tickets booked successfully!')
+            user_discount = mem.retrieve_member(cur, user_email)
+            if user_discount != 1.0:
+                flash("Successfully purchased with membership discount.")
+            else:
+                flash("Film tickets booked successfully!")
             print(film_title)
            
         except Exception as e:
@@ -567,6 +572,12 @@ def Eticket_details():
             exhib.purchase_film_tickets(cur, conn, selection, num_tickets, user_email)
             print('Exhibition tickets booked successfully!')
             print(exhib_title)
+            user_discount = mem.retrieve_member(cur, user_email)
+            print(user_discount)
+            if user_discount != 1.0:
+                flash("Successfully purchased with membership discount.")
+            else:
+                flash("Exhibit tickets booked successfully!")
         except Exception as e:
             print(f"Error booking Exhibition tickets: {e}")
             msg = 'Failed to book Exhibition tickets. Please try again later'
