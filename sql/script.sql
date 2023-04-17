@@ -8,10 +8,10 @@ INSERT INTO user_login VALUES ('e3a9dc6e-cad1-11ed-afa1-0242ac120002', 'ADMIN', 
 INSERT INTO user_account VALUES ('e3a9dd72-cad1-11ed-afa1-0242ac120002', 'joe','mom','someone@gmail.com', '02-13-1996', 'NONE', '1');
 INSERT INTO user_login VALUES ('e3a9dd72-cad1-11ed-afa1-0242ac120002', 'USER', 'someone@gmail.com','$2b$12$CriXFp4IvckRl4UdaDmadu5UTLiTGG/aYjHXbQJfG.A8r9mqwrcWO');
 -- user with silver membership
-INSERT INTO user_account VALUES ('6be41a29-8fd3-407e-9b37-784a30492237', 'alex','homer', 'other@gmail.com', '06-13-1998', 'SILVER', '.8');
+INSERT INTO user_account VALUES ('6be41a29-8fd3-407e-9b37-784a30492237', 'alex','homer', 'other@gmail.com', '06-13-1998', 'SILVER', '1');
 INSERT INTO user_login VALUES ('6be41a29-8fd3-407e-9b37-784a30492237', 'USER', 'other@gmail.com','$2b$12$PFACfUxSzEbglUTMopXx4u1w52RcaJa8zelcqGLdJm5dlMwbR91KK');
 -- user with basic membership
-INSERT INTO user_account VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'yves','chu', 'her@gmail.com', '12-11-2002', 'BASIC', '.9');
+INSERT INTO user_account VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'yves','chu', 'her@gmail.com', '12-11-2002', 'BASIC', '1');
 INSERT INTO user_login VALUES ('c8304586-5661-4db7-8e75-4dd44b4f7648', 'USER', 'her@gmail.com','$2b$12$WhzUm6vuWEG/0tDXneCHuuZljGnH.wQcCidwqz0yM9WGbp8cN5sru');
 
 INSERT INTO donation VALUES ('b6cbb3e0-cb79-11ed-afa1-0242ac120002', 'mich@gmail.com', '2023-04-19 05:48:06', 5.05);
