@@ -561,7 +561,7 @@ def Eticket_details():
         user_email = request.form['visitor_email']
         print(f"{selection} and {num_tickets} and {user_email}")
         try:
-            exhib.insert_e_ticket_trans(cur, conn, selection, num_tickets, user_email)
+            exhib.purchase_film_tickets(cur, conn, selection, num_tickets, user_email)
             print('Exhibition tickets booked successfully!')
             print(exhib_title)
         except Exception as e:

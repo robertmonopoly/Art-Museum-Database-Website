@@ -2,6 +2,8 @@
 from datetime import date
 import uuid
 from flask import flash
+from decimal import Decimal
+from re import sub
 
 class Exhibition:
     def __init__(self, uuid, exhib_at, exhib_ticket_price, exhib_gallery, exhib_title, curator, exhib_artists, image_id):
@@ -46,11 +48,15 @@ def delete_exhibit(cur, conn, exhib_title):
     except Exception as e:
         flash("An error occurred while deleting the exhibit", e)
 
-def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
+
+def purchase_film_tickets(cur,conn, event_name,num_tickets, email):
+
     try:
         # Generate a unique transaction ID
         event_transac_id = str(uuid.uuid4())
+
         trans_date = date.today()
+
         # Get the user ID for the given email address
         cur.execute("""SELECT user_id FROM user_account WHERE email = %s""", (email,))
         user_id = cur.fetchone()[0]
@@ -61,22 +67,24 @@ def insert_e_ticket_trans(cur, conn, event_name, num_tickets, email):
 
         # Get the user's ticket price
         cur.execute("""SELECT exhib_ticket_price FROM exhibitions WHERE exhib_title = %s""", (event_name,))
-        user_price = cur.fetchone()[0]
+        exhib_price = cur.fetchone()[0]
+        price = Decimal(sub(r'[^\d.]', '', exhib_price))
         
+        # Get ticket discounter
+        cur.execute("""SELECT user_discount FROM user_account WHERE user_id =%s""", (user_id,))
+        price_coefficient = cur.fetchone()[0]
+        print(price_coefficient)
+
+        # Get ticket sales
+        total = Decimal(price_coefficient)*price*Decimal(num_tickets)
+        print(total)
+
         # Insert the ticket transaction into the database
-        cur.execute("""INSERT INTO ticket_sales
-                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets, user_price))
+        cur.execute("""INSERT INTO ticket_sales VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    (event_transac_id, user_id, trans_date, event_id, event_name, num_tickets, total))
         conn.commit()
 
         # Print a success message to the command line
         flash("Ticket transaction inserted successfully")
     except Exception as e:
-        flash("An error occurred while inserting the transaction:", e)
-
-
-def retrieve_ticket_data(cur):
-    cur.execute("""SELECT * FROM ticket_sales""")
-    data = cur.fetchall()
-    return data    
-
+        print("An error occurred while inserting the tickets:", e)
