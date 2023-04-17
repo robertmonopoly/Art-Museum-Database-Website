@@ -56,6 +56,18 @@
   <li class = "active"><a href="{{ url_for('add_new_film') }}">Film Queries</a></li>
 </ul>
 
+<br>
+
+{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+
 <div style="display: flex; align-items: center; justify-content: center; padding-left: 20px;">
 
 <form action="/add_new_film" method="POST" style="padding:20px;" enctype="multipart/form-data">
@@ -77,12 +89,10 @@
 </form>
 
 <form action="/update_film" method="POST" style="padding:20px;">
-  <label for="film_id">Film ID:</label>
-  <input type="text" name="film_id" required><br><br>
-  <label for="viewing_at">Viewing At:</label>
-  <input type="datetime-local" name="viewing_at" required><br><br>
   <label for="film_title">Film Title:</label>
   <input type="text" name="film_title" required><br><br>
+  <label for="viewing_at">Viewing At:</label>
+  <input type="datetime-local" name="viewing_at" required><br><br>
   <label for="film_ticket_price" required>Ticket Price:</label>
   <input type="text" name="film_ticket_price" required><br><br>
   <label for="duration_min" required>Duration (min):</label>
@@ -95,11 +105,14 @@
 </form>
 
 <form action="/delete_film" method="POST" style="padding:20px;">
-  <label for="film_id">Film ID:</label>
-  <input type="text" name="film_id"><br><br>
+  <label for="film_title">Film Title:</label>
+  <input type="text" name="film_title" required><br><br>
   <input type="submit" value="Delete Film">
 </form>
 
 </div>
+
+
+
 </body>
 </html>

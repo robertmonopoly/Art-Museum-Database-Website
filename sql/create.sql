@@ -56,7 +56,6 @@ CREATE TABLE gift_shop_item_inventory (
 
 CREATE TABLE employees (
     employee_id UUID PRIMARY KEY,
-    employee_membership MembershipType NOT NULL,
     employee_first_name VARCHAR (60) NOT NULL,  
     employee_last_name VARCHAR (60) NOT NULL,
     employee_email VARCHAR (100) NOT NULL UNIQUE,
@@ -70,8 +69,8 @@ CREATE TABLE exhibitions (
     exhib_id UUID PRIMARY KEY,
     exhib_at TIMESTAMP NOT NULL,
     exhib_ticket_price MONEY NOT NULL,
-    exhib_gallery TEXT NOT NULL,
-    exhib_title TEXT NOT NULL,
+    exhib_gallery TEXT NOT NULL ,
+    exhib_title TEXT NOT NULL UNIQUE,
     curator TEXT NOT NULL,
     exhib_artists TEXT NOT NULL,
     image_id UUID UNIQUE NOT NULL REFERENCES images(image_id)
@@ -90,7 +89,7 @@ CREATE TABLE ticket_sales(
 CREATE TABLE films (
     film_id UUID PRIMARY KEY,
     film_at TIMESTAMP NOT NULL,
-    film_title TEXT NOT NULL,
+    film_title TEXT NOT NULL UNIQUE,
     film_ticket_price MONEY NOT NULL,
     duration_min INTEGER NOT NULL,
     film_director TEXT NOT NULL,
@@ -111,7 +110,7 @@ CREATE TABLE notifs (
     event_at TIMESTAMP NOT NULL
 );
 
-CREATE OR REPLACE FUNCTION exhibit_insert_trigger_fnc()
+/*CREATE OR REPLACE FUNCTION exhibit_insert_trigger_fnc()
   RETURNS trigger AS
 $$
 BEGIN
@@ -179,3 +178,4 @@ CREATE TRIGGER update_membership_disc
     AFTER UPDATE OF membership ON user_account
     FOR EACH ROW
     EXECUTE FUNCTION update_member_ticket_price();
+
