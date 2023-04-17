@@ -29,7 +29,7 @@ def update_member(cur, conn, email, membership_type):
             amount_charged = 40
             discount = 30
 
-        message = f"The following amount has been charged to your account: ${amount_charged}. You now have a {discount}% discount on event/film purchases."
+        message = f"The following amount has been charged to your account: ${amount_charged}. You now have a {discount}% discount on exhibit/film purchases."
         
         flash(message, 'success')
         return redirect(url_for('members'))
