@@ -149,25 +149,33 @@ CREATE OR REPLACE FUNCTION update_member_ticket_price()
   RETURNS trigger AS
 $$
 BEGIN
-    IF u.membership = 'BASIC'
-        FROM user_account AS u, ticket_sales AS t
-    WHERE u.user_id = t.user_id 
-    THEN
-        -- apply 10% discount 
+  -- If the user's membership has been updated to BASIC, apply the discount to future ticket sales
+  IF NEW.membership = 'BASIC' THEN 
     UPDATE user_account 
-    SET user_discount = 0.9;
-    END IF;
-RETURN NULL;
+    SET user_discount = 0.9 
+    WHERE user_id = NEW.user_id; -- apply discount for all future sales by the user
+  END IF;
+
+  -- If the user's membership has been updated to SILVER, apply a 20% discount to future ticket sales
+  IF NEW.membership = 'SILVER' THEN 
+    UPDATE user_account 
+    SET user_discount = 0.8 
+    WHERE user_id = NEW.user_id AND membership = 'SILVER'; -- apply 20% discount for all future sales by the user with SILVER membership
+  END IF;
+
+  -- If the user's membership has been updated to GOLD, apply a 30% discount to future ticket sales
+  IF NEW.membership = 'GOLD' THEN 
+    UPDATE user_account 
+    SET user_discount = 0.7 
+    WHERE user_id = NEW.user_id AND membership = 'GOLD'; -- apply 30% discount for all future sales by the user with GOLD membership
+  END IF;
+
+  RETURN NULL;
 END;
 $$
 LANGUAGE 'plpgsql';
 
-CREATE TRIGGER exhib_discount_mem
-    BEFORE INSERT ON ticket_sales
-    FOR EACH ROW
-    EXECUTE FUNCTION update_member_ticket_price();
-
-CREATE TRIGGER film_discount_mem
-    BEFORE INSERT ON ticket_sales
+CREATE TRIGGER update_membership_disc
+    AFTER UPDATE OF membership ON user_account
     FOR EACH ROW
     EXECUTE FUNCTION update_member_ticket_price();
