@@ -183,7 +183,7 @@
   </div>
 </div>
 {% for e in exhibs %}
-  {{elements.exhib_format('Eticket_details', e.exhib_title, e.exhib_ticket_price,e.exhib_gallery, e.curator,e.exhib_artists, e.exhib_at,e.image_id )}}
+  {{elements.exhib_format(session['user-role'], 'Eticket_details', e.exhib_title, e.exhib_ticket_price,e.exhib_gallery, e.curator,e.exhib_artists, e.exhib_at,e.image_id )}}
 {% endfor %}
 
 </div>

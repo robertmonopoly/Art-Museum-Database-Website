@@ -126,7 +126,7 @@
 </div>
 
 {% for film in films %}
-  {{elements.film_format('Fticket_details', film.view_at, film.film_title, film.ticket_price, film.dur, film.direc, film.rate, film.image_id)}}
+  {{elements.film_format(session['user-role'], 'Fticket_details', film.view_at, film.film_title, film.ticket_price, film.dur, film.direc, film.rate, film.image_id)}}
 {% endfor %}
 <div class ="row">
   <div class = "row" style="padding-left: 20px;">
