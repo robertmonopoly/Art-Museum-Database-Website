@@ -117,7 +117,9 @@
       <b>Duration:</b> 130 min<br>
       <b>Price:</b> $11
       <b>Rate:</b> 4/5
+    {% if user_view == 'USER' %}
     <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Buy Tickets</a></button></p>
+    {% endif %}
     <br>
     <br>
     <br>
@@ -140,7 +142,9 @@
       <b>Duration:</b> 125 min<br>
       <b>Price:</b> $12
       <b>Rate:</b> 3/5
+      {% if user_view == 'USER' %}
       <button class = "button button1"><a href="{{url_for('Fticket_details')}}">Buy Tickets</a></button> </p>
+      {% endif %}
     </p>
     <br>
     <br>
