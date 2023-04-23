@@ -26,13 +26,13 @@ def gift_get_sum(cur, s_date, e_date ):
 # 2nd report 
 def insert_ticket_rep(cur, s_date,e_date):
     cur.execute("""
-        SELECT exhib_title, exhib_ticket_price as ticket_price, DATE(ets.transact_at), ets.num_tickets, total_sale
+        SELECT exhib_title, exhib_ticket_price as ticket_price, DATE(ets.transact_at), ets.num_tickets, ets.total_sale
         FROM exhibitions as e
         INNER JOIN ticket_sales as ets
         ON ets.event_name = e.exhib_title
         WHERE DATE(ets.transact_at) >= %s AND DATE(ets.transact_at) <= %s
         UNION ALL
-        SELECT film_title, film_ticket_price, DATE(fts.transact_at), fts.num_tickets, total_sale
+        SELECT film_title, film_ticket_price, DATE(fts.transact_at), fts.num_tickets, ets.total_sale
         FROM films as f
         INNER JOIN ticket_sales as fts
         ON  fts.event_name = f.film_title
