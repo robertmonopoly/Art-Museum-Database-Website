@@ -1,9 +1,8 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app, jsonify
+from flask import Flask, request, render_template, make_response, redirect, url_for, session, flash, app
 app = Flask(__name__)
 app.secret_key = 'my_secret'
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from datetime import datetime
 # modules
 import src.helper as hp
 import src.art as art
