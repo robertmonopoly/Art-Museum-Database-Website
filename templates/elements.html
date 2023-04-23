@@ -33,7 +33,7 @@
   </div>
 {% endmacro %}
 
-{% macro film_format(endpoint, view_at, title, ticket_price, dur, direc, rate, image_id) %}
+{% macro film_format(user_view, endpoint, view_at, title, ticket_price, dur, direc, rate, image_id) %}
 
   <div class = "row" style="padding-left: 20px;">
     <img src="/image/{{image_id}}"  alt="{{title}}" style="width:200px; height:250px; float: left; padding-right: 10px;" />
@@ -47,8 +47,9 @@
         <b>Duration:</b> {{dur}} <br>
         <b>Price:</b> {{ticket_price}}
         <b>Rate:</b> {{rate}}/5
-          
+        {% if user_view == 'USER' %}
         <button class = "button button1"><a href="{{url_for(endpoint)}}">Buy Tickets</a></button>
+        {% endif %}
       </p>
     </p>
       <br>
@@ -58,7 +59,7 @@
   </div>
 {% endmacro %}
 
-{% macro exhib_format(endpoint,title, ticket_price, gallery, curator, exhib_artists, view_at,image_id) %}
+{% macro exhib_format(user_view,endpoint,title, ticket_price, gallery, curator, exhib_artists, view_at,image_id) %}
 
 <div class = "row" style="padding-left: 20px;">
   <p> 
@@ -70,7 +71,9 @@
     <b>Price:</b> {{ticket_price}}<br>
     <b>Curator:</b> {{curator}}<br>
     <b>Artist:</b> {{exhib_artists}}<br>
+    {% if user_view == 'USER' %}
     <button class = "button button1"><a href="{{ url_for(endpoint)}}">Buy Tickets</a></button> 
+    {% endif %}
   </p>
   <br>
   <br>

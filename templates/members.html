@@ -144,7 +144,12 @@ border-radius: 4px;
             <td>{{item[3]}}</td>
             <td>{{item[4]}}</td>
             <td>{{item[5]}}</td>
-            <td>{{item[6]}}</td>
+            {% if item[6] == 0 %}
+            <td>Inactive</td>
+            {% else %}
+            <td>Active</td>
+            {% endif %}
+
           
         </tr>
         {% endfor %}
