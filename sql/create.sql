@@ -49,11 +49,6 @@ CREATE TABLE gift_shop_sales (
     user_id UUID NOT NULL REFERENCES user_account(user_id)
 );
 
--- CREATE TABLE gift_shop_item_inventory (
---     gift_serial_number UUID PRIMARY KEY,
---     gift_SKU TEXT NOT NULL REFERENCES gift_shop_item(gift_SKU),
---     gift_transaction_id UUID REFERENCES gift_shop_sales(gift_transaction_id)
--- );
 
 CREATE TABLE employees (
     employee_id UUID PRIMARY KEY,
