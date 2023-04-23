@@ -1,5 +1,4 @@
 {% import "elements.html" as elements %}
-
 <!DOCTYPE html>
 <html style="background-image: url('/static/img/silver.jpg'); background-size: cover;"></html>
 <head>
@@ -7,59 +6,8 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css?family=Parisienne">
 <title>Gift Shop</title>
+</head>
 <style>
-
-  .my-table tr:nth-child(even) {
-    background-color: #98bfe4;
-  }
-  .my-table tr:nth-child(odd) {
-    background-color: #F6F6F6;
-  }
-  .my-table td, .my-table th {
-    padding: 20px;
-  }
-  .my-table {
-    float: left;
-    margin-right: 20px;
-  }
-  form {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  }
-
-  input[type=email],
-  input[type=password],
-  input[type=text] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-
-  input[type=submit] {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  input[type=submit]:hover {
-    background-color: #45a049;
-  }
-
-  a {
-    color: black;
-  }
   div.gallery {
     border: 1px solid #ccc;
     margin-left: 5%;
@@ -79,6 +27,11 @@
     height: auto;
   }
   
+  div.desc {
+    padding: 15px;
+    text-align: center;
+    width:100%;
+  }
   
   * {
     box-sizing: border-box;
@@ -89,17 +42,14 @@
     float: right;
     width: 20%;
   }
+  
   @media only screen and (max-width: 700px) {
     .responsive {
       width: 49.99999%;
       margin: 6px 0;
     }
   }
-  div.desc {
-    padding: 15px;
-    text-align: center;
-    width:100%;
-  }
+  
   @media only screen and (max-width: 500px) {
     .responsive {
       width: 70%;
@@ -111,15 +61,11 @@
     display: table;
     clear: both;
   }
-  
- 
 </style>
-</head>
+
 <body>
 
 <h1>Gift Shop</h1>
-
-
 <ul class = "navbarone">
     <li><a href="{{url_for('home')}}">Home</a></li>
     <li class = "active"><a href="{{url_for('gift_shop')}}">Gift Shop</a></li>
@@ -128,16 +74,16 @@
     {% endif %}
   </ul>
   
-
   <p class = "homepageDescription" style="text-align: center;"> The Gift Shop offers a unique selection of artful gifts, 
     prints, jewelry, books, toys, and more. No need to pay Museum admission - its 
-    always free to visit the Gift Shop.</p><br>
+    always free to visit the Gift Shop.</p>
+
     
-    <p style="text-align: center; padding-right: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
+    <p style="text-align: center; padding-left: 40px; padding-left: 40px; padding-top: 0px; padding-bottom: 0px;">
+
     {% for item in giftshop %}  
-      {{elements.gift_format(item.gift_name, item.gift_type, item.gift_price, item.image_id )}}
+            {{elements.gift_format(item.gift_name, item.gift_type, item.gift_price, item.image_id )}}
     {% endfor %}
-    </p>
     
 {% if session['user-role'] == 'USER' %}
 
@@ -151,6 +97,7 @@
 
 {% endif %}
 
+
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul class=flashes>
@@ -160,8 +107,6 @@
 </ul>
 {% endif %}
 {% endwith %}
-
-
 
 </body>
 </html>
