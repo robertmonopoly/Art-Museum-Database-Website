@@ -12,7 +12,7 @@ create.sql -> sets up the schema
 drop.sql -> tears down the schema
 input.sql -> inputs test data
 
-#### SRC
+#### src
 This is where the majority of our Python files go. They are query and report functions to be used in the app.py (which is located outside of the subfolders).
 
 #### static
