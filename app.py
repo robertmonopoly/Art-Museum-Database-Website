@@ -3,6 +3,7 @@ app = Flask(__name__)
 app.secret_key = 'my_secret'
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
 # modules
 import src.helper as hp
 import src.art as art
@@ -14,7 +15,6 @@ import src.gift as gift
 import src.member as mem
 import src.report as rep
 import src.user as user
-
 
 # Local Connection
 try:
@@ -171,31 +171,7 @@ def update_artwork():
         img_uuid = hp.insert_image(cur, conn, img_file)
         art.insert_art(cur, conn, obj_num, artist,title,made_on,obj_type, img_uuid)
     return render_template('add_new_artwork.html')
-
-
     
-
-@app.get('/donations')
-def donations():
-    user = session["user-role"]
-    msg = ""
-    data = []
-    start_date = request.args.get('start-date')
-    end_date = request.args.get('end-date')
-    donation_data = don.retrieve_donations_data(cur, start_date, end_date)
-    donation_sum = don.retrieve_donation_sum(cur, start_date, end_date)
-
-    if donation_data == []:
-        msg = "No Donation Data Available"
-        app.logger.info(data)
-        return render_template('donations.html', msg=msg)
-    else:
-        data.append(donation_data)
-        data.append(donation_sum[0])
-
-        print("this is the don. sum: ", data[0])
-        return render_template('donations.html', data=data,user=user)
-
 @app.route('/add_new_donation', methods = ['GET', 'POST'])
 def add_new_donation():
     if request.method == 'POST':
@@ -320,8 +296,7 @@ def update_film():
         duration = request.form['duration_min']
         director = request.form['film_director']
         rating = request.form['film_rating']
-        # TODO: find away to make forms more efficient
-        #img_uuid = request.form['film_img']
+
         film.update_film(cur, conn, title, location,
         ticket_price, duration, director,
         rating)
@@ -601,6 +576,7 @@ def user_info():
 
 
 # the reports
+
 @app.get('/report_gifts')
 def report_gifts():
     mgs = ""
@@ -645,8 +621,27 @@ def report_tickets():
         data.append(sales_sum[1])
 
         return render_template('report_tickets.html', user=user, data=data)
-    
 
 
-# third report is in donation.py 
+@app.get('/donations')
+def donations():
+    user = session["user-role"]
+    msg = ""
+    data = []
+    start_date = request.args.get('start-date')
+    end_date = request.args.get('end-date')
+    donation_data = rep.insert_don_rep(cur, start_date, end_date)
+    donation_sum = rep.retrieve_donation_sum(cur, start_date, end_date)
 
+    if donation_data == []:
+        msg = "No Donation Data Available"
+        app.logger.info(data)
+        return render_template('donations.html', msg=msg)
+    else:
+        data.append(donation_data)
+        data.append(donation_sum[0])
+
+        print("this is the don. sum: ", data[0])
+        return render_template('donations.html', data=data,user=user)
+
+# end of reports
