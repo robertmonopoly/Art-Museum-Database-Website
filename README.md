@@ -2,7 +2,7 @@
 https://museumcosc.cofecat.com/
 
 ### Techstack:
-Python, HTML, CSS
+Python, HTML, CSS, PostgreSQL
 
 ### Breakdown of our files:
 
